@@ -602,7 +602,6 @@ clientOid | Identifier created by the client |
 ```json
 {
     "cancelledOrderIds":[
-
         "5c52e11203aa677f33e493fb",
         "5c52e12103aa677f33e493fe",
         "5c52e12a03aa677f33e49401",
