@@ -599,7 +599,6 @@ clientOid | 客户端生成的标识 |
 ```json
 {
     "cancelledOrderIds":[
-
         "5c52e11203aa677f33e493fb",
         "5c52e12103aa677f33e493fe",
         "5c52e12a03aa677f33e49401",
@@ -614,12 +613,12 @@ clientOid | 客户端生成的标识 |
 }
 ```
 
-此接口，可以取消指定交易对所有状态为`open`的订单（包含高频交易账户和非高频交易账户的所有订单），返回值是是已取消订单的ID列表。
+此接口，可以取消所有状态为open的高频订单，返回值是是已取消订单的ID列表
 
 此接口只提交取消请求，实际取消结果需要通过查询订单状态或订阅websocket获取订单消息。
 
 ### HTTP请求
-`DELETE /api/v1/orders/hf`
+`DELETE /api/v1/orders/hf?symbol={symbol}`
 ### API权限
 此接口需要`交易权限`。
 ### 频率限制
@@ -677,8 +676,7 @@ symbol | String | 是 | 取消指定交易对的open订单 |
  }
 ```
 
-该接口是获取所有活跃订单列表，返回值是分页后的数据。返回数据都根据订单最新更新时间降序排序。
-
+该接口是获取所有活跃订单列表。返回数据都根据订单最新更新时间降序排序。
 
 ### HTTP请求
 `GET /api/v1/orders/hf/active`
@@ -696,8 +694,6 @@ symbol | String | 是 | 只返回指定交易对的订单信息 |
 side | String | 否 | [可选] buy（买） 或 sell（卖）|
 startAt | long | 否 | [可选] 开始时间（毫秒），限制订单最新更新时间|
 endAt | long | 否 | [可选] 截止时间（毫秒），限制订单最新更新时间|
-
-<aside class="notice"><code>lastId</code>用来过滤数据和分页，如果不输入<code>lastId</code>，默认返回最多100条最新数据，返回结果中有<code>lastId</code>，使用它作为查询条件，可以查询下一页次新数据</aside>
 
 ### 返回值
 字段	| 含义 |
@@ -883,7 +879,7 @@ tradeType | 交易类型: TRADE（现货交易）|
 此接口，可以通过订单id获取单个订单信息。
 
 ### HTTP请求
-`GET /api/v1/orders/hf/{orderId}`
+`GET /api/v1/orders/hf/{orderId}?symbol={symbol}`
 
 ### API权限
 此接口需要`通用权限`。
@@ -964,7 +960,7 @@ tradeType | 交易类型: TRADE（现货交易）|
 此接口，可以通过clientOid查询单个订单的信息，若订单不存在则提示订单不存在。
 
 ### HTTP请求
-`GET /api/v1/orders/hf/client-order/{clientOid}`
+`GET /api/v1/orders/hf/client-order/{clientOid}?symbol={symbol}`
 ### API权限
 此接口需要`通用权限`。
 ### 频率限制

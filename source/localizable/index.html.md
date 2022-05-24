@@ -617,12 +617,12 @@ clientOid | Identifier created by the client |
 }
 ```
 
-This endpoint allows cancellation of all orders related to a specific trading pair with a status of `open` （including all orders pertaining to high-frequency trading accounts and non-high-frequency trading accounts），the return value is a list of the IDs of the cancelled orders.
+This endpoint allows cancellation of all high-frequency orders related to a specific trading pair with a status of `open`, the return value is a list of the IDs of the cancelled orders.
 
 This endpoint only sends cancellation requests. The results of the requests must be obtained by checking the order status or subscribing to websocket. 
 
 ### HTTP Request
-`DELETE /api/v1/orders/hf`
+`DELETE /api/v1/orders/hf?symbol={symbol}`
 ### API Permissions
 This API requires `Trade` permissions
 ### Frequency Limits
@@ -680,7 +680,7 @@ symbol | String | Yes | Cancel open orders pertaining to the specified trading p
  }
 ```
 
-This endpoint obtains a list of all active orders，with the return value being paginated data. The return data is sorted in descending order based on the latest update times.
+This endpoint obtains a list of all active orders. The return data is sorted in descending order based on the latest update times.
 
 
 ### HTTP Request
@@ -699,8 +699,6 @@ symbol | String | Yes | Only returns order information for the specified
 trading pair | side | String | No | \[Optional] `buy` or `sell`| 
 startAt | long | No | \[Optional] Start time (ms)，latest update time of limit orders| 
 endAt | long | No | \[Optional] End time (ms), latest update time of limit order|
-
-<aside class="notice"><code>lastId</code>is used to filter data and paginate. If <code>lastId</code> is not entered，it will default to returning a maximum of 100 latest items. <code>lastId</code> is included in the returned results，and can be used as a query parameter for looking up data from the next page.</aside>
 
 ### Return Value
 Field | Description | 
@@ -887,7 +885,7 @@ tradeType | Trade type: TRADE (Spot Trading)|
 This endpoint can be used to obtain information for a single order using the order id.
 
 ### HTTP Request
-`GET /api/v1/orders/hf/{orderId}`
+`GET /api/v1/orders/hf/{orderId}?symbol={symbol}`
 
 ### API Permissions
 This API requires `General` permissions
@@ -967,7 +965,7 @@ tradeType | Trade type: `TRADE`(Spot Trading)|
 The endpoint can be used to obtain information about a single order using clientOid. If the order does not exist, then there will be a prompt saying that the order does not exist.
 
 ### HTTP Request
-`GET /api/v1/orders/hf/client-order/{clientOid}`
+`GET /api/v1/orders/hf/client-order/{clientOid}?symbol={symbol}`
 ### API Permissions
 This API requires `General` permissions
 ### Frequency Limits
