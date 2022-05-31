@@ -600,23 +600,10 @@ clientOid | Identifier created by the client |
 
 ## Cancel All Orders
 ```json
-{
-    "cancelledOrderIds":[
-        "5c52e11203aa677f33e493fb",
-        "5c52e12103aa677f33e493fe",
-        "5c52e12a03aa677f33e49401",
-        "5c52e1be03aa677f33e49404",
-        "5c52e21003aa677f33e49407",
-        "5c6243cb03aa67580f20bf2f",
-        "5c62443703aa67580f20bf32",
-        "5c6265c503aa676fee84129c",
-        "5c6269e503aa676fee84129f",
-        "5c626b0803aa676fee8412a2"
-    ]
-}
+
 ```
 
-This endpoint allows cancellation of all high-frequency orders related to a specific trading pair with a status of `open`, the return value is a list of the IDs of the cancelled orders.
+This endpoint allows cancellation of all orders related to a specific trading pair with a status of `open` (including all orders pertaining to high-frequency trading accounts and non-high-frequency trading accounts). If the HTTP status of the interface is `200`, it can be considered that the cancellation request has been submitted successfully.
 
 This endpoint only sends cancellation requests. The results of the requests must be obtained by checking the order status or subscribing to websocket. 
 
@@ -631,9 +618,7 @@ Parameters | Type | Compulsory? | Description |
 --------- | ------- | -----------| -----------| 
 symbol | String | Yes | Cancel open orders pertaining to the specified trading pair |
 ### Return Value
-| Field | Description | 
-| ----------------- | ------- | 
-| cancelledOrderIds | Order id of the cancelled order |
+Since this interface is a batch cancellation, the http status of the interface is `200`, which means that the cancellation request has been submitted successfully, so no return value is required. The actual cancellation result can be obtained by query order status through API or subscribing to websocket to get the order status.
 
 ## Obtain List of Active Orders
 ```json
