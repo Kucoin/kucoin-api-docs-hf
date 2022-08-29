@@ -672,7 +672,10 @@ symbol | String | Yes | Trading pair, such as `ETH-BTC` |
 This endpoint sends out a request to cancel a high-frequency order using clientOid.
 
 ### HTTP Request
-`DELETE /api/v1/orders/hf/client-order/{clientOid}?symbol={symbol}`
+`DELETE /api/v1/hf/orders/client-order/{clientOid}?symbol={symbol}`
+
+### Example
+`DELETE /api/v1/hf/orders/client-order/6d539dc614db3?symbol=ETH-BTC`
 
 ### API Permissions
 This API requires `Trade` permissions
