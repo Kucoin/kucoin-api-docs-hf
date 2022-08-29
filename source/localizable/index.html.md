@@ -18,7 +18,7 @@ search: true
 
 ## Brief Introduction
 
-Welcome to KuCoin’s developer documentation for high-frequency trading. This document provides an overview of high-frequency trading features, the high-frequency trading market, as well as APIs.
+Welcome to KuCoin’s developer documentation for high-frequency trading. This document provides an overview of high-frequency trading features, as well as APIs.
 
 KuCoin API: **REST API**
 
@@ -28,19 +28,35 @@ KuCoin API: **REST API**
 
 ## Update Preview
 
+# User
 
 # Account
 
-## Create an Account
+## Create a high-frequency trading account
 ```json
+// request
 {
-    "id":"5bd6e9286d99522a52e458de" //accountId
+    "currency":"KCS",
+    "type":"trade_hf"
 }
 ```
 
-This API can be used to create an account.
+```json
+// response
+{
+    "code": "200000",
+    "data": {
+        "id": "2675369984" //accountId
+    }
+}
+```
+
+This API can be used to create high-frequency trading account.
 
 ### HTTP Request
+`POST /api/v1/accounts`
+
+### Example
 `POST /api/v1/accounts`
 
 ### API Permissions
@@ -49,92 +65,175 @@ This API requires `General` permissions
 ### Parameters
 Parameters | Data Type | Compulsory? | Description 
 --------- | ------- | -----------| -----------| 
-type | String | Yes | Account type:`MAIN`, `TRADE`, `MARGIN`, or `TRADE_HF`
-currency | String | Yes | currency
+type | String | Yes | Account type:`trade_hf`
+currency | String | Yes | currency, e.g: KCS
 
 ### Return Value
 Field | Description 
 --------- | ------- 
 id | Account ID -- accountId
 
-
-
-## List Accounts
+## Internal Funds Transfers in high-frequency trading accounts
 ```json
-[
-    {
-        "id":"5bd6e9286d99522a52e458de", //accountId
-        "currency":"BTC",  //currency
-        "type":"TRADE_HF", //Account type, high-frequency trading (trade_hf)
-        "balance":"237582.04299",//Total funds
-        "available":"237582.032", //Amount available
-        "holds":"0.01099" //Amount frozen
-    },
-    {
-        "id":"5bd6e9216d99522a52e458d6",
-        "currency":"BTC",
-        "type":"trade_hf",
-        "balance":"1234356",
-        "available":"1234356",
-        "holds":"0"
-    }
-]
+// request
+{
+    "amount":10,
+    "currency":"USDT",
+    "from":"trade",
+    "to":"trade_hf",
+    "clientOid":"b6ahe97ce32aed83g3c3f8f0"
+}
 ```
 
-List Account Details
+```json
+// response
+{
+    "code":"200000",
+    "data": {
+        "orderId":"6305cbf0bd13850001e625b4"
+    }
+}
+```
+Users can transfer funds between their main account, trading account, and high-frequency trading account free of charge.
 
-Before making a trade, first deposit funds into the main account, and then transfer funds into the high-frequency trading account via internal funds transfer.
+### HTTP Request
+`POST /api/v2/accounts/inner-transfer`
+
+### Example
+`POST /api/v2/accounts/inner-transfer`
+
+### API Permissions
+This API requires `Trade` permissions
+
+### Parameters
+Parameters | Type | Compulsory? | Description | 
+--------- | ------- | -----------| -----------| 
+clientOid | String | Yes | Client Order Id，a unique identifier created by the user, using UUID is recommended | 
+currency | String | Yes | currency | 
+from | String | Yes | Payment account type: `main`(main account), `trade`(trading account), `trade_hf`(high-frequency trading account)
+to | String | Yes | Receiving account type: `main`(main account), `trade`(trading account), `trade_hf`(high-frequency trading account)
+amount | String | Yes | Transfer amount, the precision is the precision of the currency multiplied by a positive integer |
+
+### Return Value
+Field | Description 
+--------- | ------- 
+orderId | Order ID for internal funds transfer
+
+
+## List high-frequency trading accounts
+```json
+// response
+{
+    "code": "200000",
+    "data": [
+        {
+            "balance": "3027.25165335",
+            "available": "3027.25165335",
+            "holds": "0",
+            "currency": "USDT",
+            "id": "2560047104",
+            "type": "trade_hf"
+        }
+    ]
+}
+```
+Get a list of high-frequency trading accounts.
 
 ### HTTP Request
 `GET /api/v1/accounts`
 
+### Example
+`GET /api/v1/accounts?currency=USDT&type=trade_hf`
+
 ### API Permissions
 This API requires `General` permissions
-
 
 ### Parameters
 Parameters | Type | Compulsory? | Description 
 | --------- | ------- | -----------| -----------| 
 currency | String | No | currency 
-type | String | No | Account type:`MAIN`, `TRADE`, `MARGIN`, or `TRADE_HF`
+type | String | No | Account type, `trade_hf`(high-frequency trading account)
 
 ### Return Value
 Field | Description 
 --------- | ------- 
-id | accountId Account ID 
-currency | The currency the account is associated with 
-type |Account type , `MAIN` (main account) , `TRADE` (trading account), `MARGIN` (margin account), `TRADE_HF` (high-frequency trading account) balance | Total funds 
+id | accountId
+currency | The currency the account is associated with
+type | Account type ,`trade_hf`(high-frequency trading account) 
+balance | Total funds 
 available | Available funds 
 holds | Funds frozen
 
-## Get Transferrable Funds
+## Detail of the high-frequency trading account
 ```json
+// response
 {
-    "currency":"KCS",
-    "balance":"0",
-    "available":"0",
-    "holds":"0",
-    "transferable":"0"
+    "code": "200000",
+    "data": {
+        "balance": "9000000",
+        "available": "9000000",
+        "holds": "0",
+        "currency": "YOP"
+    }
 }
 ```
-This API can be used to obtain the amount of transferrable funds pertaining to the specified currency for the specified account.
+Get the details of the high-frequency trading account
 
 ### HTTP Request
-`GET /api/v1/accounts/transferable`
+`GET /api/v1/accounts/{accountId}`
+
+### Example
+`GET /api/v1/accounts/2051232768`
 
 ### API Permissions
 This API requires `General` permissions
 
-### Frequency Limits
+### Parameters
+Parameters | Type | Compulsory? | Description 
+| --------- | ------- | -----------| -----------| 
+accountId | String | Yes | Path parameters, high-frequency trading account ID
+
+### Return Value
+Field | Description 
+--------- | ------- 
+currency | The currency the account is associated with
+balance | Total funds 
+available | Available funds 
+holds | Funds frozen
+
+## Get Transferrable Funds in high-frequency trading accounts
+```json
+// response
+{
+    "code": "200000",
+    "data": {
+        "balance": "990.28419461",
+        "transferable": "983.64866777",
+        "available": "983.64866777",
+        "holds": "6.63552684",
+        "currency": "USDT"
+    }
+}
+```
+This API can be used to obtain the amount of transferrable funds in high-frequency trading accounts.
+
+### HTTP Request
+`GET /api/v1/accounts/transferable`
+
+### Example
+`GET /api/v1/accounts/transferable?currency=USDT&type=TRADE_HF`
+
+### API Permissions
+This API requires `General` permissions
+
+### REQUEST RATE LIMIT
 This API limits request frequencies to `18 times/3s` for all accounts.
 
 ### Parameters
-
 Parameters | Type | Compulsory? | Description |
 --------- | ------- | -----------| -----------| 
 currency | String | No | currency | 
-type | String | No | Account type: `MAIN`, `TRADE`, `MARGIN`, `TRADE_HF` |
-
+type | String | No | Account type, `TRADE_HF`(high-frequency trading account)|
 
 ### Return Value
 Field | Description 
@@ -146,44 +245,51 @@ holds | Funds on hold
 transferable | Transferrable funds
 
 
-## Account Ledger
+## Account Ledger in high-frequency trading accounts
 ```json
-[
-    {
-        "id": 12,//Unique key
-        "currency": "USDT", //currency
-        "amount": "10.00059547", //Amount of change in funds
-        "fee": "0", //Deposit for withdrawal fee
-        "balance": "0", //Change in balance
-        "accountType": "TRADE_HF", //Account type
-        "bizType": "TRADE_EXCHANGE", //Transaction type
-        "direction": "in", //Direction of transfer (in or out)
-        "createdAt": 1629101692950, //Created
-        "context": "{\"symbol\":\"1001\",\"orderId\":\"611a1e7cc913d000066cf7ec\",\"tradeId\":\"283742\"}" //Business core parameters
-    },
-    {
-        "id": 10,
-        "currency": "USDT",
-        "amount": "10.00059547",
-        "fee": "0",
-        "balance": "0",
-        "accountType": "TRADE_HF",
-        "bizType": "TRADE_EXCHANGE",
-        "direction": "in",
-        "createdAt": 1629101692950,
-        "context": "{\"symbol\":\"1001\",\"orderId\":\"611a1e7cc913d000066cf7ec\",\"tradeId\":\"283742\"}"
-    }
-]
+// response
+{
+    "code": "200000", 
+    "data": [
+        {
+            "id": "42852417537", 
+            "currency": "CSP", 
+            "amount": "1.00000000", 
+            "fee": "0.00000000", 
+            "balance": "99999986.99999999", 
+            "accountType": "TRADE_HF", 
+            "bizType": "TRADE_EXCHANGE", 
+            "direction": "in", 
+            "createdAt": "1661347205743", 
+            "context": "{'symbol':'CSP-USDT','orderId':'6306257dd9180300014c8d47','tradeId':'609522034689'}"
+        }, 
+        {
+            "id": "42852401152", 
+            "currency": "CSP", 
+            "amount": "1.00000000", 
+            "fee": "0.00000000", 
+            "balance": "99999985.99999999", 
+            "accountType": "TRADE_HF", 
+            "bizType": "TRADE_EXCHANGE", 
+            "direction": "out", 
+            "createdAt": "1661347205743", 
+            "context": "{'symbol':'CSP-USDT','orderId':'63062585d9180300014c8d50','tradeId':'609522034689'}"
+        }
+    ]
+}
 ```
-This API endpoint returns all transfer (in and out) records for the account and supports multi-coin queries. Get Parameter
+This API endpoint returns all transfer (in and out) records in  high-frequency trading account and supports multi-coin queries. The query results are sorted in descending order by createdAt and id.
 
 ### HTTP Request
-`GET /api/v1/accounts/ledgers/hf`
+`GET /api/v1/hf/accounts/ledgers`
+
+### Example
+`GET /api/v1/hf/accounts/ledgers?bizType=TRADE_EXCHANGE&currency=YOP,DAI&startAt=1601395200000`
 
 ### API Permissions
 This API requires `General` permissions
 
-### Frequency Limits
+### REQUEST RATE LIMIT
 This API limits request frequencies to `18 times/3s` for all accounts.
 
 ### Parameters
@@ -194,15 +300,12 @@ direction | String | No | Direction of transaction (in or out): `in`-transfer in
 bizType | String | No | Transaction type: `TRANSFER`-transfer funds,`TRADE_EXCHANGE`-Trade | 
 lastId | long | No | The id of the last set of data from the previous batch of data. By default, the latest information is given. | 
 limit | int | No | Default`100`，Max`200` | 
-startAt | long | No | Start time (ms)| 
-endAt | long | No | End time (ms)|
+startAt | long | No | Start time (ms), the conditional limit createdAt| 
+endAt | long | No | End time (ms), the conditional limit createdAt|
 
 <aside class="notice">If <code>lastId</code> is configured, the information obtained < <code>lastId</code>. Otherwise, it will go back to the latest information. You can only obtain data from within a <code>3 * 24</code> hour time range (i.e., from <code>3 * 24</code> hours ago up to now) If you specify a time range that exceeds this limit, the system will default to data from within <code>3 * 24</code> hours.</aside>
 
-
-
 #### Return Value
-
 Field | Description | 
 --------- | ------- | 
 id | Unique key | 
@@ -211,42 +314,13 @@ amount | Change in funds balance |
 fee | Deposit or withdrawal fee | 
 balance | Total balance of funds after change | 
 accountType | Master account type `TRADE_HF` | 
-bizType | Trnasaction type，such as trade, withdraw，referral bonus, loan, etc. | 
+bizType | Trnasaction type，such as `TRANSFER`, `TRADE_EXCHANGE`, etc. | 
 direction | Direction of transfer( `out` or `in`) | 
 createdAt | Created | 
 context | Core transaction parameter |
 
 - `context` description
     * If the `bizType` is `TRADE_EXCHANGE`, the context field will include additional transaction information (order id, transaction id, and trading pair).
-
-## Internal Funds Transfers
-```json
-{
-    "orderId":"5bd6e9286d99522a52e458de"
-}
-```
-
-This API endpoint can be used to transfer funds between accounts internally. Users can transfer funds between their main account, trading account, margin account, and high-frequency trading account free of charge. **Transfer of funds from other accounts to futures accounts is supported, but transfer of funds from futures accounts to other accounts is not supported.**
-
-### HTTP Request
-`POST /api/v2/accounts/inner-transfer`
-
-### API Permissions
-This API requires `Trade` permissions
-
-### Parameters
-Parameters | Type | Compulsory? | Description | 
---------- | ------- | -----------| -----------| 
-clientOid | String | Yes | Client Order Id，a unique identifier created by the user, using UUID is recommended | 
-currency | String | Yes | currency | 
-from | String | Yes | Payment account type: `MAIN`, `TRADE`, `MARGIN`, `TRADE_HF` 
-to | String | Yes | Receiving account type: `MAIN`, `TRADE`, `MARGIN`, `TRADE_HF`, `CONTRACT` 
-amount | String | Yes | Transfer amount, the precision is the precision of the currency multiplied by a positive integer |
-
-### Return Value
-Field | Description 
---------- | ------- 
-orderId | Order ID for internal funds transfer
 
 # Trade
 
@@ -257,6 +331,7 @@ The following requires signature verification.
 
 ## Order placement
 ```json
+// response
 {
     "orderId":"5bd6e9286d99522a52e458de"
 }
@@ -272,16 +347,19 @@ Please note that once your order enters the order book, the system will freeze t
 
 Before placing orders, please be sure to fully understand the meaning of the parameters for each trading pair.
 
-<aside class="notice">For each account, the maximum number of <strong>ACTIVE</strong> orders is <code>200</code> (including stop-loss orders) for each trading pair.</aside>
+<aside class="notice">For each account, the maximum number of <strong>ACTIVE</strong> orders is <code>200</code> for each trading pair.</aside>
 
 
 ### HTTP Request
-`POST /api/v1/orders/hf`
+`POST /api/v1/hf/orders`
+
+### Example
+`POST /api/v1/hf/orders`
 
 ### API Permissions
 This API requires `Trade` permissions
 
-### Frequency Limits
+### REQUEST RATE LIMIT
 The request frequency for this API is limited to `45 times/3s` for each account
 
 ### Parameters
@@ -295,8 +373,8 @@ Parameters | Type | Compulsory? | Description |
  type | String | Yes | Order type `limit` and `market` | 
  side | String | Yes | `buy` or `sell` | 
  stp | String | No | Self trade prevention (`self trade prevention`) is divided into four strategies: `CN`, `CO`, `CB` , and `DC` | 
- tags | String | No | Order tag, cannot exceed `20` characters (UTF-8) in length| 
- remark | String | No | Order placement remarks, length cannot exceed `20` characters (UTF-8) in length|
+ tags | String | No | Order tag, cannot exceed `20` characters (ASCII) in length| 
+ remark | String | No | Order placement remarks, length cannot exceed `20` characters (ASCII) in length|
 
 #### Additional Request Parameters Required by `limit` Orders
 
@@ -331,14 +409,14 @@ The ClientOid field is a unique ID created by the user（we recommend using a UU
 Please remember the orderId created by the service provider, it used to check for updates in order status.
 
 #### Order Type (type):
-The type of order you specify when you place your order determines whether or not you need to request other parameters and also affects the execution of the matching engine. If you do not specify an order type when placing the order, the system will default to a limit order.
+The type of order you specify when you place your order determines whether or not you need to request other parameters and also affects the execution of the matching engine.
 
 When placing a limit order, you must specify a price and size. The system will try to match the order according to market price or a price better than market price. If the order cannot be immediately matched, it will stay in the order book until it is matched or the user cancels.
 
 Unlike limit orders, the price for market orders fluctuates with market prices. When placing a market order, you do not need to specify a price, you only need to specify a quantity. Market orders are filled immediately and will not enter the order book. All market orders are takers and a taker fee will be charged.
 
 #### Trade Type (tradeType)
-The platform currently supports spot （TRADE） asset trading orders. Based on your parameter types, the system will freeze funds in the specified accounts. If that parameter is not set, the system will default to freezing funds in your trading account according to spot trading rules.
+The platform currently supports spot （TRADE） asset trading orders, the system will default to freezing funds in your trading account according to spot trading rules.
 
 #### Price (Price)
 When placing a limit order, the price must be based on price increments (priceIncrement) for the trading pair. The price increment (priceIncrement) is the price precision for the trading pair. For example, for the BTC-USDT trading pair, the priceIncrement is 0.00001000. So the price for your orders cannot be less than 0.00001000 and must be a multiple of priceIncrement. Otherwise, the order will return an invalid priceIncrement error.
@@ -359,10 +437,10 @@ GTT | Good Till Time | Expires at a specified time |
 IOC | Immediate Or Cancel | Execute the portions that can be executed immediately and cancel the rest; this does not enter the order book. | 
 FOK | Fill Or Kill | Cancel if the order cannot be completely filled. |
 
-- Note: order fills include self-fills.
+- Note: order fills include self-fills. Market order does not support the TimeInForce strategy
 
 #### Post Only (PostOnly)
-PostOnly is just a label. If an order can be immediately filled, then it is cancelled. \* When the user places a postOnly order, if the order encounters an iceberg order or hidden order after entering the matching engine, the order can be filled immediately. The postOnly order will charge maker fees and the iceberg order and hidden order will charge taker fees.
+PostOnly is just a label. If an order can be immediately filled, then it is cancelled. When the user places a postOnly order, if the order encounters an iceberg order or hidden order after entering the matching engine, the order can be filled immediately. The postOnly order will charge maker fees and the iceberg order and hidden order will charge taker fees.
 
 #### Hidden Orders and Iceberg Orders (Hidden & Iceberg)
 
@@ -402,7 +480,7 @@ CN | Cancel new | Cancel the new order. |
 CB | Cancel both | Cancel both sides |
 
 #### Order Lifecycle (ORDER LIFECYCLE)
-When an order placement request is successful (the matching engine receives the order) or denied (due to there being insufficient funds or illegal parameter values, etc.), the system will respond to the HTTP request. When an order is successfully placed, the order ID is returned. The order will be matched, which could result in it being fully or partially filled. When an order is partially filled, the remaining portions of the order will be in an active state awaiting to be matched (this does not include IOC orders). Orders that are fully filled will be put into the “done” state.
+When an order placement request is successful (the matching engine receives the order) or denied (due to there being insufficient funds or illegal parameter values, etc.), the system will respond to the HTTP request. When an order is successfully placed, the order ID is returned. The order will be matched, which could result in it being fully or partially filled. When an order is fully or partially filled, the remaining portions of the order will be in an active state awaiting to be matched (this does not include IOC orders). Orders that are fully or partially filled(already cancelled) will be put into the “done” state.
 
 Users that have subscribed to the Market Data Channel can use the order ID （orderId） and client ID （clientOid） to identify messages.
 
@@ -420,27 +498,29 @@ For example: if the threshold value is 10%, when a user places a market price pu
 
 | Field | Description | 
 | --------------------------------- | ---- | 
-| orderId | An order Id is returned once an order is successfully placed. The `orderId` field，represents that the order has entered the matching engine. |
+| orderId | An order Id is returned once an order is successfully placed.|
 
-## Batch Order Placement
+## Batch Order Placement for high-frequency trading
 ```json
 //request
 {
-    "symbol": "KCS-USDT",
+    "symbol": "BTC-USDT",
     "orderList": [
         {
             "clientOid": "3d07008668054da6b3cb12e432c2b13a",
             "side": "buy",
             "type": "limit",
             "price": "0.01",
-            "size": "0.01"
+            "size": "0.01",
+            "symbol": "BTC-USDT"
         },
         {
             "clientOid": "37245dbe6e134b5c97732bfb36cd4a9d",
             "side": "buy",
             "type": "limit",
             "price": "0.01",
-            "size": "0.01"
+            "size": "0.01",
+            "symbol": "BTC-USDT"
         }
     ]
 }
@@ -449,7 +529,8 @@ For example: if the threshold value is 10%, when a user places a market price pu
 ```json
 //response
 {
-    "data": [
+   "code":"200000",
+   "data":[
         {
             "symbol": "KCS-USDT",
             "type": "limit",
@@ -461,8 +542,6 @@ For example: if the threshold value is 10%, when a user places a market price pu
             "timeInForce": "GTC",
             "cancelAfter": 0,
             "postOnly": false,
-            "hidden": false,
-            "iceberge": false,
             "iceberg": false,
             "visibleSize": null,
             "channel": "API",
@@ -482,8 +561,6 @@ For example: if the threshold value is 10%, when a user places a market price pu
             "timeInForce": "GTC",
             "cancelAfter": 0,
             "postOnly": false,
-            "hidden": false,
-            "iceberge": false,
             "iceberg": false,
             "visibleSize": null,
             "channel": "API",
@@ -492,7 +569,7 @@ For example: if the threshold value is 10%, when a user places a market price pu
             "failMsg": null,
             "clientOid": "bd1e95e705724f33b508ed270888a4a9"
         }
-    ]
+   ]
 }
 ```
 
@@ -503,15 +580,16 @@ This endpoint only supports order placement requests. To obtain the results of t
 ### HTTP Request
 `POST /api/v1/orders/hf/multi`
 
-### API Permissions
+### Example
+`POST /api/v1/hf/orders/multi`
 
+### API Permissions
 This API requires `Trade` permissions
 
-### Frequency Limits
+### REQUEST RATE LIMIT
 The request frequency of this API endpoint is limited to `3 times/3s` for each account
 
 ### Parameters
-
 Parameters | Type | Compulsory?  | Description | 
 --------- | ------- | -----------| -----------| 
 clientOid | String | No | Client Order Id，a unique identifier created by the user，the use of UUID is recommended | 
@@ -527,8 +605,8 @@ postOnly | boolean | No | \[Optional] Post only identifier, invalid when the tim
 hidden | boolean | No | \[Optional] Hidden or not（not shown in order book） | 
 iceberg | boolean | No | \[Optional] Whether iceberg orders only show visible portions of orders | 
 visibleSize | String | No | \[Optional] The maximum visible size for iceberg orders | 
-tags | String | No | \[Optional] The order identifier length cannot exceed `20` characters（UTF-8）| 
-remark | String | No | \[Optional] Order placement remarks cannot exceed a length of `20` characters（UTF-8）|
+tags | String | No | \[Optional] The order identifier length cannot exceed `20` characters（ASCII）| 
+remark | String | No | \[Optional] Order placement remarks cannot exceed a length of `20` characters（ASCII）|
 
 
 ### Return Value
@@ -538,24 +616,29 @@ remark | String | No | \[Optional] Order placement remarks cannot exceed a lengt
 Msg | Reason of failure |
 
 
-## Single Order Cancellation
+## Cancellation of high-frequency orders by orderId
 ```json
-{
-    "cancelledOrderIds":[
-        "5bd6e9286d99522a52e458de"
-    ]
+// response
+{   
+    "code": "200000", 
+    "data": {
+        "orderId": "630625dbd9180300014c8d52"
+    }
 }
 ```
 
-This endpoint can be used to cancel a single order.
+This endpoint can be used to cancel a high-frequency order by orderId.
 
 ### HTTP Request
-`DELETE /api/v1/orders/hf/{orderId}?symbol={symbol}`
+`DELETE /api/v1/hf/orders/{orderId}?symbol={symbol}`
+
+### Example
+`DELETE /api/v1/hf/orders/5bd6e9286d99522a52e458de?symbol=ETH-BTC`
 
 ### API Permissions
 This API requires `Trade` permissions
 
-### Frequency Limits
+### REQUEST RATE LIMIT
 The request frequency of this API is limited to `60 times/3s` for each account
 
 ### Parameters
@@ -572,35 +655,46 @@ symbol | String | Yes | Trading pair, such as `ETH-BTC` |
 
 | Field | Description | 
 | ----------------- | ------- | 
-| cancelledOrderIds | Order id of the cancelled order |
+| orderId | Order id of the cancelled order |
 
 
-## Cancel Single Order Using clientOid 
+## Cancellation of high-frequency order by clientOid
 ```json
+// response
 {
-    "clientOid": "6d539dc614db3"
+    "code": "200000", 
+    "data": {
+        "clientOid": "6d539dc614db3"
+    }
 }
 ```
 
-This endpoint sends out a request to cancel an order using clientOid.
+This endpoint sends out a request to cancel a high-frequency order using clientOid.
 
 ### HTTP Request
 `DELETE /api/v1/orders/hf/client-order/{clientOid}?symbol={symbol}`
+
 ### API Permissions
 This API requires `Trade` permissions
+
 ### Parameters
 Parameters  | Type | Compulsory? | Description | 
 --------- | ------- | -----------| -----------| 
 clientOid | String | Yes | Path parameter，an identifier created by the 
-client | symbol | String | Yes | Trading pair such as `ETH-BTC` |
+symbol | String | Yes | Trading pair such as `ETH-BTC` |
+
 #### Return Value
 Field | Description | 
 --------- | ------- | 
 clientOid | Identifier created by the client |
 
-## Cancel All Orders
-```json
-
+## Cancellation of all HF orders related to a specific trading pair
+```json 
+// response
+{
+    "code": "200000", 
+    "data": "success"
+}
 ```
 
 This endpoint allows cancellation of all orders related to a specific trading pair with a status of `open` (including all orders pertaining to high-frequency trading accounts and non-high-frequency trading accounts). If the HTTP status of the interface is `200`, it can be considered that the cancellation request has been submitted successfully.
@@ -608,81 +702,83 @@ This endpoint allows cancellation of all orders related to a specific trading pa
 This endpoint only sends cancellation requests. The results of the requests must be obtained by checking the order status or subscribing to websocket. 
 
 ### HTTP Request
-`DELETE /api/v1/orders/hf?symbol={symbol}`
+`DELETE /api/v1/hf/orders?symbol={symbol}`
+
+### Example
+`DELETE /api/v1/hf/orders?symbol=ETH-BTC`
+
 ### API Permissions
 This API requires `Trade` permissions
-### Frequency Limits
+
+### REQUEST RATE LIMIT
 The request frequency of this API endpoint is limited to `3 times/3s` for each account
+
 ### Parameters
 Parameters | Type | Compulsory? | Description | 
 --------- | ------- | -----------| -----------| 
 symbol | String | Yes | Cancel open orders pertaining to the specified trading pair |
+
 ### Return Value
 Since this interface is a batch cancellation, the http status of the interface is `200`, which means that the cancellation request has been submitted successfully, so no return value is required. The actual cancellation result can be obtained by query order status through API or subscribing to websocket to get the order status.
 
-## Obtain List of Active Orders
+## Obtain List of Active HF Orders
 ```json
+// response
 {
-    "currentPage": 1,
-    "pageSize": 1,
-    "totalNum": 153408,
-    "totalPage": 153408,
-    "items": [
-        {
-            "id": "5c35c02703aa673ceec2a168",
-            "symbol": "BTC-USDT",
-            "opType": "DEAL",
-            "type": "limit",
-            "side": "buy",
-            "price": "10",
-            "size": "2",
-            "funds": "0",
-            "dealFunds": "0.166",
-            "dealSize": "2",
-            "fee": "0",
-            "feeCurrency": "USDT",
-            "stp": "",
-            "stop": "",
-            "stopTriggered": false,
-            "stopPrice": "0",
-            "timeInForce": "GTC",
-            "postOnly": false,
-            "hidden": false,
-            "iceberg": false,
-            "visibleSize": "0",
-            "cancelAfter": 0,
-            "channel": "IOS",
-            "clientOid": "",
-            "remark": "",
-            "tags": "",
-            "isActive": false,
-            "cancelExist": false,
-            "createdAt": 1547026471000,
-            "tradeType": "TRADE"
-        }
+    "code" : "200000",
+    "data" : [
+        "id": "5c35c02703aa673ceec2a168",
+        "symbol": "BTC-USDT",
+        "opType": "DEAL",
+        "type": "limit",
+        "side": "buy",
+        "price": "10",
+        "size": "2",
+        "funds": "0",
+        "dealFunds": "0.166",
+        "dealSize": "2",
+        "fee": "0",
+        "feeCurrency": "USDT",
+        "stp": "",
+        "timeInForce": "GTC",
+        "postOnly": false,
+        "hidden": false,
+        "iceberg": false,
+        "visibleSize": "0",
+        "cancelAfter": 0,
+        "channel": "IOS",
+        "clientOid": "",
+        "remark": "",
+        "tags": "",
+        "active": true,
+        "inOrderBook": true,
+        "cancelExist": false,
+        "createdAt": 1547026471000,
+        "lastUpdatedAt": 1547026471001,
+        "tradeType": "TRADE"
+        }        
     ]
- }
+}
 ```
-
-This endpoint obtains a list of all active orders. The return data is sorted in descending order based on the latest update times.
+This endpoint obtains a list of all active HF orders. The return data is sorted in descending order based on the latest update times.
 
 
 ### HTTP Request
-`GET /api/v1/orders/hf/active`
+`GET /api/v1/hf/orders/active`
+
+### Example
+`GET /api/v1/hf/orders/active?symbol=BTC-ETH`
 
 ### API Permissions
 This API requires `General` permissions
 
-### Frequency Limits
+### REQUEST RATE LIMIT
 The request frequency of this API is limited to `30 times/3s` for each account
 
 ### Parameters
 Parameters | Type | Compulsory? | Description | 
 --------- | ------- | -----------| -----------| 
-symbol | String | Yes | Only returns order information for the specified 
-trading pair | side | String | No | \[Optional] `buy` or `sell`| 
-startAt | long | No | \[Optional] Start time (ms)，latest update time of limit orders| 
-endAt | long | No | \[Optional] End time (ms), latest update time of limit order|
+symbol | String | Yes | Only returns order information for the specified trading pair 
 
 ### Return Value
 Field | Description | 
@@ -710,79 +806,73 @@ channel | Source of orders |
 clientOid | Identifier created by the client | 
 remark | Order description | 
 tags | Order identifier | 
-isActive | Order status: `true`-The status of the order is`open`; `false`-the order has been filled or cancelled | 
+active | Order status: `true`-The status of the order is`active`; `false`-The status of the order is`done` | 
+inOrderBook | Whether to enter the orderbook: `true`: enter the orderbook; `false`: not enter the orderbook |  
 cancelExist | Are there any cancellation records pertaining to the order? | 
-createdAt | Creation time | 
+createdAt | order creation time | 
+lastUpdatedAt | Last update time of order |
 tradeType | Trade type: TRADE (Spot Trading)|
-
-#### Order Status and Settlement
-
-All orders in the order book are in the “active” state. Orders removed from the order book are put in the “done” state.
-
-There could be a delay in the order of milliseconds from the time an order is filled and the time funds are credited due to the system conducting settlement operations.
-
-There are no time limits for looking up orders in the “active” statue. However, when looking up orders in the “completed” state, you can only obtain data from within  the `3 * 24` hour time range. (i.e., `3 * 24` hours ago to the current time). If the time range limit is exceeded, the system will default to looking up data from within the `3 * 24` hour time range.
-
-Records for cancelled orders are only kept for `3`days. You will not be able to look up orders cancelled more than `3` days ago.
 
 #### Order Polling (Polling)
 
 For high-frequency trading users, we recommend locally caching, maintaining your own order records, and using market data streams to update your order information in real time. 
 
-## Obtain List of Filled Orders
+## Obtain List of Filled HF Orders
 ```json
+// response
 {
-    "currentPage": 1,
-    "pageSize": 1,
-    "totalNum": 153408,
-    "totalPage": 153408,
-    "items": [
-        {
-            "id": "5c35c02703aa673ceec2a168",
-            "symbol": "BTC-USDT",
-            "opType": "DEAL",
-            "type": "limit",
-            "side": "buy",
-            "price": "10",
-            "size": "2",
-            "funds": "0",
-            "dealFunds": "0.166",
-            "dealSize": "2",
-            "fee": "0",
-            "feeCurrency": "USDT",
-            "stp": "",
-            "stop": "",
-            "stopTriggered": false,
-            "stopPrice": "0",
-            "timeInForce": "GTC",
-            "postOnly": false,
-            "hidden": false,
-            "iceberg": false,
-            "visibleSize": "0",
-            "cancelAfter": 0,
-            "channel": "IOS",
-            "clientOid": "",
-            "remark": "",
-            "tags": "",
-            "isActive": false,
-            "cancelExist": false,
-            "createdAt": 1547026471000,
-            "tradeType": "TRADE"
-        }
-    ]
- }
+   "code":"200000",
+   "data":{
+      "lastId":2682265600,
+      "items":[
+         {
+            "id":"63074a5a27ecbe0001e1f3ba",
+            "symbol":"CSP-USDT",
+            "opType":"DEAL",
+            "type":"limit",
+            "side":"sell",
+            "price":"0.1",
+            "size":"0.1",
+            "funds":"0.01",
+            "dealSize":"0",
+            "dealFunds":"0",
+            "fee":"0",
+            "feeCurrency":"USDT",
+            "stp":"",
+            "timeInForce":"GTC",
+            "postOnly":false,
+            "hidden":false,
+            "iceberg":false,
+            "visibleSize":"0",
+            "cancelAfter":0,
+            "channel":"API",
+            "clientOid":"",
+            "remark":"",
+            "tags":"",
+            "cancelExist":true,
+            "createdAt":1661422170924,
+            "lastUpdatedAt":1661422196926,
+            "tradeType":"TRADE",
+            "inOrderBook":false,
+            "active":false
+         }
+      ]
+   }
+}
 ```
-
-This endpoint obtains a list of filled orders and returns paginated data. The returned data is sorted in descending order based on the latest order update times.
+This endpoint obtains a list of filled HF orders and returns paginated data. The returned data is sorted in descending order based on the latest order update times.
 
 
 ### HTTP Request
-`GET /api/v1/orders/hf/done`
+`GET /api/v1/hf/orders/done`
+
+### Example
+`GET /api/v1/hf/orders/done?symbol=BTC-ETH&type=limit&side=buy`
 
 ### API Permissions
 This API requires `General` permissions
 
-### Frequency Limits
+### REQUEST RATE LIMIT
 The request frequency of this API is limited to `30 times/3s` for each account
 
 ### Parameters
@@ -791,8 +881,8 @@ Parameters | Type | Compulsory? | Description |
 symbol | String | Yes | Only returns order information for the specified trading pair | 
 side | String | No | \[Optional] `buy` (Buy) or`sell` (Sell)| 
 type | String | No | \[Optional] Order type: `limit` (limit order), `market`(market order) | 
-startAt | long | No | \[Optional] Start time (ms)，last update time of the limit order| 
-endAt | long | No | \[Optional] End time (ms)，last update time of limit order| 
+startAt | long | No | \[Optional] Start time (ms)，last update(filled) time of the limit order| 
+endAt | long | No | \[Optional] End time (ms)，last update(filled) time of limit order| 
 lastId | long | No | \[Optional] The id of the last data item from the previous batch，defaults to obtaining the latest data | 
 limit | int | No | \[Optional] Default`100`，maximum`200` |
 
@@ -827,50 +917,57 @@ channel | Source of orders |
 clientOid | Identifier created by the client | 
 remark | Order description | 
 tags | Order identifier | 
-isActive | Order status `true`: the status of the order is open; `false`: the order has been filled or cancelled | 
+active | Order status: `true`-The status of the order is`active`; `false`-The status of the order is`done` | 
+inOrderBook | Whether to enter the orderbook: `true`: enter the orderbook; `false`: not enter the orderbook |  
 cancelExist | Are there any cancellation records pertaining to the order? | 
-createdAt | Creation time | 
+createdAt | order creation time | 
+lastUpdatedAt | Last update time of order |
 tradeType | Trade type: TRADE (Spot Trading)|
 
 
-## Details of a Single Order
+## Details of a Single HF Order
 ```json
+// response
 {
-    "id": "5c35c02703aa673ceec2a168",
-    "symbol": "BTC-USDT",
-    "opType": "DEAL",
-    "type": "limit",
-    "side": "buy",
-    "price": "10",
-    "size": "2",
-    "funds": "0",
-    "dealFunds": "0.166",
-    "dealSize": "2",
-    "fee": "0",
-    "feeCurrency": "USDT",
-    "stp": "",
-    "timeInForce": "GTC",
-    "postOnly": false,
-    "hidden": false,
-    "iceberg": false,
-    "visibleSize": "0",
-    "cancelAfter": 0,
-    "channel": "IOS",
-    "clientOid": "",
-    "remark": "",
-    "tags": "",
-    "isActive": false,
-    "cancelExist": false,
-    "createdAt": 1547026471000,
-    "tradeType": "TRADE"
+   "code":"200000",
+   "data": {
+        "id": "5f3113a1c9b6d539dc614dc6",
+        "symbol": "KCS-BTC",
+        "opType": "DEAL",
+        "type": "limit",
+        "side": "buy",
+        "price": "0.00001",
+        "size": "1",
+        "funds": "0",
+        "dealFunds": "0",
+        "dealSize": "0",
+        "fee": "0",
+        "feeCurrency": "BTC",
+        "stp": "",
+        "timeInForce": "GTC",
+        "postOnly": false,
+        "hidden": false,
+        "iceberg": false,
+        "visibleSize": "0",
+        "cancelAfter": 0,
+        "channel": "API",
+        "clientOid": "6d539dc614db312",
+        "remark": "",
+        "tags": "",
+        "active": true,
+        "inOrderBook": false,
+        "cancelExist": false,
+        "createdAt": 1547026471000,
+        "lastUpdatedAt": 1547026471001,
+        "tradeType": "TRADE"
+    }
 }
 ```
-
-This endpoint can be used to obtain information for a single order using the order id.
-
+This endpoint can be used to obtain information for a single HF order using the order id.
 ### HTTP Request
-`GET /api/v1/orders/hf/{orderId}?symbol={symbol}`
-
+`GET /api/v1/hf/orders/{orderId}?symbol={symbol}`
+### Example
+`GET /api/v1/hf/orders/5c35c02703aa673ceec2a168?symbol=ETH-BTC`
 ### API Permissions
 This API requires `General` permissions
 ### Parameters
@@ -907,52 +1004,60 @@ channel | Source of orders |
 clientOid | Identifier created by the client | 
 remark | Order description | 
 tags | Order identifier | 
-isActive | Order status `true`: the status of the order is open; `false`: the order has been filled or cancelled | 
+active | Order status: `true`-The status of the order is`active`; `false`-The status of the order is`done` | 
+inOrderBook | Whether to enter the orderbook: `true`: enter the orderbook; `false`: not enter the orderbook |  
 cancelExist | Are there any cancellation records pertaining to the order? | 
-createdAt | Creation time | 
-tradeType | Trade type: `TRADE`(Spot Trading)|
+createdAt | order creation time | 
+lastUpdatedAt | Last update time of order |
+tradeType | Trade type: TRADE (Spot Trading)|
 
 
-## Obtain details of a single order using clientOid 
+## Obtain details of a single HF order using clientOid 
 ```json
 {
-    "id": "5f3113a1c9b6d539dc614dc6",
-    "symbol": "KCS-BTC",
-    "opType": "DEAL",
-    "type": "limit",
-    "side": "buy",
-    "price": "0.00001",
-    "size": "1",
-    "funds": "0",
-    "dealFunds": "0",
-    "dealSize": "0",
-    "fee": "0",
-    "feeCurrency": "BTC",
-    "stp": "",
-    "timeInForce": "GTC",
-    "postOnly": false,
-    "hidden": false,
-    "iceberg": false,
-    "visibleSize": "0",
-    "cancelAfter": 0,
-    "channel": "API",
-    "clientOid": "6d539dc614db312",
-    "remark": "",
-    "tags": "",
-    "isActive": true,
-    "cancelExist": false,
-    "createdAt": 1597051810000,
-    "tradeType": "TRADE"
+   "code":"200000",
+   "data": {
+        "id": "5f3113a1c9b6d539dc614dc6",
+        "symbol": "KCS-BTC",
+        "opType": "DEAL",
+        "type": "limit",
+        "side": "buy",
+        "price": "0.00001",
+        "size": "1",
+        "funds": "0",
+        "dealFunds": "0",
+        "dealSize": "0",
+        "fee": "0",
+        "feeCurrency": "BTC",
+        "stp": "",
+        "timeInForce": "GTC",
+        "postOnly": false,
+        "hidden": false,
+        "iceberg": false,
+        "visibleSize": "0",
+        "cancelAfter": 0,
+        "channel": "API",
+        "clientOid": "6d539dc614db312",
+        "remark": "",
+        "tags": "",
+        "active": true,
+        "inOrderBook": false,
+        "cancelExist": false,
+        "createdAt": 1547026471000,
+        "lastUpdatedAt": 1547026471001,
+        "tradeType": "TRADE"
+    }
 }
 ```
-
 The endpoint can be used to obtain information about a single order using clientOid. If the order does not exist, then there will be a prompt saying that the order does not exist.
 
 ### HTTP Request
-`GET /api/v1/orders/hf/client-order/{clientOid}?symbol={symbol}`
+`GET /api/v1/hf/orders/client-order/{clientOid}?symbol={symbol}`
+### Example
+`GET /api/v1/hf/orders/client-order/6d539dc614db312?symbol=ETH-BTC`
 ### API Permissions
 This API requires `General` permissions
-### Frequency Limits
+### REQUEST RATE LIMIT
 The request frequency of this API is limited to `30 times/3s` for each account
 ### Parameters
 Parameters  | Type | Compulsory? | Description | 
@@ -988,14 +1093,16 @@ channel | Source of orders |
 clientOid | Identifier created by the client | 
 remark | Order description | 
 tags | Order identifier | 
-isActive | Order status `true`: the status of the order is open; `false`: the order has been filled or cancelled | 
+active | Order status: `true`-The status of the order is`active`; `false`-The status of the order is`done` | 
+inOrderBook | Whether to enter the orderbook: `true`: enter the orderbook; `false`: not enter the orderbook |  
 cancelExist | Are there any cancellation records pertaining to the order? | 
-createdAt | Creation time | 
-tradeType | Trade type: `TRADE` (Spot Trading)|
+createdAt | order creation time | 
+lastUpdatedAt | Last update time of order |
+tradeType | Trade type: TRADE (Spot Trading)|
 
 # Transaction details
 
-## Transaction records
+## HF transaction records
 ```json
 {
     "id": "5f3113a1c9b6d539dc614dc6",
@@ -1028,26 +1135,29 @@ tradeType | Trade type: `TRADE` (Spot Trading)|
 }
 ```
 
-This endpoint can be used to obtain a list of the latest transaction details. The returned results are paginated. The data is sorted in descending order according to time.
+This endpoint can be used to obtain a list of the latest HF transaction details. The returned results are paginated. The data is sorted in descending order according to time.
 
 ### HTTP Request
-`GET /api/v1/fills/hf`
+`GET /api/v1/hf/fills`
+
+### Example
+`GET /api/v1/hf/fills?symbol=BTC-USDT`
 
 ### API Permissions
 This API requires `General` permissions
 
-### Frequency Limits
+### REQUEST RATE LIMIT
 The request frequency of this API is limited to `9 times/3s` for each account
 
 ### Parameters
 Parameters | Type | Compulsory?  | Description | 
 --------- | ------- | -----------| -----------| 
 orderId | String | No | \[Optional] Look up the transaction details pertaining to the order id（If`orderId` is specified，please ignore the other query parameters）| 
-symbol | String | No | \[Optional] Only returns order information for the specified trading pair, if `orderId`is specified，then this parameter is required | 
+symbol | String | No | \[Optional] Only returns order information for the specified trading pair | 
 side | String | No | \[Optional] `buy`（Buy） or `sell`（Sell）| 
 type | String | No | \[Optional] Order type: `limit`（limit order）, `market`(market order) | 
-startAt | long | No | \[Optional] Start time（ms），puts a restriction on the transaction time for the transaction records| 
-endAt | long | No | \[Optional] End time（ms），puts a restriction on the transaction time of the transaction records| 
+startAt | long | No | \[Optional] Start time（ms），puts a restriction on the transaction(creation) time for the transaction records| 
+endAt | long | No | \[Optional] End time（ms），puts a restriction on the transaction(creation) time of the transaction records| 
 lastId | long | No | \[Optional] The id of the last data item from the previous batch, defaults to obtaining the latest data | 
 limit | int | No | \[Optional] Default`100`，maximum `200` |
 
@@ -1058,13 +1168,14 @@ limit | int | No | \[Optional] Default`100`，maximum `200` |
 
 Field | Description | 
 --------- | ------- | 
+id | Id of transaction detail |
 symbol | Trading pair | 
 tradeId | Trade Id | 
 orderId | Order Id | 
 counterOrderId | Counterparty order Id | 
-side | Buy or sedd | 
-forceTaker | Whether or not to forcefully process as taker | 
+side | Buy or sell | 
 liquidity | Liquidity type: taker or maker | 
+forceTaker | Whether or not to forcefully process as taker | 
 price | Order price | 
 size | Order size | 
 funds | Turnover | 
@@ -1072,7 +1183,8 @@ fee | Service fee |
 feeRate | Fee rate | 
 feeCurrency | currency used to calculate fees | 
 type | Order type: limit or market | 
-createdAt | Creation time | 
+stop | Take Profit and Stop Loss type, currently HFT does not support the Take Profit and Stop Loss type, so it is empty |
+createdAt | Transaction(Creation) time | 
 tradeType | Trade type: `TRADE`(Spot Trading)|
 
 ##### Show time range
@@ -1119,3 +1231,36 @@ Price（USDT）| Size（BTC）| Fee（BTC）|
 4011.32 | 0.24738383 | 0.00024738 | 
 4015.60 | 0.56849308 | 0.00056849 | 
 4200.00 | 0.18312409 | 0.00018312 |
+
+# Websocket
+
+While there is a strict access frequency control for REST API, we highly recommend that API users utilize Websocket to get the real-time data. For Websocket related settings, please refer to the documentation `https://docs.kucoin.com/#websocket-feed`
+
+# Public Channels
+please refer to the documentation `https://docs.kucoin.com/#public-channels`
+
+# Private Channels
+
+## HF Account Balance Notice
+```json
+```
+Topic: `/account/balance`
+
+* Push frequency: `real-time`
+
+You will receive this message when an HF account balance changes. The message contains the details of the change.
+
+Relation Event
+
+类型 | 描述
+--------- | -------
+| trade_hf.hold | Hold (high frequency account) |
+| trade_hf.setted | Settlement (high frequency account) |
+| trade_hf.transfer | Transfer (high frequency account) |
+| trade_hf.other | Other operations (high frequency account) |
+
+## Private HF Order Change Events
+please refer to the documentation `https://docs.kucoin.com/#private-order-change-events`
+
+## Other
+Other parts please refer to the documentation `https://docs.kucoin.com/#private-channels`

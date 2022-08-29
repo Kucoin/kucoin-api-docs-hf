@@ -18,7 +18,7 @@ search: true
 
 ## 简介
 
-欢迎使用KuCoin开发者高频交易文档。 此文档概述了高频交易功能、高频交易市场行情和其他应用开发接口。
+欢迎使用KuCoin开发者高频交易文档。 此文档概述了高频交易功能等应用开发接口。
 
 KuCoin API：**REST API**
 
@@ -28,20 +28,34 @@ KuCoin API：**REST API**
 
 ## 更新预告
 
+# 用户模块
 
 # 账户
 
-## 创建账户
+## 创建高频交易账户
 ```json
+// request
 {
-    "id":"5bd6e9286d99522a52e458de" //accountId
+    "currency":"KCS",
+    "type":"trade_hf"
 }
 ```
 
-此接口可以用于创建账户
-
+```json
+// response
+{
+    "code": "200000",
+    "data": {
+        "id": "2675369984" //accountId
+    }
+}
+```
+用于创建高频交易账户。
 
 ### HTTP请求
+`POST /api/v1/accounts`
+
+### 请求示例
 `POST /api/v1/accounts`
 
 ### API权限
@@ -50,80 +64,163 @@ KuCoin API：**REST API**
 ### 请求参数
 请求参数 | 数据类型 | 是否必需 | 含义
 --------- | ------- | -----------| -----------|
-type | String | 是 | 账户类型:`MAIN`、`TRADE`、`MARGIN`或`TRADE_HF`
-currency | String | 是 | 币种
+type | String | 是 | 账户类型: `trade_hf`
+currency | String | 是 | 币种，比如：KCS
 
 ### 返回值
 字段 | 含义
 --------- | -------
 id | 账户ID -- accountId
 
-
-
-## 账户列表
+## 高频交易账户内部资金划转
 ```json
-[
-    {
-        "id":"5bd6e9286d99522a52e458de", //accountId
-        "currency":"BTC",  //币种
-        "type":"TRADE_HF", //账户类型，高频交易（trade_hf）账户
-        "balance":"237582.04299",//资金总额
-        "available":"237582.032", //可用金额
-        "holds":"0.01099" //冻结金额
-    },
-    {
-        "id":"5bd6e9216d99522a52e458d6",
-        "currency":"BTC",
-        "type":"TRADE_HF",
-        "balance":"1234356",
-        "available":"1234356",
-        "holds":"0"
-    }
-]
+// request
+{
+    "amount":10,
+    "currency":"USDT",
+    "from":"trade",
+    "to":"trade_hf",
+    "clientOid":"b6ahe97ce32aed83g3c3f8f0"
+}
 ```
 
-获取账号下账户详情列表。
+```json
+// response
+{
+    "code":"200000",
+    "data": {
+        "orderId":"6305cbf0bd13850001e625b4"
+    }
+}
+```
+用户可以将资金在储蓄账户、交易账户和高频交易账户之间免费划转。
 
-交易前请先充值到储蓄账户，再使用内部资金划转将资金从储蓄账户划转到高频交易账户。
+### HTTP请求
+`POST /api/v2/accounts/inner-transfer`
+
+### 请求示例
+`POST /api/v2/accounts/inner-transfer`
+
+### API权限
+此接口需要`交易权限`。
+
+### 请求参数
+请求参数 | 类型 | 是否必须 | 含义 |
+--------- | ------- | -----------| -----------|
+clientOid | String | 是 | Client Order Id，客户端创建的唯一标识，建议使用UUID |
+currency | String | 是 | 币种 |
+from | String | 是 | 付款账户类型：`main`(储蓄账户)、`trade`(交易账户)、`trade_hf`(高频交易账户) |
+to | String | 是 | 收款账户类型：`main`(储蓄账户)、`trade`(交易账户)、`trade_hf`(高频交易账户) |
+amount | String | 是 | 转账金额，精度为币种精度正整数倍 |
+
+### 返回值
+字段 | 含义
+--------- | -------
+orderId | 内部资金划转的订单ID
+
+## 高频交易账户列表
+```json
+// response
+{
+    "code": "200000",
+    "data": [
+        {
+            "balance": "3027.25165335",
+            "available": "3027.25165335",
+            "holds": "0",
+            "currency": "USDT",
+            "id": "2560047104",
+            "type": "trade_hf"
+        }
+    ]
+}
+```
+获取高频交易账户列表。
 
 ### HTTP请求
 `GET /api/v1/accounts`
 
+### 请求示例
+`GET /api/v1/accounts?currency=USDT&type=trade_hf`
+
 ### API权限
 此接口需要`通用权限`。
-
 
 ### 请求参数
 请求参数 | 类型 | 是否必须 | 含义 |
 --------- | ------- | -----------| -----------|
 currency | String | 否 | 币种
-type | String | 否 | 账户类型:`MAIN`、`TRADE`、`MARGIN`或`TRADE_HF`
+type | String | 是 | 账户类型:`trade_hf`（高频交易账户）
 
 ### 返回值
 字段 | 含义
 --------- | -------
 id | accountId 账户ID
 currency | 账户对应的币种
-type |账户类型 ，`MAIN`（储蓄账户）、`TRADE`（交易账户）、`MARGIN`(杠杆账户)、`TRADE_HF`（高频交易账户）
+type |账户类型 ，trade_hf（高频交易账户）
 balance | 账户资金总额
 available | 账户可用的资金
 holds | 账户冻结的资金
 
-## 获取可划转资金
-
+## 单个高频交易账户详情
 ```json
+// response
 {
-    "currency":"KCS",
-    "balance":"0",
-    "available":"0",
-    "holds":"0",
-    "transferable":"0"
+    "code": "200000",
+    "data": {
+        "balance": "9000000",
+        "available": "9000000",
+        "holds": "0",
+        "currency": "YOP"
+    }
 }
 ```
-此接口可获取指定账户和币种下的可划转的资金。
+获取单个高频交易账户详情。
+
+### HTTP请求
+`GET /api/v1/accounts/{accountId}`
+
+### 请求示例
+`GET /api/v1/accounts/2051232768`
+
+### API权限
+此接口需要`通用权限`。
+
+### 请求参数
+请求参数 | 类型 | 是否必须 | 含义 |
+--------- | ------- | -----------| -----------|
+accountId | String | 是 | 路径参数，高频交易账户Id
+
+### 返回值
+字段 | 含义
+--------- | -------
+currency | 账户对应的币种 |
+balance | 账户资金总额 |
+available | 账户可用的资金 |
+holds | 账户冻结的资金 |
+
+## 高频交易账户可划转的资金
+
+```json
+// response
+{
+    "code": "200000",
+    "data": {
+        "balance": "990.28419461",
+        "transferable": "983.64866777",
+        "available": "983.64866777",
+        "holds": "6.63552684",
+        "currency": "USDT"
+    }
+}
+```
+获取高频交易账户可划转的资金。
 
 ### HTTP请求
 `GET /api/v1/accounts/transferable`
+
+### 请求示例
+`GET /api/v1/accounts/transferable?currency=USDT&type=TRADE_HF`
 
 ### API权限
 此接口需要`通用权限`。
@@ -136,7 +233,7 @@ holds | 账户冻结的资金
 请求参数 | 类型 | 是否必须 | 含义 |
 --------- | ------- | -----------| -----------|
 currency | String | 否 | 币种 |
-type | String | 否 | 账户类型: `MAIN`、`TRADE`、`MARGIN`、`TRADE_HF` |
+type | String | 否 | 账户类型: `TRADE_HF`|
 
 
 ### 返回值
@@ -149,39 +246,46 @@ holds | 冻结资金
 transferable | 可划转资金
 
 
-## 账户流水记录
+## 高频交易账户流水记录
 ```json
-[
-    {
-        "id": 12,//唯一键
-        "currency": "USDT", //币种
-        "amount": "10.00059547", //资金变动值
-        "fee": "0", //充值或提现费率
-        "balance": "0", //金额变动
-        "accountType": "TRADE_HF", //账户类型
-        "bizType": "TRADE_EXCHANGE", //业务类型
-        "direction": "in", //出入账方向入账或出账（in or out）
-        "createdAt": 1629101692950, //创建时间
-        "context": "{\"symbol\":\"1001\",\"orderId\":\"611a1e7cc913d000066cf7ec\",\"tradeId\":\"283742\"}" //Business core parameters
-    },
-    {
-        "id": 10,
-        "currency": "USDT",
-        "amount": "10.00059547",
-        "fee": "0",
-        "balance": "0",
-        "accountType": "TRADE_HF",
-        "bizType": "TRADE_EXCHANGE",
-        "direction": "in",
-        "createdAt": 1629101692950,
-        "context": "{\"symbol\":\"1001\",\"orderId\":\"611a1e7cc913d000066cf7ec\",\"tradeId\":\"283742\"}"
-    }
-]
+// response
+{
+    "code": "200000", 
+    "data": [
+        {
+            "id": "42852417537", 
+            "currency": "CSP", 
+            "amount": "1.00000000", 
+            "fee": "0.00000000", 
+            "balance": "99999986.99999999", 
+            "accountType": "TRADE_HF", 
+            "bizType": "TRADE_EXCHANGE", 
+            "direction": "in", 
+            "createdAt": "1661347205743", 
+            "context": "{'symbol':'CSP-USDT','orderId':'6306257dd9180300014c8d47','tradeId':'609522034689'}"
+        }, 
+        {
+            "id": "42852401152", 
+            "currency": "CSP", 
+            "amount": "1.00000000", 
+            "fee": "0.00000000", 
+            "balance": "99999985.99999999", 
+            "accountType": "TRADE_HF", 
+            "bizType": "TRADE_EXCHANGE", 
+            "direction": "out", 
+            "createdAt": "1661347205743", 
+            "context": "{'symbol':'CSP-USDT','orderId':'63062585d9180300014c8d50','tradeId':'609522034689'}"
+        }
+    ]
+}
 ```
-此接口返回所有账户的出入账流水记录，支持多币种查询。 查询参数
+获取高频交易账户的出入账流水记录，支持多币种查询。查询结果按流水创建时间和Id降序排序。
 
 ### HTTP请求
-`GET /api/v1/accounts/ledgers/hf`
+`GET /api/v1/hf/accounts/ledgers`
+
+### 请求示例
+`GET /api/v1/hf/accounts/ledgers?bizType=TRADE_EXCHANGE&currency=YOP,DAI&startAt=1601395200000`
 
 ### API权限
 此接口需要`通用权限`。
@@ -197,14 +301,14 @@ direction | String | 否 | 出入账方向: `in`-入账, `out`-出账 |
 bizType | String | 否 | 业务类型: `TRANSFER`-转账,`TRADE_EXCHANGE`-交易 |
 lastId | long | 否 | 前一批次数据最后一条数据的id。 默认获取最新流水。|
 limit | int | 否 | 默认`100`，最大`200` |
-startAt | long | 否 | 开始时间（毫秒）|
-endAt | long | 否 | 截止时间（毫秒）|
+startAt | long | 否 | 开始时间（毫秒），限制流水创建时间|
+endAt | long | 否 | 截止时间（毫秒），限制流水创建时间|
 
-<aside class="notice">如果设定<code>lastId</code>, 获取流水 < <code>lastId</code>. 否则返回最近流水。
+<aside class="notice">如果设定<code>lastId</code>，获取流水id < lastId，否则返回最近流水。lastId的值取流水id，可以从返回结果里获取。
+
 您只能获取<code>3 * 24</code>小时时间范围内的数据（即：从当前时间起至<code>3 * 24</code>小时前）。若超出时间范围，系统会默认查询<code>3 * 24</code>小时时间范围内的数据。</aside>
 
 #### 返回值
-
 字段 | 含义 |
 --------- | ------- |
 id | 唯一键 |
@@ -213,42 +317,13 @@ amount | 资金变动值 |
 fee | 充值或提现费率 |
 balance | 变动后的资金总额 |
 accountType | 母账号账户类型`TRADE_HF` |
-bizType | 业务类型，比如交易，提现，推荐关系奖，借贷等 |
+bizType | 业务类型，比如`TRANSFER`-转账，`TRADE_EXCHANGE` -交易 |
 direction | 出入账方向 `out` 或 `in` |
 createdAt | 创建时间 |
 context | 业务核心参数 |
 
 - `context`说明
     * 如果 `bizType` 是`TRADE_EXCHANGE`，那么 context 字段会包含交易的额外信息（订单id，交易id，交易对）。
-
-## 内部资金划转
-
-```json
-{
-    "orderId":"5bd6e9286d99522a52e458de"
-}
-```
-此接口用于平台内部账户资金划转，用户可以将资金在储蓄账户、交易账户、杠杆账户、高频账户之间免费划转。**同时支持从其他账户划转资金至合约账户，但不支持从合约账户转出资金至其他账户。**
-
-### HTTP请求
-`POST /api/v2/accounts/inner-transfer`
-
-### API权限
-此接口需要`交易权限`。
-
-### 请求参数
-请求参数 | 类型 | 是否必须 | 含义 |
---------- | ------- | -----------| -----------|
-clientOid | String | 是 | Client Order Id，客户端创建的唯一标识，建议使用UUID |
-currency | String | 是 | 币种 |
-from | String | 是 |  付款账户类型: `MAIN`、`TRADE`、`MARGIN`、`TRADE_HF`
-to | String | 是 |  收款账户类型: `MAIN`、`TRADE`、`MARGIN`、`TRADE_HF`、`CONTRACT`
-amount | String | 是 | 转账金额，精度为币种精度正整数倍 |
-
-### 返回值
-字段 | 含义
---------- | -------
-orderId | 内部资金划转的订单ID
 
 # 交易模块
 
@@ -257,8 +332,9 @@ orderId | 内部资金划转的订单ID
 
 # 订单
 
-## 下单
+## 高频交易下单
 ```json
+// response
 {
     "orderId":"5bd6e9286d99522a52e458de"
 }
@@ -272,10 +348,13 @@ orderId | 内部资金划转的订单ID
 
 在下单之前，请充分了解每一个交易对的参数含义。
 
-<aside class="notice">对于一个账号，每一个交易对最大<strong>活跃</strong>委托订单数量<code>200</code>（包含止损单）。</aside>
+<aside class="notice">对于一个账号，每一个交易对最大<strong>活跃</strong>委托订单数量<code>200</code>。</aside>
 
 ### HTTP 请求
-`POST /api/v1/orders/hf`
+`POST /api/v1/hf/orders`
+
+### 请求示例
+`POST /api/v1/hf/orders`
 
 ### API权限
 此接口需要`交易权限`。
@@ -294,8 +373,8 @@ symbol | String | 是 | 交易对 比如，ETH-BTC |
 type | String | 是 | 订单类型 limit 和 market |
 side | String | 是 | `buy`（买） 或 `sell`（卖）|
 stp | String | 否 | 自成交保护（`self trade prevention`）分为`CN`, `CO`, `CB` , `DC`四种策略 |
-tags | String | 否 | 订单标签，长度不超过`20`个字符（UTF-8）|
-remark | String | 否 | 下单备注，长度不超过`20`个字符（UTF-8）|
+tags | String | 否 | 订单标签，长度不超过`20`个字符（编码只支持ASCII）|
+remark | String | 否 | 下单备注，长度不超过`20`个字符（编码只支持ASCII）|
 
 #### **limit** 限价单额外所需请求参数
 
@@ -329,14 +408,14 @@ ClientOid字段是客户端创建的唯一ID（推荐使用UUID），只能包�
 请妥善记录服务端创建的orderId，以用于查询订单状态的更新。
 
 #### 订单类型(type)
-您在下单时指定的订单类型，决定了您是否需要请求其他参数，同时还会影响到撮合引擎的执行。如果您在下单时未指定订单类型，系统将默认按照限价单执行。
+您在下单时指定的订单类型，决定了您是否需要请求其他参数，同时还会影响到撮合引擎的执行。
 
 下限价单时，您需指定限价单的价格（price）和数量（size）。系统将根据市场行情以指定或更优价格撮合该订单。如果订单未能被立即撮合，将继续留买卖盘中，直至被撮合或被用户取消。
 
 与限价单不同，市价单价格会随着市场价格波动而变化。下市价单时，您无需指定价格，只需指定数量。市价单会立即成交，不会进入买卖盘。所有市价单都是taker，需支付taker费用。
 
 #### 交易类型(tradeType)
-目前平台支持现货（TRADE）资产交易下单。系统根据您的参数类型，将对指定账户资金进行冻结。若未传递该参数，将默认按照现货冻结您交易账户资金。
+目前平台只支持现货（TRADE）资产交易下单，系统将默认按照现货冻结您交易账户资金。
 
 #### 价格(Price)
 下限价单时，price 必须以交易对的价格增量 priceIncrement为基准，价格增量是交易对的价格的精度。比如，对BTC-USDT这个交易对, 它的 priceIncrement 为0.00001000。那么你下单的 price 不可以小于0.00001000，且为 priceIncrement 的正整数倍，否则下单时会报错，invalid priceIncrement。
@@ -357,10 +436,10 @@ GTT | Good Till Time | 指定时间后过期 |
 IOC | Immediate Or Cancel | 立即成交可成交的部分，然后取消剩余部分，不进入买卖盘 |
 FOK | Fill Or Kill | 如果下单不能全部成交，则取消 |
 
-- 注意，成交也包含自成交。
+- 注意，成交也包含自成交。市价单并不支持订单时效策略(TimeInForce)
 
 #### 被动委托(PostOnly)
-PostOnly只是一个标识，如果下单有能立即成交的对手方，则取消。 * 当用户所下订单是postOnly订单时，如果订单进入撮合引擎后遇到冰山单和隐藏单可以立即成交，postOnly 订单收maker手续费，冰山单和隐藏单收taker手续费。
+PostOnly只是一个标识，如果下单有能立即成交的对手方，则取消。当用户所下订单是postOnly订单时，如果订单进入撮合引擎后遇到冰山单和隐藏单可以立即成交，postOnly 订单收maker手续费，冰山单和隐藏单收taker手续费。
 
 #### 隐藏单和冰山单(Hidden & Iceberg)
 您可在高级设置中设置隐藏单和冰山单（冰山单是一种特殊形式的隐藏单）。进行限价单和限价止损单交易时，您可选择按照隐藏单或冰山单执行。
@@ -399,9 +478,7 @@ CB | Cancel both | 双方都取消 |
 
 #### 订单生命周期(ORDER LIFECYCLE)
 
-当下单请求因请求成功（撮合引擎已收到订单）或（因余额不足、参数不合法等原因）被拒绝时，HTTP 请求会进行响应。下单成功，返回订单ID，订单将被撮合，可能会部分或全部成交。部分成交后，订单剩余为未成交部分会变成等待撮合（Active）状态（不包括使用立即成交或取消[IOC]的订单）。已完全成交的订单会变成“已完成”（Done）状态。
-
-订阅市场数据频道的用户可使用订单ID（orderId）和用户订单ID（clientOid）来识别消息。
+当下单请求因请求成功或（因余额不足、参数不合法等原因）被拒绝时，HTTP请求会进行响应。下单成功，返回订单ID，订单将被撮合，可能会部分或全部成交。被取消或者已完全成交的订单状态为“已完成”（DONE），否则订单就是“活跃”（ACTIVE）状态。订阅市场数据频道的用户可使用订单ID（orderId）和用户订单ID（clientOid）来识别消息。
 
 #### 价格保护机制
 
@@ -418,27 +495,29 @@ CB | Cancel both | 双方都取消 |
 
 | 字段                                | 含义   |
 | --------------------------------- | ---- |
-| orderId                           | 订单Id,下单成功后，会返回一个`orderId`字段，意味这订单进入撮合引擎。 |
+| orderId                           | 订单Id,下单成功后，会返回一个`orderId`字段 |
 
-## 批量下单
+## 高频交易批量下单
 ```json
 //request
 {
-    "symbol": "KCS-USDT",
+    "symbol": "BTC-USDT",
     "orderList": [
         {
             "clientOid": "3d07008668054da6b3cb12e432c2b13a",
             "side": "buy",
             "type": "limit",
             "price": "0.01",
-            "size": "0.01"
+            "size": "0.01",
+            "symbol": "BTC-USDT"
         },
         {
             "clientOid": "37245dbe6e134b5c97732bfb36cd4a9d",
             "side": "buy",
             "type": "limit",
             "price": "0.01",
-            "size": "0.01"
+            "size": "0.01",
+            "symbol": "BTC-USDT"
         }
     ]
 }
@@ -447,7 +526,8 @@ CB | Cancel both | 双方都取消 |
 ```json
 //response
 {
-    "data": [
+   "code":"200000",
+   "data":[
         {
             "symbol": "KCS-USDT",
             "type": "limit",
@@ -459,8 +539,6 @@ CB | Cancel both | 双方都取消 |
             "timeInForce": "GTC",
             "cancelAfter": 0,
             "postOnly": false,
-            "hidden": false,
-            "iceberge": false,
             "iceberg": false,
             "visibleSize": null,
             "channel": "API",
@@ -480,8 +558,6 @@ CB | Cancel both | 双方都取消 |
             "timeInForce": "GTC",
             "cancelAfter": 0,
             "postOnly": false,
-            "hidden": false,
-            "iceberge": false,
             "iceberg": false,
             "visibleSize": null,
             "channel": "API",
@@ -490,7 +566,7 @@ CB | Cancel both | 双方都取消 |
             "failMsg": null,
             "clientOid": "bd1e95e705724f33b508ed270888a4a9"
         }
-    ]
+   ]
 }
 ```
 
@@ -499,10 +575,12 @@ CB | Cancel both | 双方都取消 |
 此接口只提交下单请求，实际下单结果需要通过查询订单状态或订阅websocket获取订单消息。
 
 ### HTTP 请求
-`POST /api/v1/orders/hf/multi`
+`POST /api/v1/hf/orders/multi`
+
+### 请求示例
+`POST /api/v1/hf/orders/multi`
 
 ### API权限
-
 此接口需要`交易权限`。
 
 ### 频率限制
@@ -525,8 +603,8 @@ postOnly | boolean | 否 | [可选] 被动委托的标识, 当订单时效策略
 hidden | boolean | 否 | [可选] 是否隐藏（买卖盘中不展示） |
 iceberg | boolean | 否 | [可选] 冰山单中是否仅显示订单的可见部分 |
 visibleSize | String | 否 | [可选] 冰山单最大的展示数量 |
-tags | String | 否 | [可选] 订单标签，长度不超过`20`个字符（UTF-8）|
-remark | String | 否 | [可选] 下单备注，长度不超过`20`个字符（UTF-8）|
+tags | String | 否 | [可选] 订单标签，长度不超过`20`个字符（编码只支持ASCII）|
+remark | String | 否 | [可选] 下单备注，长度不超过`20`个字符（编码只支持ASCII）|
 
 
 ### 返回值
@@ -536,19 +614,23 @@ remark | String | 否 | [可选] 下单备注，长度不超过`20`个字符（U
 |failMsg |  失败原因                    |
 
 
-## 单个撤单
+## 高频交易通过orderId撤单
 ```json
-{
-    "cancelledOrderIds":[
-        "5bd6e9286d99522a52e458de"
-    ]
+// response
+{   
+    "code": "200000", 
+    "data": {
+        "orderId": "630625dbd9180300014c8d52"
+    }
 }
 ```
-
-此端点可以取消单笔订单。
+通过orderId取消单笔订单。
 
 ### HTTP请求
-`DELETE /api/v1/orders/hf/{orderId}?symbol={symbol}`
+`DELETE /api/v1/hf/orders/{orderId}?symbol={symbol}`
+
+### 请求示例
+`DELETE /api/v1/hf/orders/5bd6e9286d99522a52e458de?symbol=ETH-BTC`
 
 ### API权限
 此接口需要`交易权限`。
@@ -567,103 +649,126 @@ symbol | String | 是 | 交易对 比如，ETH-BTC |
 <aside class="notice">如果订单不能撤销（已经成交或已经取消），会返回错误信息，可根据返回的<code>msg</code>获取原因。</aside>
 
 ### 返回值
-
 | 字段                | 含义      |
 | ----------------- | ------- |
-| cancelledOrderIds | 取消的订单id |
+| orderId | 取消的订单id |
 
-## 基于clientOid 单个撤单
+## 高频交易通过clientOid单个撤单
 ```json
+// response
 {
-    "clientOid": "6d539dc614db3"
+    "code": "200000", 
+    "data": {
+        "clientOid": "6d539dc614db3"
+    }
 }
 ```
-
-此接口发送一个通过clientOid撤销订单的请求。
+通过clientOid取消单笔订单。
 
 ### HTTP请求
-`DELETE /api/v1/orders/hf/client-order/{clientOid}?symbol={symbol}`
+`DELETE /api/v1/hf/orders/client-order/{clientOid}?symbol={symbol}`
+
+### 请求示例
+`DELETE /api/v1/hf/orders/client-order/6d539dc614db3?symbol=ETH-BTC`
+
 ### API权限
 此接口需要`交易权限`。
+
 ### 请求参数
 请求参数 | 类型 | 是否必须 | 含义 |
 --------- | ------- | -----------| -----------|
 clientOid | String | 是 | 路径参数，客户端生成的标识 |
 symbol | String | 是 | 交易对 比如，`ETH-BTC` |
+
 #### 返回值
 字段	| 含义 |
 --------- | ------- |
 clientOid | 客户端生成的标识 |
 
-## 全部撤单
-```json
-
+## 高频交易全部撤单
+```json 
+// response
+{
+    "code": "200000", 
+    "data": "success"
+}
 ```
-此接口，可以取消指定交易对所有状态为open的订单（包含高频交易账户和非高频交易账户的所有订单），该接口http状态为200即可视为取消请求提交成功。
+此接口，可以取消所有还没有完成的高频订单（通过`/api/v1/hf/orders`创建的订单）。
 
 此接口只提交取消请求，实际取消结果需要通过查询订单状态或订阅websocket获取订单消息。
 
 ### HTTP请求
-`DELETE /api/v1/orders/hf?symbol={symbol}`
+`DELETE /api/v1/hf/orders?symbol={symbol}`
+
+### 请求示例
+`DELETE /api/v1/hf/orders?symbol=ETH-BTC`
+
 ### API权限
 此接口需要`交易权限`。
+
 ### 频率限制
 此接口针对每个账号请求频率限制为`3次/3s`
+
 ### 请求参数
 请求参数 | 类型 | 是否必须 | 含义 |
 --------- | ------- | -----------| -----------|
 symbol | String | 是 | 取消指定交易对的open订单 |
+
 ### 返回值
 由于此接口为批量撤单，接口http状态为`200`即可视为取消请求提交成功，所以不需要返回值，实际取消结果可根据“获取订单列表（新）“查询订单或订阅websocket获取订单消息。
 
+### 获取高频交易订单列表
+
+包含获取活跃订单(Active)和已完成订单(Done)两个接口，活跃订单接口返回值是所有还没有完成的订单列表，已完成订单接口获取历史订单列表，返回值是分页后的数据。两个接口的返回数据都根据订单最新更新时间降序排序。用户成功下单后，订单就处于活跃（Active）状态，用户可以通过 inOrderBook 来判断委托是否进入买卖盘。被取消或者已完全成交的订单则被标记为已完成（Done）状态。
+
+查询“活跃”状态的订单，没有时间限制。但查询“已完成”状态的订单时，您只能获取 3 * 24 小时时间范围内的数据（即：从当前时间起至3 * 24 小时前）。若超出时间范围，系统会默认查询 3 * 24 小时时间范围内的数据。
+
 ## 获取活跃订单列表
 ```json
+// response
 {
-    "currentPage": 1,
-    "pageSize": 1,
-    "totalNum": 153408,
-    "totalPage": 153408,
-    "items": [
-        {
-            "id": "5c35c02703aa673ceec2a168",
-            "symbol": "BTC-USDT",
-            "opType": "DEAL",
-            "type": "limit",
-            "side": "buy",
-            "price": "10",
-            "size": "2",
-            "funds": "0",
-            "dealFunds": "0.166",
-            "dealSize": "2",
-            "fee": "0",
-            "feeCurrency": "USDT",
-            "stp": "",
-            "stop": "",
-            "stopTriggered": false,
-            "stopPrice": "0",
-            "timeInForce": "GTC",
-            "postOnly": false,
-            "hidden": false,
-            "iceberg": false,
-            "visibleSize": "0",
-            "cancelAfter": 0,
-            "channel": "IOS",
-            "clientOid": "",
-            "remark": "",
-            "tags": "",
-            "isActive": false,
-            "cancelExist": false,
-            "createdAt": 1547026471000,
-            "tradeType": "TRADE"
-        }
+    "code" : "200000",
+    "data" : [
+        "id": "5c35c02703aa673ceec2a168",
+        "symbol": "BTC-USDT",
+        "opType": "DEAL",
+        "type": "limit",
+        "side": "buy",
+        "price": "10",
+        "size": "2",
+        "funds": "0",
+        "dealFunds": "0.166",
+        "dealSize": "2",
+        "fee": "0",
+        "feeCurrency": "USDT",
+        "stp": "",
+        "timeInForce": "GTC",
+        "postOnly": false,
+        "hidden": false,
+        "iceberg": false,
+        "visibleSize": "0",
+        "cancelAfter": 0,
+        "channel": "IOS",
+        "clientOid": "",
+        "remark": "",
+        "tags": "",
+        "active": true,
+        "inOrderBook": true,
+        "cancelExist": false,
+        "createdAt": 1547026471000,
+        "lastUpdatedAt": 1547026471001,
+        "tradeType": "TRADE"
+        }        
     ]
- }
+}
 ```
-
 该接口是获取所有活跃订单列表。返回数据都根据订单最新更新时间降序排序。
 
 ### HTTP请求
-`GET /api/v1/orders/hf/active`
+`GET /api/v1/hf/orders/active`
+
+### 请求示例
+`GET /api/v1/hf/orders/active?symbol=BTC-ETH`
 
 ### API权限
 此接口需要`通用权限`。
@@ -675,9 +780,6 @@ symbol | String | 是 | 取消指定交易对的open订单 |
 请求参数 | 类型 | 是否必须 | 含义 |
 --------- | ------- | -----------| -----------|
 symbol | String | 是 | 只返回指定交易对的订单信息 |
-side | String | 否 | [可选] buy（买） 或 sell（卖）|
-startAt | long | 否 | [可选] 开始时间（毫秒），限制订单最新更新时间|
-endAt | long | 否 | [可选] 截止时间（毫秒），限制订单最新更新时间|
 
 ### 返回值
 字段	| 含义 |
@@ -705,74 +807,68 @@ channel | 下单来源 |
 clientOid | 客户端生成的标识 |
 remark | 订单说明 |
 tags | 订单标签 |
-isActive | 订单状态: `true`-订单状态为`open`; `false`-订单已成交或取消 |
+active | 订单状态 true: 订单状态为 active; false: 订单订单状态为 done |
+inOrderBook | 是否进入买卖盘 true: 进入买卖盘; false: 没有进入买卖盘 |  
 cancelExist | 订单是否存在取消记录 |
-createdAt | 创建时间 |
+createdAt | 订单创建时间 |
+lastUpdatedAt | 订单最新更新时间 |
 tradeType | 交易类型: TRADE（现货交易）|
-
-#### 订单状态和结算
-
-在买卖盘上，所有委托都处于活跃（Active）状态，从买卖盘上移除的订单则被标记为已完成（Done）状态。
-
-订单被成交后到入账，因系统清算可能会有毫秒级别的延迟。
-
-查询“active”状态的订单，没有时间限制。但查询“已完成”状态的订单时，您只能获取 `3 * 24` 小时时间范围内的数据（即：从当前时间起至`3 * 24` 小时前）。若超出时间范围，系统会默认查询 `3 * 24` 小时时间范围内的数据。
-
-取消订单的历史记录仅保留`3`天。您将无法查询`3`天以前已取消的订单。
 
 #### 订单轮询(Polling)
 
 对于高频交易的用户，建议您在本地缓存和维护一份自己的活动委托列表，并使用市场数据流实时更新自己的订单信息。
 
-## 获取成交订单列表
+## 已完成订单列表
 ```json
+// response
 {
-    "currentPage": 1,
-    "pageSize": 1,
-    "totalNum": 153408,
-    "totalPage": 153408,
-    "items": [
-        {
-            "id": "5c35c02703aa673ceec2a168",
-            "symbol": "BTC-USDT",
-            "opType": "DEAL",
-            "type": "limit",
-            "side": "buy",
-            "price": "10",
-            "size": "2",
-            "funds": "0",
-            "dealFunds": "0.166",
-            "dealSize": "2",
-            "fee": "0",
-            "feeCurrency": "USDT",
-            "stp": "",
-            "stop": "",
-            "stopTriggered": false,
-            "stopPrice": "0",
-            "timeInForce": "GTC",
-            "postOnly": false,
-            "hidden": false,
-            "iceberg": false,
-            "visibleSize": "0",
-            "cancelAfter": 0,
-            "channel": "IOS",
-            "clientOid": "",
-            "remark": "",
-            "tags": "",
-            "isActive": false,
-            "cancelExist": false,
-            "createdAt": 1547026471000,
-            "tradeType": "TRADE"
-        }
-    ]
- }
+   "code":"200000",
+   "data":{
+      "lastId":2682265600,
+      "items":[
+         {
+            "id":"63074a5a27ecbe0001e1f3ba",
+            "symbol":"CSP-USDT",
+            "opType":"DEAL",
+            "type":"limit",
+            "side":"sell",
+            "price":"0.1",
+            "size":"0.1",
+            "funds":"0.01",
+            "dealSize":"0",
+            "dealFunds":"0",
+            "fee":"0",
+            "feeCurrency":"USDT",
+            "stp":"",
+            "timeInForce":"GTC",
+            "postOnly":false,
+            "hidden":false,
+            "iceberg":false,
+            "visibleSize":"0",
+            "cancelAfter":0,
+            "channel":"API",
+            "clientOid":"",
+            "remark":"",
+            "tags":"",
+            "cancelExist":true,
+            "createdAt":1661422170924,
+            "lastUpdatedAt":1661422196926,
+            "tradeType":"TRADE",
+            "inOrderBook":false,
+            "active":false
+         }
+      ]
+   }
+}
 ```
-
-该接口是获取已成交订单列表，返回值是分页后的数据。返回数据都根据订单最新更新时间降序排序。
+该接口是获取已成交高频订单列表，返回值是分页后的数据。返回数据都根据订单最新更新时间降序排序。
 
 
 ### HTTP请求
-`GET /api/v1/orders/hf/done`
+`GET /api/v1/hf/orders/done`
+
+### 请求示例
+`GET /api/v1/hf/orders/done?symbol=BTC-ETH&type=limit&side=buy`
 
 ### API权限
 此接口需要`通用权限`。
@@ -786,8 +882,8 @@ tradeType | 交易类型: TRADE（现货交易）|
 symbol | String | 是 | 只返回指定交易对的订单信息 |
 side | String | 否 | [可选] `buy`（买）或 `sell`（卖）|
 type | String | 否 | [可选] 订单类型: `limit`（限价单）, `market`(市价单) |
-startAt | long | 否 | [可选] 开始时间（毫秒），限制订单最新更新时间|
-endAt | long | 否 | [可选] 截止时间（毫秒），限制订单最新更新时间|
+startAt | long | 否 | [可选] 开始时间（毫秒），限制订单最新更新(完成)时间|
+endAt | long | 否 | [可选] 截止时间（毫秒），限制订单最新更新(完成)时间|
 lastId | long | 否 | [可选] 前一批次数据最后一条数据的id，默认获取最新数据 |
 limit | int | 否 | [可选] 默认`100`，最大`200` |
 
@@ -821,52 +917,67 @@ channel | 下单来源 |
 clientOid | 客户端生成的标识 |
 remark | 订单说明 |
 tags | 订单标签 |
-isActive | 订单状态 true: 订单状态为 open; false: 订单已成交或取消 |
+active | 订单状态 true: 订单状态为 active; false: 订单订单状态为 done |
+inOrderBook | 是否进入买卖盘 true: 进入买卖盘; false: 没有进入买卖盘 |  
 cancelExist | 订单是否存在取消记录 |
-createdAt | 创建时间 |
+createdAt | 订单创建时间 |
+lastUpdatedAt | 订单最新更新时间 |
 tradeType | 交易类型: TRADE（现货交易）|
 
 
-## 单个订单详情
+## 获取高频交易订单详情
 ```json
+// response
 {
-    "id": "5c35c02703aa673ceec2a168",
-    "symbol": "BTC-USDT",
-    "opType": "DEAL",
-    "type": "limit",
-    "side": "buy",
-    "price": "10",
-    "size": "2",
-    "funds": "0",
-    "dealFunds": "0.166",
-    "dealSize": "2",
-    "fee": "0",
-    "feeCurrency": "USDT",
-    "stp": "",
-    "timeInForce": "GTC",
-    "postOnly": false,
-    "hidden": false,
-    "iceberg": false,
-    "visibleSize": "0",
-    "cancelAfter": 0,
-    "channel": "IOS",
-    "clientOid": "",
-    "remark": "",
-    "tags": "",
-    "isActive": false,
-    "cancelExist": false,
-    "createdAt": 1547026471000,
-    "tradeType": "TRADE"
+   "code":"200000",
+   "data": {
+        "id": "5f3113a1c9b6d539dc614dc6",
+        "symbol": "KCS-BTC",
+        "opType": "DEAL",
+        "type": "limit",
+        "side": "buy",
+        "price": "0.00001",
+        "size": "1",
+        "funds": "0",
+        "dealFunds": "0",
+        "dealSize": "0",
+        "fee": "0",
+        "feeCurrency": "BTC",
+        "stp": "",
+        "timeInForce": "GTC",
+        "postOnly": false,
+        "hidden": false,
+        "iceberg": false,
+        "visibleSize": "0",
+        "cancelAfter": 0,
+        "channel": "API",
+        "clientOid": "6d539dc614db312",
+        "remark": "",
+        "tags": "",
+        "active": true,
+        "inOrderBook": false,
+        "cancelExist": false,
+        "createdAt": 1547026471000,
+        "lastUpdatedAt": 1547026471001,
+        "tradeType": "TRADE"
+    }
 }
 ```
 
 此接口，可以通过订单id获取单个订单信息。
 
 ### HTTP请求
-`GET /api/v1/orders/hf/{orderId}?symbol={symbol}`
+`GET /api/v1/hf/orders/{orderId}?symbol={symbol}`
+
+### 请求示例
+`GET /api/v1/hf/orders/5c35c02703aa673ceec2a168?symbol=ETH-BTC`
 
 ### API权限
 此接口需要`通用权限`。
+
+### 频率限制
+此接口针对每个账号请求频率限制为`30次/3s`
+
 ### 请求参数
 请求参数 | 类型 | 是否必须 | 含义 |
 --------- | ------- | -----------| -----------|
@@ -902,51 +1013,62 @@ channel | 下单来源 |
 clientOid | 客户端生成的标识 |
 remark | 订单说明 |
 tags | 订单标签 |
-isActive | 订单状态 `true`: 订单状态为 open; `false`: 订单已成交或取消 |
+active | 订单状态 true: 订单状态为 active; false: 订单订单状态为 done |
+inOrderBook | 是否进入买卖盘 true: 进入买卖盘; false: 没有进入买卖盘 | 
 cancelExist | 订单是否存在取消记录 |
-createdAt | 创建时间 |
+createdAt | 订单创建时间 |
+lastUpdatedAt | 订单最新更新时间 |
 tradeType | 交易类型: TRADE（现货交易）|
 
 
-## 基于clientOid 获取单个订单详情
+## 基于clientOid 通过clientOid获取高频交易订单详情
 ```json
 {
-    "id": "5f3113a1c9b6d539dc614dc6",
-    "symbol": "KCS-BTC",
-    "opType": "DEAL",
-    "type": "limit",
-    "side": "buy",
-    "price": "0.00001",
-    "size": "1",
-    "funds": "0",
-    "dealFunds": "0",
-    "dealSize": "0",
-    "fee": "0",
-    "feeCurrency": "BTC",
-    "stp": "",
-    "timeInForce": "GTC",
-    "postOnly": false,
-    "hidden": false,
-    "iceberg": false,
-    "visibleSize": "0",
-    "cancelAfter": 0,
-    "channel": "API",
-    "clientOid": "6d539dc614db312",
-    "remark": "",
-    "tags": "",
-    "isActive": true,
-    "cancelExist": false,
-    "createdAt": 1597051810000,
-    "tradeType": "TRADE"
+   "code":"200000",
+   "data": {
+        "id": "5f3113a1c9b6d539dc614dc6",
+        "symbol": "KCS-BTC",
+        "opType": "DEAL",
+        "type": "limit",
+        "side": "buy",
+        "price": "0.00001",
+        "size": "1",
+        "funds": "0",
+        "dealFunds": "0",
+        "dealSize": "0",
+        "fee": "0",
+        "feeCurrency": "BTC",
+        "stp": "",
+        "timeInForce": "GTC",
+        "postOnly": false,
+        "hidden": false,
+        "iceberg": false,
+        "visibleSize": "0",
+        "cancelAfter": 0,
+        "channel": "API",
+        "clientOid": "6d539dc614db312",
+        "remark": "",
+        "tags": "",
+        "active": true,
+        "inOrderBook": false,
+        "cancelExist": false,
+        "createdAt": 1547026471000,
+        "lastUpdatedAt": 1547026471001,
+        "tradeType": "TRADE"
+    }
 }
 ```
-
 此接口，可以通过clientOid查询单个订单的信息，若订单不存在则提示订单不存在。
 
 ### HTTP请求
-`GET /api/v1/orders/hf/client-order/{clientOid}?symbol={symbol}`
+`GET /api/v1/hf/orders/client-order/{clientOid}?symbol={symbol}`
+
+### 请求示例
+`GET /api/v1/hf/orders/client-order/6d539dc614db312?symbol=ETH-BTC`
+
 ### API权限
 此接口需要`通用权限`。
+
 ### 频率限制
 此接口针对每个账号请求频率限制为`30次/3s`
 ### 请求参数
@@ -978,49 +1100,58 @@ postOnly | 是否为被动委托 |
 hidden | 是否为隐藏单 |
 iceberg | 是否为冰山单 |
 visibleSize | 冰山单在买卖盘可见数量 |
-cancelAfter | timeInForce 为 GTT `n`秒后触发 |
+cancelAfter | timeInForce 为 GTT n秒后触发 |
 channel | 下单来源 |
 clientOid | 客户端生成的标识 |
 remark | 订单说明 |
 tags | 订单标签 |
-isActive | 订单状态 `true`: 订单状态为 open; `false`: 订单已成交或取消 |
+active | 订单状态 true: 订单状态为 active; false: 订单订单状态为 done |
+inOrderBook | 是否进入买卖盘 true: 进入买卖盘; false: 没有进入买卖盘 |
 cancelExist | 订单是否存在取消记录 |
-createdAt | 创建时间 |
-tradeType | 交易类型: `TRADE`（现货交易）|
+createdAt | 订单创建时间 |
+lastUpdatedAt | 订单最新更新时间 |
+tradeType | 交易类型: TRADE（现货交易）|
 
 # 成交明细
 
-## 成交记录
+## 获取高频交易成交记录
 ```json
 {
-    "lastId": 10002,
-    "items":[
-        {
-            "symbol":"BTC-USDT",
-            "tradeId":"5c35c02709e4f67d5266954e",
-            "orderId":"5c35c02703aa673ceec2a168",
-            "counterOrderId":"5c1ab46003aa676e487fa8e3",
+   "code":"200000",
+   "data":{
+      "items":[
+         {
+            "id":2678765568,
+            "symbol":"BTC-ETC",
+            "tradeId":616179312641,
+            "orderId":"6306cf6e27ecbe0001e1e03a",
+            "counterOrderId":"6306cf4027ecbe0001e1df4d",
             "side":"buy",
             "liquidity":"taker",
-            "forceTaker":true,
-            "price":"0.083",
-            "size":"0.8424304",
-            "funds":"0.0699217232",
-            "fee":"0",
-            "feeRate":"0",
+            "forceTaker":false,
+            "price":"1",
+            "size":"1",
+            "funds":"1",
+            "fee":"0.00021",
+            "feeRate":"0.00021",
             "feeCurrency":"USDT",
+            "stop":"",
+            "tradeType":"TRADE",
             "type":"limit",
-            "createdAt":1547026472000,
-            "tradeType": "TRADE"
-        }
-    ]
+            "createdAt":1661390702919
+         }
+      ],
+      "lastId":2678765568
+   }
 }
 ```
-
-此接口，可获取最近的成交明细列表 返回值是分页后的数据，根据时间降序排序。
+获取最近的成交明细列表 返回值是分页后的数据，根据成交(创建)时间降序排序。
 
 ### HTTP请求
-`GET /api/v1/fills/hf`
+`GET /api/v1/hf/fills`
+
+### 请求示例
+`GET /api/v1/hf/fills?symbol=BTC-USDT`
 
 ### API权限
 此接口需要`通用权限`。
@@ -1032,11 +1163,11 @@ tradeType | 交易类型: `TRADE`（现货交易）|
 请求参数 | 类型 | 是否必须 | 含义 |
 --------- | ------- | -----------| -----------|
 orderId | String | 否 | [可选] 查询该订单Id的成交明细（如果指定了`orderId`，请忽略其他查询条件）|
-symbol | String | 否 | [可选] 只返回指定交易对的订单信息，如果没有指定`orderId`，则该参数是必填参数 |
+symbol | String | 是 | [可选] 只返回指定交易对的订单信息 |
 side | String | 否 | [可选] `buy`（买） 或 `sell`（卖）|
 type | String | 否 | [可选] 订单类型: `limit`（限价单）, `market`(市价单) |
-startAt | long | 否 | [可选] 开始时间（毫秒），限制成交记录成交时间|
-endAt | long | 否 | [可选] 截止时间（毫秒），限制成交记录成交时间|
+startAt | long | 否 | [可选] 开始时间（毫秒），限制成交记录成交(创建)时间|
+endAt | long | 否 | [可选] 截止时间（毫秒），限制成交记录成交(创建)时间|
 lastId | long | 否 | [可选] 前一批次数据最后一条数据的id，默认获取最新数据 |
 limit | int | 否 | [可选] 默认`100`，最大`200` |
 
@@ -1044,25 +1175,26 @@ limit | int | 否 | [可选] 默认`100`，最大`200` |
 
 
 ### 返回值
-
 字段 | 含义 |
 --------- | ------- |
+id | 成交明细Id |
 symbol | 交易对 |
 tradeId | 交易Id |
 orderId	| 订单Id |
 counterOrderId | 对手方订单Id |
 side | 买或卖 |
-forceTaker | 是否强制作为taker处理 |
 liquidity | 流动性类型: taker 或 maker |
-price | 订单价格 |
-size | 订单数量 |
+forceTaker | 是否强制作为taker处理 |
+price | 成交价格 |
+size | 成交数量 |
 funds | 成交额 |
 fee | 手续费 |
 feeRate | 手续费率 |
 feeCurrency | 计手续费币种 |
 type | 订单类型limit 或 market |
-createdAt | 创建时间 |
-tradeType | 交易类型: `TRADE`（现货交易）|
+stop | 止盈止损类型，目前高频交易还未支持止盈止损类型，所以为空 |
+createdAt | 成交(创建)时间 |
+tradeType | 交易类型: TRADE（现货交易）|
 
 ##### 查询时间范围
 
@@ -1108,3 +1240,36 @@ Price（USDT）| Size（BTC）| Fee（BTC）|
 4011.32 | 0.24738383 | 0.00024738 |
 4015.60	| 0.56849308 | 0.00056849 |
 4200.00	| 0.18312409 | 0.00018312 |
+
+# Websocket
+
+REST API的使用受到了访问频率的限制，因此推荐您使用websocket获取实时数据。Websocket的相关设置请参考线上文档`https://docs.kucoin.com/#websocket-feed `
+
+# 公共频道
+参考线上文档`https://docs.kucoin.com/#public-channels`
+
+# 私有频道
+
+## 高频交易账户余额变更事件
+```json
+```
+Topic: `/account/balance`
+
+- 推送频率: `实时推送`
+
+当您的高频交易账户余额变更时，您会收到详细的账户变更信息。
+
+Relation Event
+
+类型 | 描述
+--------- | -------
+| trade_hf.hold | 高频交易账户冻结 |
+| trade_hf.setted | 高频交易账户入账 |
+| trade_hf.transfer | 高频交易账户转账 |
+| trade_hf.other | 高频交易账户其他操作 |
+
+## 高频交易私有订单变更事件
+参考线上文档 `https://docs.kucoin.com/#private-order-change-events`
+
+## 其他部分
+其他部分参考线上文档 `https://docs.kucoin.com/#private-channels`
