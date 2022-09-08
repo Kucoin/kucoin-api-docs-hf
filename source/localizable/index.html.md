@@ -1017,6 +1017,7 @@ tradeType | Trade type: TRADE (Spot Trading)|
 
 ## Obtain details of a single HF order using clientOid 
 ```json
+// response
 {
    "code":"200000",
    "data": {
@@ -1107,34 +1108,34 @@ tradeType | Trade type: TRADE (Spot Trading)|
 
 ## HF transaction records
 ```json
+// response
 {
-    "id": "5f3113a1c9b6d539dc614dc6",
-    "symbol": "KCS-BTC",
-    "opType": "DEAL",
-    "type": "limit",
-    "side": "buy",
-    "price": "0.00001",
-    "size": "1",
-    "funds": "0",
-    "dealFunds": "0",
-    "dealSize": "0",
-    "fee": "0",
-    "feeCurrency": "BTC",
-    "stp": "",
-    "timeInForce": "GTC",
-    "postOnly": false,
-    "hidden": false,
-    "iceberg": false,
-    "visibleSize": "0",
-    "cancelAfter": 0,
-    "channel": "API",
-    "clientOid": "6d539dc614db312",
-    "remark": "",
-    "tags": "",
-    "isActive": true,
-    "cancelExist": false,
-    "createdAt": 1597051810000,
-    "tradeType": "TRADE"
+   "code":"200000",
+   "data":{
+      "items":[
+         {
+            "id":2678765568,
+            "symbol":"BTC-ETC",
+            "tradeId":616179312641,
+            "orderId":"6306cf6e27ecbe0001e1e03a",
+            "counterOrderId":"6306cf4027ecbe0001e1df4d",
+            "side":"buy",
+            "liquidity":"taker",
+            "forceTaker":false,
+            "price":"1",
+            "size":"1",
+            "funds":"1",
+            "fee":"0.00021",
+            "feeRate":"0.00021",
+            "feeCurrency":"USDT",
+            "stop":"",
+            "tradeType":"TRADE",
+            "type":"limit",
+            "createdAt":1661390702919
+         }
+      ],
+      "lastId":2678765568
+   }
 }
 ```
 
