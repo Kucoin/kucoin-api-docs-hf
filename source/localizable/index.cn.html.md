@@ -1023,6 +1023,7 @@ tradeType | 交易类型: TRADE（现货交易）|
 
 ## 基于clientOid 通过clientOid获取高频交易订单详情
 ```json
+// response
 {
    "code":"200000",
    "data": {
@@ -1116,6 +1117,7 @@ tradeType | 交易类型: TRADE（现货交易）|
 
 ## 获取高频交易成交记录
 ```json
+// response
 {
    "code":"200000",
    "data":{
