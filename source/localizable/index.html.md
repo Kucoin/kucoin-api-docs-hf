@@ -578,7 +578,7 @@ This endpoint supports batch order placement from a single endpoint. A maximum o
 This endpoint only supports order placement requests. To obtain the results of the order placement, you will need to check the order status or subscribe to websocket to obtain information about he order. 
 
 ### HTTP Request
-`POST /api/v1/orders/hf/multi`
+`POST /api/v1/hf/orders/multi`
 
 ### Example
 `POST /api/v1/hf/orders/multi`
