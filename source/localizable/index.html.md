@@ -1157,7 +1157,7 @@ The request frequency of this API is limited to `9 times/3s` for each account
 Parameters | Type | Compulsory?  | Description | 
 --------- | ------- | -----------| -----------| 
 orderId | String | No | \[Optional] Look up the transaction details pertaining to the order id（If`orderId` is specified，please ignore the other query parameters）| 
-symbol | String | No | \[Optional] Only returns order information for the specified trading pair | 
+symbol | String | Yes | \[Optional] Only returns order information for the specified trading pair | 
 side | String | No | \[Optional] `buy`（Buy） or `sell`（Sell）| 
 type | String | No | \[Optional] Order type: `limit`（limit order）, `market`(market order) | 
 startAt | long | No | \[Optional] Start time（ms），puts a restriction on the transaction(creation) time for the transaction records| 
