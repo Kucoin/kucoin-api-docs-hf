@@ -28,6 +28,10 @@ KuCoin API: **REST API**
 
 ## Update Preview
 
+**10/18/22**:
+
+- Modify the `limit` request parameter description in the `GET /api/v1/hf/orders/done` interface to "default 20, maximum 100".
+
 # User
 
 # Account
@@ -63,7 +67,7 @@ This API can be used to create high-frequency trading account.
 This API requires `General` permissions
 
 ### Parameters
-Parameters | Data Type | Compulsory? | Description 
+Parameters | Data Type | Mandatory | Description 
 --------- | ------- | -----------| -----------| 
 type | String | Yes | Account type:`trade_hf`
 currency | String | Yes | currency, e.g: KCS
@@ -106,7 +110,7 @@ Users can transfer funds between their main account, trading account, and high-f
 This API requires `Trade` permissions
 
 ### Parameters
-Parameters | Type | Compulsory? | Description | 
+Parameters | Type | Mandatory | Description | 
 --------- | ------- | -----------| -----------| 
 clientOid | String | Yes | Client Order Id，a unique identifier created by the user, using UUID is recommended | 
 currency | String | Yes | currency | 
@@ -149,7 +153,7 @@ Get a list of high-frequency trading accounts.
 This API requires `General` permissions
 
 ### Parameters
-Parameters | Type | Compulsory? | Description 
+Parameters | Type | Mandatory | Description 
 | --------- | ------- | -----------| -----------| 
 currency | String | No | currency 
 type | String | No | Account type, `trade_hf`(high-frequency trading account)
@@ -189,7 +193,7 @@ Get the details of the high-frequency trading account
 This API requires `General` permissions
 
 ### Parameters
-Parameters | Type | Compulsory? | Description 
+Parameters | Type | Mandatory | Description 
 | --------- | ------- | -----------| -----------| 
 accountId | String | Yes | Path parameters, high-frequency trading account ID
 
@@ -230,7 +234,7 @@ This API requires `General` permissions
 This API limits request frequencies to `18 times/3s` for all accounts.
 
 ### Parameters
-Parameters | Type | Compulsory? | Description |
+Parameters | Type | Mandatory | Description |
 --------- | ------- | -----------| -----------| 
 currency | String | No | currency | 
 type | String | No | Account type, `TRADE_HF`(high-frequency trading account)|
@@ -293,7 +297,7 @@ This API requires `General` permissions
 This API limits request frequencies to `18 times/3s` for all accounts.
 
 ### Parameters
-Parameters | Type | Compulsory? | Description | 
+Parameters | Type | Mandatory | Description | 
 --------- | ------- | -----------| -----------| 
 currency | String | No | currency, optional，can select more than one，separate with commas，select no more than `10` currencys，the default will be to query for all currencys if left empty | 
 direction | String | No | Direction of transaction (in or out): `in`-transfer in, `out`-transfer out | 
@@ -333,7 +337,10 @@ The following requires signature verification.
 ```json
 // response
 {
-    "orderId":"5bd6e9286d99522a52e458de"
+    "code": "200000",
+    "data": {
+        "orderId": "5bd6e9286d99522a52e458de"
+    }
 }
 ```
 
@@ -366,7 +373,7 @@ The request frequency for this API is limited to `45 times/3s` for each account
 
 Public order placement request parameters
 
-Parameters | Type | Compulsory? | Description |
+Parameters | Type | Mandatory | Description |
  --------- | ------- | -----------| -----------| 
  clientOid | String | No | Client Order Id，unique identifier created by the user, the use of UUID is recommended | 
  symbol | String | Yes | Trading pair, such as, `ETH-BTC` | 
@@ -378,7 +385,7 @@ Parameters | Type | Compulsory? | Description |
 
 #### Additional Request Parameters Required by `limit` Orders
 
-Parameters | Type | Compulsory? | Description | 
+Parameters | Type | Mandatory | Description | 
 --------- | ------- | -----------| -----------| 
 price | String | Yes | Specify price for currency | 
 size | String | Yes | Specify quantity for currency | 
@@ -391,7 +398,7 @@ visibleSize | String | No | \[Optional] Maximum visible quantity in iceberg orde
 
 #### Additional request parameters required by `market` orders
 <aside class="notice">When placing a market order, the <code>size</code> or <code>funds</code> must be set.</aside>
-Parameters | Type | Compulsory? | Description | 
+Parameters | Type | Mandatory | Description | 
 --------- | ------- | -----------| -----------| 
 size | String | No | (Select one out of two: `size` or `funds`) | 
 funds | String | No | (Select one out of two: `size` or `funds`) |
@@ -590,7 +597,7 @@ This API requires `Trade` permissions
 The request frequency of this API endpoint is limited to `3 times/3s` for each account
 
 ### Parameters
-Parameters | Type | Compulsory?  | Description | 
+Parameters | Type | Mandatory  | Description | 
 --------- | ------- | -----------| -----------| 
 clientOid | String | No | Client Order Id，a unique identifier created by the user，the use of UUID is recommended | 
 symbol | String | Yes | trading pairs such as，ETH-BTC | 
@@ -642,7 +649,7 @@ This API requires `Trade` permissions
 The request frequency of this API is limited to `60 times/3s` for each account
 
 ### Parameters
-Parameters | Type | Compulsory? | Description | 
+Parameters | Type | Mandatory | Description | 
 --------- | ------- | -----------| -----------| 
 orderId | String | Yes | Path parameter，Order Id unique identifier | 
 symbol | String | Yes | Trading pair, such as `ETH-BTC` |
@@ -681,7 +688,7 @@ This endpoint sends out a request to cancel a high-frequency order using clientO
 This API requires `Trade` permissions
 
 ### Parameters
-Parameters  | Type | Compulsory? | Description | 
+Parameters  | Type | Mandatory | Description | 
 --------- | ------- | -----------| -----------| 
 clientOid | String | Yes | Path parameter，an identifier created by the 
 symbol | String | Yes | Trading pair such as `ETH-BTC` |
@@ -717,7 +724,7 @@ This API requires `Trade` permissions
 The request frequency of this API endpoint is limited to `3 times/3s` for each account
 
 ### Parameters
-Parameters | Type | Compulsory? | Description | 
+Parameters | Type | Mandatory | Description | 
 --------- | ------- | -----------| -----------| 
 symbol | String | Yes | Cancel open orders pertaining to the specified trading pair |
 
@@ -779,7 +786,7 @@ This API requires `General` permissions
 The request frequency of this API is limited to `30 times/3s` for each account
 
 ### Parameters
-Parameters | Type | Compulsory? | Description | 
+Parameters | Type | Mandatory | Description | 
 --------- | ------- | -----------| -----------| 
 symbol | String | Yes | Only returns order information for the specified trading pair 
 
@@ -879,7 +886,7 @@ This API requires `General` permissions
 The request frequency of this API is limited to `30 times/3s` for each account
 
 ### Parameters
-Parameters | Type | Compulsory? | Description | 
+Parameters | Type | Mandatory | Description | 
 --------- | ------- | -----------| -----------| 
 symbol | String | Yes | Only returns order information for the specified trading pair | 
 side | String | No | \[Optional] `buy` (Buy) or`sell` (Sell)| 
@@ -887,7 +894,7 @@ type | String | No | \[Optional] Order type: `limit` (limit order), `market`(mar
 startAt | long | No | \[Optional] Start time (ms)，last update(filled) time of the limit order| 
 endAt | long | No | \[Optional] End time (ms)，last update(filled) time of limit order| 
 lastId | long | No | \[Optional] The id of the last data item from the previous batch，defaults to obtaining the latest data | 
-limit | int | No | \[Optional] Default`100`，maximum`200` |
+limit | int | No | \[Optional] Default`20`，maximum`100` |
 
 
 <aside class="notice">You can only obtain data from within a <code>3 * 24</code> hour time range（i.e., from now up to <code>3 * 24</code> hours ago）. If the time range limit is exceeded, the system will default to looking up data from within the <code>3 * 24</code> hour time range.</aside>
@@ -974,7 +981,7 @@ This endpoint can be used to obtain information for a single HF order using the 
 ### API Permissions
 This API requires `General` permissions
 ### Parameters
-Parameters | Type | Compulsory? | Description | 
+Parameters | Type | Mandatory | Description | 
 --------- | ------- | -----------| -----------| 
 orderId | String | Yes | Path parameter，Order Id unique identifier | 
 symbol | String | Yes | Trading pair, such as `ETH-BTC` |
@@ -1064,7 +1071,7 @@ This API requires `General` permissions
 ### REQUEST RATE LIMIT
 The request frequency of this API is limited to `30 times/3s` for each account
 ### Parameters
-Parameters  | Type | Compulsory? | Description | 
+Parameters  | Type | Mandatory | Description | 
 --------- | ------- | -----------| -----------| 
 clientOid | String | Yes | Path parameter，an identifier created by the client | 
 symbol | String | Yes | Trading pair such as `ETH-BTC` |
@@ -1154,7 +1161,7 @@ This API requires `General` permissions
 The request frequency of this API is limited to `9 times/3s` for each account
 
 ### Parameters
-Parameters | Type | Compulsory?  | Description | 
+Parameters | Type | Mandatory  | Description | 
 --------- | ------- | -----------| -----------| 
 orderId | String | No | \[Optional] Look up the transaction details pertaining to the order id（If`orderId` is specified，please ignore the other query parameters）| 
 symbol | String | Yes | \[Optional] Only returns order information for the specified trading pair | 

@@ -28,6 +28,10 @@ KuCoin API：**REST API**
 
 ## 更新预告
 
+**10/18/22**:
+
+- 【修改】`GET /api/v1/hf/orders/done`接口中`limit`请求参数修改为：默认20，最大100
+
 # 用户模块
 
 # 账户
@@ -150,7 +154,7 @@ orderId | 内部资金划转的订单ID
 请求参数 | 类型 | 是否必须 | 含义 |
 --------- | ------- | -----------| -----------|
 currency | String | 否 | 币种
-type | String | 是 | 账户类型:`trade_hf`（高频交易账户）
+type | String | 否 | 账户类型:`trade_hf`（高频交易账户）
 
 ### 返回值
 字段 | 含义
@@ -336,7 +340,10 @@ context | 业务核心参数 |
 ```json
 // response
 {
-    "orderId":"5bd6e9286d99522a52e458de"
+    "code": "200000",
+    "data": {
+        "orderId": "5bd6e9286d99522a52e458de"
+    }
 }
 ```
 
@@ -885,7 +892,7 @@ type | String | 否 | [可选] 订单类型: `limit`（限价单）, `market`(�
 startAt | long | 否 | [可选] 开始时间（毫秒），限制订单最新更新(完成)时间|
 endAt | long | 否 | [可选] 截止时间（毫秒），限制订单最新更新(完成)时间|
 lastId | long | 否 | [可选] 前一批次数据最后一条数据的id，默认获取最新数据 |
-limit | int | 否 | [可选] 默认`100`，最大`200` |
+limit | int | 否 | [可选] 默认`20`，最大`100` |
 
 <aside class="notice">您只能获取<code>3 * 24</code>小时时间范围内的数据（即：从当前时间起至<code>3 * 24</code>小时前），若超出时间范围，系统会默认查询<code>3 * 24</code>小时时间范围内的数据。</aside>
 
