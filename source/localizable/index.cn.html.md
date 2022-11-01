@@ -887,12 +887,12 @@ tradeType | 交易类型: TRADE（现货交易）|
 请求参数 | 类型 | 是否必须 | 含义 |
 --------- | ------- | -----------| -----------|
 symbol | String | 是 | 只返回指定交易对的订单信息 |
-side | String | 否 | [可选] `buy`（买）或 `sell`（卖）|
-type | String | 否 | [可选] 订单类型: `limit`（限价单）, `market`(市价单) |
-startAt | long | 否 | [可选] 开始时间（毫秒），限制订单最新更新(完成)时间|
-endAt | long | 否 | [可选] 截止时间（毫秒），限制订单最新更新(完成)时间|
-lastId | long | 否 | [可选] 前一批次数据最后一条数据的id，默认获取最新数据 |
-limit | int | 否 | [可选] 默认`20`，最大`100` |
+side | String | 否 | `buy`（买）或 `sell`（卖）|
+type | String | 否 | 订单类型: `limit`（限价单）, `market`(市价单) |
+startAt | long | 否 | 开始时间（毫秒），限制订单最新更新(完成)时间|
+endAt | long | 否 | 截止时间（毫秒），限制订单最新更新(完成)时间|
+lastId | long | 否 | 前一批次数据最后一条数据的id，默认获取最新数据 |
+limit | int | 否 | 默认`20`，最大`100` |
 
 <aside class="notice">您只能获取<code>3 * 24</code>小时时间范围内的数据（即：从当前时间起至<code>3 * 24</code>小时前），若超出时间范围，系统会默认查询<code>3 * 24</code>小时时间范围内的数据。</aside>
 
@@ -1171,14 +1171,14 @@ tradeType | 交易类型: TRADE（现货交易）|
 ### 请求参数
 请求参数 | 类型 | 是否必须 | 含义 |
 --------- | ------- | -----------| -----------|
-orderId | String | 否 | [可选] 查询该订单Id的成交明细（如果指定了`orderId`，请忽略其他查询条件）|
-symbol | String | 是 | [可选] 只返回指定交易对的订单信息 |
-side | String | 否 | [可选] `buy`（买） 或 `sell`（卖）|
-type | String | 否 | [可选] 订单类型: `limit`（限价单）, `market`(市价单) |
-startAt | long | 否 | [可选] 开始时间（毫秒），限制成交记录成交(创建)时间|
-endAt | long | 否 | [可选] 截止时间（毫秒），限制成交记录成交(创建)时间|
-lastId | long | 否 | [可选] 前一批次数据最后一条数据的id，默认获取最新数据 |
-limit | int | 否 | [可选] 默认`100`，最大`200` |
+orderId | String | 否 | 查询该订单Id的成交明细（如果指定了`orderId`，请忽略其他查询条件）|
+symbol | String | 是 | 只返回指定交易对的订单信息 |
+side | String | 否 | `buy`（买） 或 `sell`（卖）|
+type | String | 否 | 订单类型: `limit`（限价单）, `market`(市价单) |
+startAt | long | 否 | 开始时间（毫秒），限制成交记录成交(创建)时间|
+endAt | long | 否 | 截止时间（毫秒），限制成交记录成交(创建)时间|
+lastId | long | 否 | 前一批次数据最后一条数据的id，默认获取最新数据 |
+limit | int | 否 | 默认`100`，最大`200` |
 
 <aside class="notice"><code>lastId</code>用来过滤数据和分页，如果不输入<code>lastId</code>，默认返回最多100条最新数据，返回结果中有<code>lastId</code>，使用它作为查询条件，可以查询下一页次新数据</aside>
 
