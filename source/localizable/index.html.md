@@ -889,12 +889,12 @@ The request frequency of this API is limited to `30 times/3s` for each account
 Parameters | Type | Mandatory | Description | 
 --------- | ------- | -----------| -----------| 
 symbol | String | Yes | Only returns order information for the specified trading pair | 
-side | String | No | \[Optional] `buy` (Buy) or`sell` (Sell)| 
-type | String | No | \[Optional] Order type: `limit` (limit order), `market`(market order) | 
-startAt | long | No | \[Optional] Start time (ms)，last update(filled) time of the limit order| 
-endAt | long | No | \[Optional] End time (ms)，last update(filled) time of limit order| 
-lastId | long | No | \[Optional] The id of the last data item from the previous batch，defaults to obtaining the latest data | 
-limit | int | No | \[Optional] Default`20`，maximum`100` |
+side | String | No | `buy` (Buy) or`sell` (Sell)| 
+type | String | No | Order type: `limit` (limit order), `market`(market order) | 
+startAt | long | No | Start time (ms)，last update(filled) time of the limit order| 
+endAt | long | No | End time (ms)，last update(filled) time of limit order| 
+lastId | long | No | The id of the last data item from the previous batch，defaults to obtaining the latest data | 
+limit | int | No | Default`20`，maximum`100` |
 
 
 <aside class="notice">You can only obtain data from within a <code>3 * 24</code> hour time range（i.e., from now up to <code>3 * 24</code> hours ago）. If the time range limit is exceeded, the system will default to looking up data from within the <code>3 * 24</code> hour time range.</aside>
@@ -1163,14 +1163,14 @@ The request frequency of this API is limited to `9 times/3s` for each account
 ### Parameters
 Parameters | Type | Mandatory  | Description | 
 --------- | ------- | -----------| -----------| 
-orderId | String | No | \[Optional] Look up the transaction details pertaining to the order id（If`orderId` is specified，please ignore the other query parameters）| 
-symbol | String | Yes | \[Optional] Only returns order information for the specified trading pair | 
-side | String | No | \[Optional] `buy`（Buy） or `sell`（Sell）| 
-type | String | No | \[Optional] Order type: `limit`（limit order）, `market`(market order) | 
-startAt | long | No | \[Optional] Start time（ms），puts a restriction on the transaction(creation) time for the transaction records| 
-endAt | long | No | \[Optional] End time（ms），puts a restriction on the transaction(creation) time of the transaction records| 
-lastId | long | No | \[Optional] The id of the last data item from the previous batch, defaults to obtaining the latest data | 
-limit | int | No | \[Optional] Default`100`，maximum `200` |
+orderId | String | No | Look up the transaction details pertaining to the order id（If`orderId` is specified，please ignore the other query parameters）| 
+symbol | String | Yes | Only returns order information for the specified trading pair | 
+side | String | No | `buy`（Buy） or `sell`（Sell）| 
+type | String | No | Order type: `limit`（limit order）, `market`(market order) | 
+startAt | long | No | Start time（ms），puts a restriction on the transaction(creation) time for the transaction records| 
+endAt | long | No | End time（ms），puts a restriction on the transaction(creation) time of the transaction records| 
+lastId | long | No | The id of the last data item from the previous batch, defaults to obtaining the latest data | 
+limit | int | No | Default`100`，maximum `200` |
 
 <aside class="notice"><code>lastId</code>is used to filter data and paginate. If <code>lastId</code>is not entered, the default is a maximum of 100 returned data items. The return results include<code>lastId</code>，which can be used as a query parameter to look up new data from the next page.</aside>
 
