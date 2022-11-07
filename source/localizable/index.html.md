@@ -28,6 +28,10 @@ KuCoin API: **REST API**
 
 ## Update Preview
 
+**11/08/22**:
+
+- Deprecate `POST /api/v1/accounts` interface.
+
 **10/18/22**:
 
 - Modify the `limit` request parameter description in the `GET /api/v1/hf/orders/done` interface to "default 20, maximum 100".
@@ -35,47 +39,6 @@ KuCoin API: **REST API**
 # User
 
 # Account
-
-## Create a high-frequency trading account
-```json
-// request
-{
-    "currency":"KCS",
-    "type":"trade_hf"
-}
-```
-
-```json
-// response
-{
-    "code": "200000",
-    "data": {
-        "id": "2675369984" //accountId
-    }
-}
-```
-
-This API can be used to create high-frequency trading account.
-
-### HTTP Request
-`POST /api/v1/accounts`
-
-### Example
-`POST /api/v1/accounts`
-
-### API Permissions
-This API requires `General` permissions
-
-### Parameters
-Parameters | Data Type | Mandatory | Description 
---------- | ------- | -----------| -----------| 
-type | String | Yes | Account type:`trade_hf`
-currency | String | Yes | currency, e.g: KCS
-
-### Return Value
-Field | Description 
---------- | ------- 
-id | Account ID -- accountId
 
 ## Internal Funds Transfers in high-frequency trading accounts
 ```json
