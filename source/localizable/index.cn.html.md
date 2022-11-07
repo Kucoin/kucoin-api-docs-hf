@@ -28,6 +28,10 @@ KuCoin API：**REST API**
 
 ## 更新预告
 
+**11/08/22**:
+
+- 【废弃】废弃`POST /api/v1/accounts`接口
+
 **10/18/22**:
 
 - 【修改】`GET /api/v1/hf/orders/done`接口中`limit`请求参数修改为：默认20，最大100
@@ -35,46 +39,6 @@ KuCoin API：**REST API**
 # 用户模块
 
 # 账户
-
-## 创建高频交易账户
-```json
-// request
-{
-    "currency":"KCS",
-    "type":"trade_hf"
-}
-```
-
-```json
-// response
-{
-    "code": "200000",
-    "data": {
-        "id": "2675369984" //accountId
-    }
-}
-```
-用于创建高频交易账户。
-
-### HTTP请求
-`POST /api/v1/accounts`
-
-### 请求示例
-`POST /api/v1/accounts`
-
-### API权限
-此接口需要`通用权限`。
-
-### 请求参数
-请求参数 | 数据类型 | 是否必需 | 含义
---------- | ------- | -----------| -----------|
-type | String | 是 | 账户类型: `trade_hf`
-currency | String | 是 | 币种，比如：KCS
-
-### 返回值
-字段 | 含义
---------- | -------
-id | 账户ID -- accountId
 
 ## 高频交易账户内部资金划转
 ```json
