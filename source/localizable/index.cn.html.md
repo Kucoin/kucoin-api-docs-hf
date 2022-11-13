@@ -14,33 +14,33 @@ includes:
 search: true
 ---
 
-# 快速开始
+# 快速開始
 
-## 简介
+## 簡介
 
-欢迎使用KuCoin开发者高频交易文档。 此文档概述了高频交易功能等应用开发接口。
+歡迎使用KuCoin開發者高頻交易文檔。 此文檔概述了高頻交易功能等應用開發接口。
 
 KuCoin API：**REST API**
 
-- REST API 包含三个类别：**用户（私有）、交易（私有）、市场数据（公共）**
+- REST API 包含三個類別：**用戶（私有）、交易（私有）、市場數據（公共）**
 
 
 
-## 更新预告
+## 更新預告
 
 **11/08/22**:
 
-- 【废弃】废弃`POST /api/v1/accounts`接口
+- 【廢棄】廢棄`POST /api/v1/accounts`接口
 
 **10/18/22**:
 
-- 【修改】`GET /api/v1/hf/orders/done`接口中`limit`请求参数修改为：默认20，最大100
+- 【修改】`GET /api/v1/hf/orders/done`接口中`limit`請求參數修改爲：默認20，最大100
 
-# 用户模块
+# 用戶模塊
 
-# 账户
+# 賬戶
 
-## 高频交易账户内部资金划转
+## 高頻交易賬戶內部資金劃轉
 ```json
 // request
 {
@@ -61,32 +61,32 @@ KuCoin API：**REST API**
     }
 }
 ```
-用户可以将资金在储蓄账户、交易账户和高频交易账户之间免费划转。
+用戶可以將資金在儲蓄賬戶、交易賬戶和高頻交易賬戶之間免費劃轉。
 
-### HTTP请求
+### HTTP請求
 `POST /api/v2/accounts/inner-transfer`
 
-### 请求示例
+### 請求示例
 `POST /api/v2/accounts/inner-transfer`
 
-### API权限
-此接口需要`交易权限`。
+### API權限
+此接口需要`交易權限`。
 
-### 请求参数
-请求参数 | 类型 | 是否必须 | 含义 |
+### 請求參數
+請求參數 | 類型 | 是否必須 | 含義 |
 --------- | ------- | -----------| -----------|
-clientOid | String | 是 | Client Order Id，客户端创建的唯一标识，建议使用UUID |
-currency | String | 是 | 币种 |
-from | String | 是 | 付款账户类型：`main`(储蓄账户)、`trade`(交易账户)、`trade_hf`(高频交易账户) |
-to | String | 是 | 收款账户类型：`main`(储蓄账户)、`trade`(交易账户)、`trade_hf`(高频交易账户) |
-amount | String | 是 | 转账金额，精度为币种精度正整数倍 |
+clientOid | String | 是 | Client Order Id，客戶端創建的唯一標識，建議使用UUID |
+currency | String | 是 | 幣種 |
+from | String | 是 | 付款賬戶類型：`main`(儲蓄賬戶)、`trade`(交易賬戶)、`trade_hf`(高頻交易賬戶) |
+to | String | 是 | 收款賬戶類型：`main`(儲蓄賬戶)、`trade`(交易賬戶)、`trade_hf`(高頻交易賬戶) |
+amount | String | 是 | 轉賬金額，精度爲幣種精度正整數倍 |
 
 ### 返回值
-字段 | 含义
+字段 | 含義
 --------- | -------
-orderId | 内部资金划转的订单ID
+orderId | 內部資金劃轉的訂單ID
 
-## 高频交易账户列表
+## 高頻交易賬戶列表
 ```json
 // response
 {
@@ -103,34 +103,34 @@ orderId | 内部资金划转的订单ID
     ]
 }
 ```
-获取高频交易账户列表。
+獲取高頻交易賬戶列表。
 
-### HTTP请求
+### HTTP請求
 `GET /api/v1/accounts`
 
-### 请求示例
+### 請求示例
 `GET /api/v1/accounts?currency=USDT&type=trade_hf`
 
-### API权限
-此接口需要`通用权限`。
+### API權限
+此接口需要`通用權限`。
 
-### 请求参数
-请求参数 | 类型 | 是否必须 | 含义 |
+### 請求參數
+請求參數 | 類型 | 是否必須 | 含義 |
 --------- | ------- | -----------| -----------|
-currency | String | 否 | 币种
-type | String | 否 | 账户类型:`trade_hf`（高频交易账户）
+currency | String | 否 | 幣種
+type | String | 否 | 賬戶類型:`trade_hf`（高頻交易賬戶）
 
 ### 返回值
-字段 | 含义
+字段 | 含義
 --------- | -------
-id | accountId 账户ID
-currency | 账户对应的币种
-type |账户类型 ，trade_hf（高频交易账户）
-balance | 账户资金总额
-available | 账户可用的资金
-holds | 账户冻结的资金
+id | accountId 賬戶ID
+currency | 賬戶對應的幣種
+type |賬戶類型 ，trade_hf（高頻交易賬戶）
+balance | 賬戶資金總額
+available | 賬戶可用的資金
+holds | 賬戶凍結的資金
 
-## 单个高频交易账户详情
+## 單個高頻交易賬戶詳情
 ```json
 // response
 {
@@ -143,31 +143,31 @@ holds | 账户冻结的资金
     }
 }
 ```
-获取单个高频交易账户详情。
+獲取單個高頻交易賬戶詳情。
 
-### HTTP请求
+### HTTP請求
 `GET /api/v1/accounts/{accountId}`
 
-### 请求示例
+### 請求示例
 `GET /api/v1/accounts/2051232768`
 
-### API权限
-此接口需要`通用权限`。
+### API權限
+此接口需要`通用權限`。
 
-### 请求参数
-请求参数 | 类型 | 是否必须 | 含义 |
+### 請求參數
+請求參數 | 類型 | 是否必須 | 含義 |
 --------- | ------- | -----------| -----------|
-accountId | String | 是 | 路径参数，高频交易账户Id
+accountId | String | 是 | 路徑參數，高頻交易賬戶Id
 
 ### 返回值
-字段 | 含义
+字段 | 含義
 --------- | -------
-currency | 账户对应的币种 |
-balance | 账户资金总额 |
-available | 账户可用的资金 |
-holds | 账户冻结的资金 |
+currency | 賬戶對應的幣種 |
+balance | 賬戶資金總額 |
+available | 賬戶可用的資金 |
+holds | 賬戶凍結的資金 |
 
-## 高频交易账户可划转的资金
+## 高頻交易賬戶可劃轉的資金
 
 ```json
 // response
@@ -182,39 +182,39 @@ holds | 账户冻结的资金 |
     }
 }
 ```
-获取高频交易账户可划转的资金。
+獲取高頻交易賬戶可劃轉的資金。
 
-### HTTP请求
+### HTTP請求
 `GET /api/v1/accounts/transferable`
 
-### 请求示例
+### 請求示例
 `GET /api/v1/accounts/transferable?currency=USDT&type=TRADE_HF`
 
-### API权限
-此接口需要`通用权限`。
+### API權限
+此接口需要`通用權限`。
 
-### 频率限制
-此接口针对每个账号请求频率限制为`18次/3s`
+### 頻率限制
+此接口針對每個賬號請求頻率限制爲`18次/3s`
 
-### 请求参数
+### 請求參數
 
-请求参数 | 类型 | 是否必须 | 含义 |
+請求參數 | 類型 | 是否必須 | 含義 |
 --------- | ------- | -----------| -----------|
-currency | String | 否 | 币种 |
-type | String | 否 | 账户类型: `TRADE_HF`|
+currency | String | 否 | 幣種 |
+type | String | 否 | 賬戶類型: `TRADE_HF`|
 
 
 ### 返回值
-字段 | 含义
+字段 | 含義
 --------- | -------
-currency | 币种
-balance | 资金总额
-available | 可用资金
-holds | 冻结资金
-transferable | 可划转资金
+currency | 幣種
+balance | 資金總額
+available | 可用資金
+holds | 凍結資金
+transferable | 可劃轉資金
 
 
-## 高频交易账户流水记录
+## 高頻交易賬戶流水記錄
 ```json
 // response
 {
@@ -247,60 +247,60 @@ transferable | 可划转资金
     ]
 }
 ```
-获取高频交易账户的出入账流水记录，支持多币种查询。查询结果按流水创建时间和Id降序排序。
+獲取高頻交易賬戶的出入賬流水記錄，支持多幣種查詢。查詢結果按流水創建時間和Id降序排序。
 
-### HTTP请求
+### HTTP請求
 `GET /api/v1/hf/accounts/ledgers`
 
-### 请求示例
+### 請求示例
 `GET /api/v1/hf/accounts/ledgers?bizType=TRADE_EXCHANGE&currency=YOP,DAI&startAt=1601395200000`
 
-### API权限
-此接口需要`通用权限`。
+### API權限
+此接口需要`通用權限`。
 
-### 频率限制
-此接口针对每个账号请求频率限制为`18次/3s`
+### 頻率限制
+此接口針對每個賬號請求頻率限制爲`18次/3s`
 
-### 请求参数
-请求参数 | 类型 | 是否必须 | 含义 |
+### 請求參數
+請求參數 | 類型 | 是否必須 | 含義 |
 --------- | ------- | -----------| -----------|
-currency | String | 否 | 币种，选填，可多选，以逗号分隔，最多支持选择`10`个币种，若不填写，默认查询所有币种 |
-direction | String | 否 | 出入账方向: `in`-入账, `out`-出账 |
-bizType | String | 否 | 业务类型: `TRANSFER`-转账,`TRADE_EXCHANGE`-交易 |
-lastId | long | 否 | 前一批次数据最后一条数据的id。 默认获取最新流水。|
-limit | int | 否 | 默认`100`，最大`200` |
-startAt | long | 否 | 开始时间（毫秒），限制流水创建时间|
-endAt | long | 否 | 截止时间（毫秒），限制流水创建时间|
+currency | String | 否 | 幣種，選填，可多選，以逗號分隔，最多支持選擇`10`個幣種，若不填寫，默認查詢所有幣種 |
+direction | String | 否 | 出入賬方向: `in`-入賬, `out`-出賬 |
+bizType | String | 否 | 業務類型: `TRANSFER`-轉賬,`TRADE_EXCHANGE`-交易 |
+lastId | long | 否 | 前一批次數據最後一條數據的id。 默認獲取最新流水。|
+limit | int | 否 | 默認`100`，最大`200` |
+startAt | long | 否 | 開始時間（毫秒），限制流水創建時間|
+endAt | long | 否 | 截止時間（毫秒），限制流水創建時間|
 
-<aside class="notice">如果设定<code>lastId</code>，获取流水id < lastId，否则返回最近流水。lastId的值取流水id，可以从返回结果里获取。
+<aside class="notice">如果設定<code>lastId</code>，獲取流水id < lastId，否則返回最近流水。lastId的值取流水id，可以從返回結果裏獲取。
 
-您只能获取<code>3 * 24</code>小时时间范围内的数据（即：从当前时间起至<code>3 * 24</code>小时前）。若超出时间范围，系统会默认查询<code>3 * 24</code>小时时间范围内的数据。</aside>
+您只能獲取<code>3 * 24</code>小時時間範圍內的數據（即：從當前時間起至<code>3 * 24</code>小時前）。若超出時間範圍，系統會默認查詢<code>3 * 24</code>小時時間範圍內的數據。</aside>
 
 #### 返回值
-字段 | 含义 |
+字段 | 含義 |
 --------- | ------- |
-id | 唯一键 |
-currency | 币种 |
-amount | 资金变动值 |
-fee | 充值或提现费率 |
-balance | 变动后的资金总额 |
-accountType | 母账号账户类型`TRADE_HF` |
-bizType | 业务类型，比如`TRANSFER`-转账，`TRADE_EXCHANGE` -交易 |
-direction | 出入账方向 `out` 或 `in` |
-createdAt | 创建时间 |
-context | 业务核心参数 |
+id | 唯一鍵 |
+currency | 幣種 |
+amount | 資金變動值 |
+fee | 充值或提現費率 |
+balance | 變動後的資金總額 |
+accountType | 母賬號賬戶類型`TRADE_HF` |
+bizType | 業務類型，比如`TRANSFER`-轉賬，`TRADE_EXCHANGE` -交易 |
+direction | 出入賬方向 `out` 或 `in` |
+createdAt | 創建時間 |
+context | 業務核心參數 |
 
-- `context`说明
-    * 如果 `bizType` 是`TRADE_EXCHANGE`，那么 context 字段会包含交易的额外信息（订单id，交易id，交易对）。
+- `context`說明
+    * 如果 `bizType` 是`TRADE_EXCHANGE`，那麼 context 字段會包含交易的額外信息（訂單id，交易id，交易對）。
 
-# 交易模块
+# 交易模塊
 
-以下请求需要校验签名。
+以下請求需要校驗簽名。
 
 
-# 订单
+# 訂單
 
-## 高频交易下单
+## 高頻交易下單
 ```json
 // response
 {
@@ -311,164 +311,164 @@ context | 业务核心参数 |
 }
 ```
 
-订单有两种类型： 限价单（`limit`）: 指定价格和数量进行交易。 市价单(`market`) : 指定资金或数量进行交易。
+訂單有兩種類型： 限價單（`limit`）: 指定價格和數量進行交易。 市價單(`market`) : 指定資金或數量進行交易。
 
-在下单前，请确保您的高频交易账户有足够的资金。一旦下单成功，您下单的金额会被冻结。冻结金额的多少取决于您下单的类型和具体的请求参数。
+在下單前，請確保您的高頻交易賬戶有足夠的資金。一旦下單成功，您下單的金額會被凍結。凍結金額的多少取決於您下單的類型和具體的請求參數。
 
-请悉知，当您的订单进入买卖盘，系统会提前冻结订单的手续费。
+請悉知，當您的訂單進入買賣盤，系統會提前凍結訂單的手續費。
 
-在下单之前，请充分了解每一个交易对的参数含义。
+在下單之前，請充分了解每一個交易對的參數含義。
 
-<aside class="notice">对于一个账号，每一个交易对最大<strong>活跃</strong>委托订单数量<code>200</code>。</aside>
+<aside class="notice">對於一個賬號，每一個交易對最大<strong>活躍</strong>委託訂單數量<code>200</code>。</aside>
 
-### HTTP 请求
+### HTTP 請求
 `POST /api/v1/hf/orders`
 
-### 请求示例
+### 請求示例
 `POST /api/v1/hf/orders`
 
-### API权限
-此接口需要`交易权限`。
+### API權限
+此接口需要`交易權限`。
 
-### 频率限制
-此接口针对每个账号请求频率限制为`45次/3s`
+### 頻率限制
+此接口針對每個賬號請求頻率限制爲`45次/3s`
 
-### 请求参数
+### 請求參數
 
-下单公有的请求参数
+下單公有的請求參數
 
-请求参数 | 类型 | 是否必须 | 含义 |
+請求參數 | 類型 | 是否必須 | 含義 |
 --------- | ------- | -----------| -----------|
-clientOid | String | 否 | Client Order Id，客户端创建的唯一标识，建议使用UUID |
-symbol | String | 是 | 交易对 比如，ETH-BTC |
-type | String | 是 | 订单类型 limit 和 market |
-side | String | 是 | `buy`（买） 或 `sell`（卖）|
-stp | String | 否 | 自成交保护（`self trade prevention`）分为`CN`, `CO`, `CB` , `DC`四种策略 |
-tags | String | 否 | 订单标签，长度不超过`20`个字符（编码只支持ASCII）|
-remark | String | 否 | 下单备注，长度不超过`20`个字符（编码只支持ASCII）|
+clientOid | String | 否 | Client Order Id，客戶端創建的唯一標識，建議使用UUID |
+symbol | String | 是 | 交易對 比如，ETH-BTC |
+type | String | 是 | 訂單類型 limit 和 market |
+side | String | 是 | `buy`（買） 或 `sell`（賣）|
+stp | String | 否 | 自成交保護（`self trade prevention`）分爲`CN`, `CO`, `CB` , `DC`四種策略 |
+tags | String | 否 | 訂單標籤，長度不超過`20`個字符（編碼只支持ASCII）|
+remark | String | 否 | 下單備註，長度不超過`20`個字符（編碼只支持ASCII）|
 
-#### **limit** 限价单额外所需请求参数
+#### **limit** 限價單額外所需請求參數
 
-请求参数 | 类型 | 是否必须 | 含义 |
+請求參數 | 類型 | 是否必須 | 含義 |
 --------- | ------- | -----------| -----------|
-price | String | 是 | 指定币种的价格 |
-size | String | 是 | 指定币种的数量 |
-timeInForce | String | 否 | [可选] 订单时效策略 `GTC`, `GTT`, `IOC`, `FOK` (默认为`GTC`) |
-cancelAfter | long | 否 | [可选] `n`秒之后取消，订单时效策略为`GTT` |
-postOnly | boolean | 否 | [可选] 被动委托的标识, 当订单时效策略为`IOC`或`FOK`时无效 |
-hidden | boolean | 否 | [可选] 是否隐藏（买卖盘中不展示） |
-iceberg | boolean | 否 | [可选] 冰山单中是否仅显示订单的可见部分 |
-visibleSize | String | 否 | [可选] 冰山单最大的展示数量 |
+price | String | 是 | 指定幣種的價格 |
+size | String | 是 | 指定幣種的數量 |
+timeInForce | String | 否 | [可選] 訂單時效策略 `GTC`, `GTT`, `IOC`, `FOK` (默認爲`GTC`) |
+cancelAfter | long | 否 | [可選] `n`秒之後取消，訂單時效策略爲`GTT` |
+postOnly | boolean | 否 | [可選] 被動委託的標識, 當訂單時效策略爲`IOC`或`FOK`時無效 |
+hidden | boolean | 否 | [可選] 是否隱藏（買賣盤中不展示） |
+iceberg | boolean | 否 | [可選] 冰山單中是否僅顯示訂單的可見部分 |
+visibleSize | String | 否 | [可選] 冰山單最大的展示數量 |
 
-#### **market** 市价单额外所需请求参数
-<aside class="notice">下市价单，需定买卖数量(size)或资金(funds)。</aside>
-请求参数 | 类型 | 是否必须 | 含义 |
+#### **market** 市價單額外所需請求參數
+<aside class="notice">下市價單，需定買賣數量(size)或資金(funds)。</aside>
+請求參數 | 類型 | 是否必須 | 含義 |
 --------- | ------- | -----------| -----------|
-size | String | 否 | （`size`和`funds` 二选一） |
-funds | String | 否 | （`size`和`funds` 二选一） |
+size | String | 否 | （`size`和`funds` 二選一） |
+funds | String | 否 | （`size`和`funds` 二選一） |
 
 
-### 术语解释
+### 術語解釋
 
-### 交易对(Symbol)
-交易对必须是KuCoin支持的交易对。
+### 交易對(Symbol)
+交易對必須是KuCoin支持的交易對。
 
 #### Client Order Id(clientOid)
-ClientOid字段是客户端创建的唯一ID（推荐使用UUID），只能包含数字、字母、下划线（_）和 分隔线（-）。这个字段会在获取订单信息时返回。您可使用clientOid来标识您的订单。ClientOid不同于服务端创建的订单ID。请不要使用同一个clientOid发起请求。ClientOid最长不得超过40个字符。
+ClientOid字段是客戶端創建的唯一ID（推薦使用UUID），只能包含數字、字母、下劃線（_）和 分隔線（-）。這個字段會在獲取訂單信息時返回。您可使用clientOid來標識您的訂單。ClientOid不同於服務端創建的訂單ID。請不要使用同一個clientOid發起請求。ClientOid最長不得超過40個字符。
 
-请妥善记录服务端创建的orderId，以用于查询订单状态的更新。
+請妥善記錄服務端創建的orderId，以用於查詢訂單狀態的更新。
 
-#### 订单类型(type)
-您在下单时指定的订单类型，决定了您是否需要请求其他参数，同时还会影响到撮合引擎的执行。
+#### 訂單類型(type)
+您在下單時指定的訂單類型，決定了您是否需要請求其他參數，同時還會影響到撮合引擎的執行。
 
-下限价单时，您需指定限价单的价格（price）和数量（size）。系统将根据市场行情以指定或更优价格撮合该订单。如果订单未能被立即撮合，将继续留买卖盘中，直至被撮合或被用户取消。
+下限價單時，您需指定限價單的價格（price）和數量（size）。系統將根據市場行情以指定或更優價格撮合該訂單。如果訂單未能被立即撮合，將繼續留買賣盤中，直至被撮合或被用戶取消。
 
-与限价单不同，市价单价格会随着市场价格波动而变化。下市价单时，您无需指定价格，只需指定数量。市价单会立即成交，不会进入买卖盘。所有市价单都是taker，需支付taker费用。
+與限價單不同，市價單價格會隨着市場價格波動而變化。下市價單時，您無需指定價格，只需指定數量。市價單會立即成交，不會進入買賣盤。所有市價單都是taker，需支付taker費用。
 
-#### 交易类型(tradeType)
-目前平台只支持现货（TRADE）资产交易下单，系统将默认按照现货冻结您交易账户资金。
+#### 交易類型(tradeType)
+目前平臺只支持現貨（TRADE）資產交易下單，系統將默認按照現貨凍結您交易賬戶資金。
 
-#### 价格(Price)
-下限价单时，price 必须以交易对的价格增量 priceIncrement为基准，价格增量是交易对的价格的精度。比如，对BTC-USDT这个交易对, 它的 priceIncrement 为0.00001000。那么你下单的 price 不可以小于0.00001000，且为 priceIncrement 的正整数倍，否则下单时会报错，invalid priceIncrement。
+#### 價格(Price)
+下限價單時，price 必須以交易對的價格增量 priceIncrement爲基準，價格增量是交易對的價格的精度。比如，對BTC-USDT這個交易對, 它的 priceIncrement 爲0.00001000。那麼你下單的 price 不可以小於0.00001000，且爲 priceIncrement 的正整數倍，否則下單時會報錯，invalid priceIncrement。
 
-#### 数量(Size)
-下限价单时，size 是指交易对的交易对象(即写在靠前部分的资产名)的数量。size 必须以交易对中的数量增量 baseIncrement为基准，数量增量是交易对的数量的精度。下单的 size 为 baseIncrement 的正整数倍并且必须在 baseMinSize 和 baseMaxSize 之间。
+#### 數量(Size)
+下限價單時，size 是指交易對的交易對象(即寫在靠前部分的資產名)的數量。size 必須以交易對中的數量增量 baseIncrement爲基準，數量增量是交易對的數量的精度。下單的 size 爲 baseIncrement 的正整數倍並且必須在 baseMinSize 和 baseMaxSize 之間。
 
-#### 资金(Funds)
-下市价单时，funds 字段是指交易对的定价资产(即写在靠后部分资产名)的资金。funds 必须以交易对中的资金增量quoteIncrement为基准，资金增量是交易对的资金的精度。下单的 funds 为 quoteIncrement 的正整数倍且必须在 quoteMinSize 和 quoteMaxSize 之间。
+#### 資金(Funds)
+下市價單時，funds 字段是指交易對的定價資產(即寫在靠後部分資產名)的資金。funds 必須以交易對中的資金增量quoteIncrement爲基準，資金增量是交易對的資金的精度。下單的 funds 爲 quoteIncrement 的正整數倍且必須在 quoteMinSize 和 quoteMaxSize 之間。
 
-#### 订单时效策略(TimeInForce)
-订单时效是一种交易时使用的特殊策略，用于设定订单在被撮合或取消前的生效时间。订单时效策略分为四种：
+#### 訂單時效策略(TimeInForce)
+訂單時效是一種交易時使用的特殊策略，用於設定訂單在被撮合或取消前的生效時間。訂單時效策略分爲四種：
 
-缩写 | 全称 | 含义 |
+縮寫 | 全稱 | 含義 |
 --------- | ------- | -----------|
-GTC | Good Till Canceled | 主动取消才过期 |
-GTT | Good Till Time | 指定时间后过期 |
-IOC | Immediate Or Cancel | 立即成交可成交的部分，然后取消剩余部分，不进入买卖盘 |
-FOK | Fill Or Kill | 如果下单不能全部成交，则取消 |
+GTC | Good Till Canceled | 主動取消才過期 |
+GTT | Good Till Time | 指定時間後過期 |
+IOC | Immediate Or Cancel | 立即成交可成交的部分，然後取消剩餘部分，不進入買賣盤 |
+FOK | Fill Or Kill | 如果下單不能全部成交，則取消 |
 
-- 注意，成交也包含自成交。市价单并不支持订单时效策略(TimeInForce)
+- 注意，成交也包含自成交。市價單並不支持訂單時效策略(TimeInForce)
 
-#### 被动委托(PostOnly)
-PostOnly只是一个标识，如果下单有能立即成交的对手方，则取消。当用户所下订单是postOnly订单时，如果订单进入撮合引擎后遇到冰山单和隐藏单可以立即成交，postOnly 订单收maker手续费，冰山单和隐藏单收taker手续费。
+#### 被動委託(PostOnly)
+PostOnly只是一個標識，如果下單有能立即成交的對手方，則取消。當用戶所下訂單是postOnly訂單時，如果訂單進入撮合引擎後遇到冰山單和隱藏單可以立即成交，postOnly 訂單收maker手續費，冰山單和隱藏單收taker手續費。
 
-#### 隐藏单和冰山单(Hidden & Iceberg)
-您可在高级设置中设置隐藏单和冰山单（冰山单是一种特殊形式的隐藏单）。进行限价单和限价止损单交易时，您可选择按照隐藏单或冰山单执行。
+#### 隱藏單和冰山單(Hidden & Iceberg)
+您可在高級設置中設置隱藏單和冰山單（冰山單是一種特殊形式的隱藏單）。進行限價單和限價止損單交易時，您可選擇按照隱藏單或冰山單執行。
 
-隐藏单不会展示在买卖盘上。
+隱藏單不會展示在買賣盤上。
 
-与隐藏单不同，冰山单分为可见和隐藏两部分。进行冰山单交易时，需设置可见订单数量。冰山单最小可见数量是总订单量的1/20。
+與隱藏單不同，冰山單分爲可見和隱藏兩部分。進行冰山單交易時，需設置可見訂單數量。冰山單最小可見數量是總訂單量的1/20。
 
-进行撮合时，冰山单的可见部分会首先被撮合，当可见部分被全部撮合后，另一部分隐藏订单将浮出，直至订单全部成交。
+進行撮合時，冰山單的可見部分會首先被撮合，當可見部分被全部撮合後，另一部分隱藏訂單將浮出，直至訂單全部成交。
 
 ##### 注意
-- 系统将对隐藏和冰山单收取taker费用。
-- 如果您同时设定了冰山单和隐藏单，您的订单将默认作为冰山单处理。
+- 系統將對隱藏和冰山單收取taker費用。
+- 如果您同時設定了冰山單和隱藏單，您的訂單將默認作爲冰山單處理。
 
-#### 冻结策略(Hold)
-对于限价买单，我们会从您的资金里面冻结您买单的金额(price * size)。同样，对于限价卖单，我们也会冻结您卖单的资产。在成交那一刻评估实际的手续费。如果您取消了一个部分成交或未成交的订单，那么剩余金额会解冻会退到您的账户。 对于市价买/卖单，需要指定funds(资金)，我们会根据funds来冻结您账户里的资金。如果只指定了size，在成交或取消之前，您的账户所有资金会被冻结（通常冻结时间非常短）。
+#### 凍結策略(Hold)
+對於限價買單，我們會從您的資金裏面凍結您買單的金額(price * size)。同樣，對於限價賣單，我們也會凍結您賣單的資產。在成交那一刻評估實際的手續費。如果您取消了一個部分成交或未成交的訂單，那麼剩餘金額會解凍會退到您的賬戶。 對於市價買/賣單，需要指定funds(資金)，我們會根據funds來凍結您賬戶裏的資金。如果只指定了size，在成交或取消之前，您的賬戶所有資金會被凍結（通常凍結時間非常短）。
 
-#### 自成交保护(SelfTradePrevention)
-您可在高级设置中设置自成交保护策略，您的订单将不会发生自成交。如果您在下单时没有指定STP，您的订单可能会被自己的订单成交。市价单现不支持DC策略。
+#### 自成交保護(SelfTradePrevention)
+您可在高級設置中設置自成交保護策略，您的訂單將不會發生自成交。如果您在下單時沒有指定STP，您的訂單可能會被自己的訂單成交。市價單現不支持DC策略。
 
-市价单现不支持 DC，当timeInForce 为FOK， 那么stp会指定为CN。
+市價單現不支持 DC，當timeInForce 爲FOK， 那麼stp會指定爲CN。
 
-缩写 | 全称 | 含义 |
+縮寫 | 全稱 | 含義 |
 --------- | ------- | -----------|
-GTC | Good Till Canceled | 主动取消才过期 |
-GTT | Good Till Time | 指定时间后过期 |
-IOC | Immediate Or Cancel | 立即成交可成交的部分，然后取消剩余部分，不进入买卖盘 |
-FOK | Fill Or Kill | 如果下单不能全部成交，则取消 |
+GTC | Good Till Canceled | 主動取消才過期 |
+GTT | Good Till Time | 指定時間後過期 |
+IOC | Immediate Or Cancel | 立即成交可成交的部分，然後取消剩餘部分，不進入買賣盤 |
+FOK | Fill Or Kill | 如果下單不能全部成交，則取消 |
 
-缩写 | 全称 | 含义 |
+縮寫 | 全稱 | 含義 |
 --------- | ------- | -----------|
-DC | Decrease and Cancel | 取消数量少的一方的订单，并将数量多的一方数量改为新旧差值 |
-CO | Cancel old | 取消旧的订单 |
-CN | Cancel new | 取消新的订单 |
-CB | Cancel both | 双方都取消 |
+DC | Decrease and Cancel | 取消數量少的一方的訂單，並將數量多的一方數量改爲新舊差值 |
+CO | Cancel old | 取消舊的訂單 |
+CN | Cancel new | 取消新的訂單 |
+CB | Cancel both | 雙方都取消 |
 
-#### 订单生命周期(ORDER LIFECYCLE)
+#### 訂單生命週期(ORDER LIFECYCLE)
 
-当下单请求因请求成功或（因余额不足、参数不合法等原因）被拒绝时，HTTP请求会进行响应。下单成功，返回订单ID，订单将被撮合，可能会部分或全部成交。被取消或者已完全成交的订单状态为“已完成”（DONE），否则订单就是“活跃”（ACTIVE）状态。订阅市场数据频道的用户可使用订单ID（orderId）和用户订单ID（clientOid）来识别消息。
+當下單請求因請求成功或（因餘額不足、參數不合法等原因）被拒絕時，HTTP請求會進行響應。下單成功，返回訂單ID，訂單將被撮合，可能會部分或全部成交。被取消或者已完全成交的訂單狀態爲“已完成”（DONE），否則訂單就是“活躍”（ACTIVE）狀態。訂閱市場數據頻道的用戶可使用訂單ID（orderId）和用戶訂單ID（clientOid）來識別消息。
 
-#### 价格保护机制
+#### 價格保護機制
 
-下单将启用价格保护机制。具体规则如下
+下單將啓用價格保護機制。具體規則如下
 
-- 若用户在币币交易所下的市价单/限价单可以与当前买卖盘内订单直接成交，那么系统会判断成交深度对应的价格与同方向盘口价的偏差是否超出阈值（阈值可根据API symbol接口获取）；
-- 若超过，当您是限价单时，该订单会被直接取消；
-- 若是市价单则此订单将被系统部分执行，执行上限为阈值对应的价格内的订单数量，其他剩余订单将不被成交。
+- 若用戶在幣幣交易所下的市價單/限價單可以與當前買賣盤內訂單直接成交，那麼系統會判斷成交深度對應的價格與同方向盤口價的偏差是否超出閾值（閾值可根據API symbol接口獲取）；
+- 若超過，當您是限價單時，該訂單會被直接取消；
+- 若是市價單則此訂單將被系統部分執行，執行上限爲閾值對應的價格內的訂單數量，其他剩餘訂單將不被成交。
 
-举例说明：若阈值为10%，当某用户在KCS/USDT交易区下了10,000 USDT的市价买单时(此时卖一价为1.20000)，系统会判断订单完全成交后最新成交价为1.40000。(1.40000-1.20000)/1.20000=16.7%>10%，而阈值价格为1.32000，此时，用户的这笔市价买单将最多被成交至1.32000，其他剩余订单则不会和买卖盘内订单进行撮合。 请注意：该功能对深度的探测可能存在偏差，若您的订单未被完全成交有可能是因为超出了阈值的部分未成交。
+舉例說明：若閾值爲10%，當某用戶在KCS/USDT交易區下了10,000 USDT的市價買單時(此時賣一價爲1.20000)，系統會判斷訂單完全成交後最新成交價爲1.40000。(1.40000-1.20000)/1.20000=16.7%>10%，而閾值價格爲1.32000，此時，用戶的這筆市價買單將最多被成交至1.32000，其他剩餘訂單則不會和買賣盤內訂單進行撮合。 請注意：該功能對深度的探測可能存在偏差，若您的訂單未被完全成交有可能是因爲超出了閾值的部分未成交。
 
 
 ### 返回值
 
-| 字段                                | 含义   |
+| 字段                                | 含義   |
 | --------------------------------- | ---- |
-| orderId                           | 订单Id,下单成功后，会返回一个`orderId`字段 |
+| orderId                           | 訂單Id,下單成功後，會返回一個`orderId`字段 |
 
-## 高频交易批量下单
+## 高頻交易批量下單
 ```json
 //request
 {
@@ -541,51 +541,51 @@ CB | Cancel both | 双方都取消 |
 }
 ```
 
-该接口支持在一个接口中批量下单，每次最多可同时下`5`个订单，订单类型必须为相同交易对的限价单（目前该接口只支持现货交易，不支持杠杆交易）
+該接口支持在一個接口中批量下單，每次最多可同時下`5`個訂單，訂單類型必須爲相同交易對的限價單（目前該接口只支持現貨交易，不支持槓桿交易）
 
-此接口只提交下单请求，实际下单结果需要通过查询订单状态或订阅websocket获取订单消息。
+此接口只提交下單請求，實際下單結果需要通過查詢訂單狀態或訂閱websocket獲取訂單消息。
 
-### HTTP 请求
+### HTTP 請求
 `POST /api/v1/hf/orders/multi`
 
-### 请求示例
+### 請求示例
 `POST /api/v1/hf/orders/multi`
 
-### API权限
-此接口需要`交易权限`。
+### API權限
+此接口需要`交易權限`。
 
-### 频率限制
-此接口针对每个账号请求频率限制为`3次/3s`
+### 頻率限制
+此接口針對每個賬號請求頻率限制爲`3次/3s`
 
-### 请求参数
+### 請求參數
 
-请求参数 | 类型 | 是否必须 | 含义 |
+請求參數 | 類型 | 是否必須 | 含義 |
 --------- | ------- | -----------| -----------|
-clientOid | String | 否 | Client Order Id，客户端创建的唯一标识，建议使用UUID |
-symbol | String | 是 | 交易对 比如，`ETH-BTC` |
-type | String | 是 | 订单类型 limit 和 market |
-timeInForce | String | 否 | [可选] 订单时效策略 `GTC`, `GTT`, `IOC`, `FOK` (默认为`GTC`) |
-stp | String | 否 | [可选] 自成交保护（self trade prevention）分为CN, CO, CB , DC四种策略 |
-side | String | 是 | buy（买） 或 sell（卖）|
-price | String | 是 | 指定币种的价格 |
-size | String | 是 | 指定币种的数量 |
-cancelAfter | long | 否 | [可选] `n`秒之后取消，订单时效策略为 GTT |
-postOnly | boolean | 否 | [可选] 被动委托的标识, 当订单时效策略为 IOC 或 FOK 时无效 |
-hidden | boolean | 否 | [可选] 是否隐藏（买卖盘中不展示） |
-iceberg | boolean | 否 | [可选] 冰山单中是否仅显示订单的可见部分 |
-visibleSize | String | 否 | [可选] 冰山单最大的展示数量 |
-tags | String | 否 | [可选] 订单标签，长度不超过`20`个字符（编码只支持ASCII）|
-remark | String | 否 | [可选] 下单备注，长度不超过`20`个字符（编码只支持ASCII）|
+clientOid | String | 否 | Client Order Id，客戶端創建的唯一標識，建議使用UUID |
+symbol | String | 是 | 交易對 比如，`ETH-BTC` |
+type | String | 是 | 訂單類型 limit 和 market |
+timeInForce | String | 否 | [可選] 訂單時效策略 `GTC`, `GTT`, `IOC`, `FOK` (默認爲`GTC`) |
+stp | String | 否 | [可選] 自成交保護（self trade prevention）分爲CN, CO, CB , DC四種策略 |
+side | String | 是 | buy（買） 或 sell（賣）|
+price | String | 是 | 指定幣種的價格 |
+size | String | 是 | 指定幣種的數量 |
+cancelAfter | long | 否 | [可選] `n`秒之後取消，訂單時效策略爲 GTT |
+postOnly | boolean | 否 | [可選] 被動委託的標識, 當訂單時效策略爲 IOC 或 FOK 時無效 |
+hidden | boolean | 否 | [可選] 是否隱藏（買賣盤中不展示） |
+iceberg | boolean | 否 | [可選] 冰山單中是否僅顯示訂單的可見部分 |
+visibleSize | String | 否 | [可選] 冰山單最大的展示數量 |
+tags | String | 否 | [可選] 訂單標籤，長度不超過`20`個字符（編碼只支持ASCII）|
+remark | String | 否 | [可選] 下單備註，長度不超過`20`個字符（編碼只支持ASCII）|
 
 
 ### 返回值
-| 字段    | 含义                        |
+| 字段    | 含義                        |
 | -------| --------------------------- |
-|status  |  订单创建结果 (`success`, `fail`) |
-|failMsg |  失败原因                    |
+|status  |  訂單創建結果 (`success`, `fail`) |
+|failMsg |  失敗原因                    |
 
 
-## 高频交易通过orderId撤单
+## 高頻交易通過orderId撤單
 ```json
 // response
 {   
@@ -595,36 +595,36 @@ remark | String | 否 | [可选] 下单备注，长度不超过`20`个字符（�
     }
 }
 ```
-通过orderId取消单笔订单。
+通過orderId取消單筆訂單。
 
-### HTTP请求
+### HTTP請求
 `DELETE /api/v1/hf/orders/{orderId}?symbol={symbol}`
 
-### 请求示例
+### 請求示例
 `DELETE /api/v1/hf/orders/5bd6e9286d99522a52e458de?symbol=ETH-BTC`
 
-### API权限
-此接口需要`交易权限`。
+### API權限
+此接口需要`交易權限`。
 
-### 频率限制
-此接口针对每个账号请求频率限制为`60次/3s`
+### 頻率限制
+此接口針對每個賬號請求頻率限制爲`60次/3s`
 
-### 请求参数
-请求参数 | 类型 | 是否必须 | 含义 |
+### 請求參數
+請求參數 | 類型 | 是否必須 | 含義 |
 --------- | ------- | -----------| -----------|
-orderId | String | 是 | 路径参数，订单Id 唯一标识 |
-symbol | String | 是 | 交易对 比如，ETH-BTC |
+orderId | String | 是 | 路徑參數，訂單Id 唯一標識 |
+symbol | String | 是 | 交易對 比如，ETH-BTC |
 
-<aside class="notice">输入参数orderId是服务器生成的订单唯一标识，不是客户端生成的clientOId</aside>
+<aside class="notice">輸入參數orderId是服務器生成的訂單唯一標識，不是客戶端生成的clientOId</aside>
 
-<aside class="notice">如果订单不能撤销（已经成交或已经取消），会返回错误信息，可根据返回的<code>msg</code>获取原因。</aside>
+<aside class="notice">如果訂單不能撤銷（已經成交或已經取消），會返回錯誤信息，可根據返回的<code>msg</code>獲取原因。</aside>
 
 ### 返回值
-| 字段                | 含义      |
+| 字段                | 含義      |
 | ----------------- | ------- |
-| orderId | 取消的订单id |
+| orderId | 取消的訂單id |
 
-## 高频交易通过clientOid单个撤单
+## 高頻交易通過clientOid單個撤單
 ```json
 // response
 {
@@ -634,29 +634,29 @@ symbol | String | 是 | 交易对 比如，ETH-BTC |
     }
 }
 ```
-通过clientOid取消单笔订单。
+通過clientOid取消單筆訂單。
 
-### HTTP请求
+### HTTP請求
 `DELETE /api/v1/hf/orders/client-order/{clientOid}?symbol={symbol}`
 
-### 请求示例
+### 請求示例
 `DELETE /api/v1/hf/orders/client-order/6d539dc614db3?symbol=ETH-BTC`
 
-### API权限
-此接口需要`交易权限`。
+### API權限
+此接口需要`交易權限`。
 
-### 请求参数
-请求参数 | 类型 | 是否必须 | 含义 |
+### 請求參數
+請求參數 | 類型 | 是否必須 | 含義 |
 --------- | ------- | -----------| -----------|
-clientOid | String | 是 | 路径参数，客户端生成的标识 |
-symbol | String | 是 | 交易对 比如，`ETH-BTC` |
+clientOid | String | 是 | 路徑參數，客戶端生成的標識 |
+symbol | String | 是 | 交易對 比如，`ETH-BTC` |
 
 #### 返回值
-字段	| 含义 |
+字段	| 含義 |
 --------- | ------- |
-clientOid | 客户端生成的标识 |
+clientOid | 客戶端生成的標識 |
 
-## 高频交易全部撤单
+## 高頻交易全部撤單
 ```json 
 // response
 {
@@ -664,37 +664,37 @@ clientOid | 客户端生成的标识 |
     "data": "success"
 }
 ```
-此接口，可以取消所有还没有完成的高频订单（通过`/api/v1/hf/orders`创建的订单）。
+此接口，可以取消所有還沒有完成的高頻訂單（通過`/api/v1/hf/orders`創建的訂單）。
 
-此接口只提交取消请求，实际取消结果需要通过查询订单状态或订阅websocket获取订单消息。
+此接口只提交取消請求，實際取消結果需要通過查詢訂單狀態或訂閱websocket獲取訂單消息。
 
-### HTTP请求
+### HTTP請求
 `DELETE /api/v1/hf/orders?symbol={symbol}`
 
-### 请求示例
+### 請求示例
 `DELETE /api/v1/hf/orders?symbol=ETH-BTC`
 
-### API权限
-此接口需要`交易权限`。
+### API權限
+此接口需要`交易權限`。
 
-### 频率限制
-此接口针对每个账号请求频率限制为`3次/3s`
+### 頻率限制
+此接口針對每個賬號請求頻率限制爲`3次/3s`
 
-### 请求参数
-请求参数 | 类型 | 是否必须 | 含义 |
+### 請求參數
+請求參數 | 類型 | 是否必須 | 含義 |
 --------- | ------- | -----------| -----------|
-symbol | String | 是 | 取消指定交易对的open订单 |
+symbol | String | 是 | 取消指定交易對的open訂單 |
 
 ### 返回值
-由于此接口为批量撤单，接口http状态为`200`即可视为取消请求提交成功，所以不需要返回值，实际取消结果可根据“获取订单列表（新）“查询订单或订阅websocket获取订单消息。
+由於此接口爲批量撤單，接口http狀態爲`200`即可視爲取消請求提交成功，所以不需要返回值，實際取消結果可根據“獲取訂單列表（新）“查詢訂單或訂閱websocket獲取訂單消息。
 
-### 获取高频交易订单列表
+### 獲取高頻交易訂單列表
 
-包含获取活跃订单(Active)和已完成订单(Done)两个接口，活跃订单接口返回值是所有还没有完成的订单列表，已完成订单接口获取历史订单列表，返回值是分页后的数据。两个接口的返回数据都根据订单最新更新时间降序排序。用户成功下单后，订单就处于活跃（Active）状态，用户可以通过 inOrderBook 来判断委托是否进入买卖盘。被取消或者已完全成交的订单则被标记为已完成（Done）状态。
+包含獲取活躍訂單(Active)和已完成訂單(Done)兩個接口，活躍訂單接口返回值是所有還沒有完成的訂單列表，已完成訂單接口獲取歷史訂單列表，返回值是分頁後的數據。兩個接口的返回數據都根據訂單最新更新時間降序排序。用戶成功下單後，訂單就處於活躍（Active）狀態，用戶可以通過 inOrderBook 來判斷委託是否進入買賣盤。被取消或者已完全成交的訂單則被標記爲已完成（Done）狀態。
 
-查询“活跃”状态的订单，没有时间限制。但查询“已完成”状态的订单时，您只能获取 3 * 24 小时时间范围内的数据（即：从当前时间起至3 * 24 小时前）。若超出时间范围，系统会默认查询 3 * 24 小时时间范围内的数据。
+查詢“活躍”狀態的訂單，沒有時間限制。但查詢“已完成”狀態的訂單時，您只能獲取 3 * 24 小時時間範圍內的數據（即：從當前時間起至3 * 24 小時前）。若超出時間範圍，系統會默認查詢 3 * 24 小時時間範圍內的數據。
 
-## 获取活跃订单列表
+## 獲取活躍訂單列表
 ```json
 // response
 {
@@ -733,63 +733,63 @@ symbol | String | 是 | 取消指定交易对的open订单 |
     ]
 }
 ```
-该接口是获取所有活跃订单列表。返回数据都根据订单最新更新时间降序排序。
+該接口是獲取所有活躍訂單列表。返回數據都根據訂單最新更新時間降序排序。
 
-### HTTP请求
+### HTTP請求
 `GET /api/v1/hf/orders/active`
 
-### 请求示例
+### 請求示例
 `GET /api/v1/hf/orders/active?symbol=BTC-ETH`
 
-### API权限
-此接口需要`通用权限`。
+### API權限
+此接口需要`通用權限`。
 
-### 频率限制
-此接口针对每个账号请求频率限制为`30次/3s`
+### 頻率限制
+此接口針對每個賬號請求頻率限制爲`30次/3s`
 
-### 请求参数
-请求参数 | 类型 | 是否必须 | 含义 |
+### 請求參數
+請求參數 | 類型 | 是否必須 | 含義 |
 --------- | ------- | -----------| -----------|
-symbol | String | 是 | 只返回指定交易对的订单信息 |
+symbol | String | 是 | 只返回指定交易對的訂單信息 |
 
 ### 返回值
-字段	| 含义 |
+字段	| 含義 |
 --------- | ------- |
-id | 订单id，订单唯一标识 |
-symbol | 交易对 |
-opType | 操作类型: DEAL |
-type | 订单类型 |
-side | 买或卖 |
-price | 订单价格 |
-size | 下单数量 |
-funds | 下单金额 |
-dealFunds | 成交额 |
-dealSize | 成交数量 |
-fee | 手续费 |
-feeCurrency | 计手续费币种 |
-stp | 自成交保护 |
-timeInForce | 订单时效策略 |
-postOnly | 是否为被动委托 |
-hidden | 是否为隐藏单 |
-iceberg | 是否为冰山单 |
-visibleSize | 冰山单在买卖盘可见数量 |
-cancelAfter | timeInForce 为 GTT n秒后过期 |
-channel | 下单来源 |
-clientOid | 客户端生成的标识 |
-remark | 订单说明 |
-tags | 订单标签 |
-active | 订单状态 true: 订单状态为 active; false: 订单订单状态为 done |
-inOrderBook | 是否进入买卖盘 true: 进入买卖盘; false: 没有进入买卖盘 |  
-cancelExist | 订单是否存在取消记录 |
-createdAt | 订单创建时间 |
-lastUpdatedAt | 订单最新更新时间 |
-tradeType | 交易类型: TRADE（现货交易）|
+id | 訂單id，訂單唯一標識 |
+symbol | 交易對 |
+opType | 操作類型: DEAL |
+type | 訂單類型 |
+side | 買或賣 |
+price | 訂單價格 |
+size | 下單數量 |
+funds | 下單金額 |
+dealFunds | 成交額 |
+dealSize | 成交數量 |
+fee | 手續費 |
+feeCurrency | 計手續費幣種 |
+stp | 自成交保護 |
+timeInForce | 訂單時效策略 |
+postOnly | 是否爲被動委託 |
+hidden | 是否爲隱藏單 |
+iceberg | 是否爲冰山單 |
+visibleSize | 冰山單在買賣盤可見數量 |
+cancelAfter | timeInForce 爲 GTT n秒後過期 |
+channel | 下單來源 |
+clientOid | 客戶端生成的標識 |
+remark | 訂單說明 |
+tags | 訂單標籤 |
+active | 訂單狀態 true: 訂單狀態爲 active; false: 訂單訂單狀態爲 done |
+inOrderBook | 是否進入買賣盤 true: 進入買賣盤; false: 沒有進入買賣盤 |  
+cancelExist | 訂單是否存在取消記錄 |
+createdAt | 訂單創建時間 |
+lastUpdatedAt | 訂單最新更新時間 |
+tradeType | 交易類型: TRADE（現貨交易）|
 
-#### 订单轮询(Polling)
+#### 訂單輪詢(Polling)
 
-对于高频交易的用户，建议您在本地缓存和维护一份自己的活动委托列表，并使用市场数据流实时更新自己的订单信息。
+對於高頻交易的用戶，建議您在本地緩存和維護一份自己的活動委託列表，並使用市場數據流實時更新自己的訂單信息。
 
-## 已完成订单列表
+## 已完成訂單列表
 ```json
 // response
 {
@@ -832,71 +832,71 @@ tradeType | 交易类型: TRADE（现货交易）|
    }
 }
 ```
-该接口是获取已成交高频订单列表，返回值是分页后的数据。返回数据都根据订单最新更新时间降序排序。
+該接口是獲取已成交高頻訂單列表，返回值是分頁後的數據。返回數據都根據訂單最新更新時間降序排序。
 
 
-### HTTP请求
+### HTTP請求
 `GET /api/v1/hf/orders/done`
 
-### 请求示例
+### 請求示例
 `GET /api/v1/hf/orders/done?symbol=BTC-ETH&type=limit&side=buy`
 
-### API权限
-此接口需要`通用权限`。
+### API權限
+此接口需要`通用權限`。
 
-### 频率限制
-此接口针对每个账号请求频率限制为`30次/3s`
+### 頻率限制
+此接口針對每個賬號請求頻率限制爲`30次/3s`
 
-### 请求参数
-请求参数 | 类型 | 是否必须 | 含义 |
+### 請求參數
+請求參數 | 類型 | 是否必須 | 含義 |
 --------- | ------- | -----------| -----------|
-symbol | String | 是 | 只返回指定交易对的订单信息 |
-side | String | 否 | `buy`（买）或 `sell`（卖）|
-type | String | 否 | 订单类型: `limit`（限价单）, `market`(市价单) |
-startAt | long | 否 | 开始时间（毫秒），限制订单最新更新(完成)时间|
-endAt | long | 否 | 截止时间（毫秒），限制订单最新更新(完成)时间|
-lastId | long | 否 | 前一批次数据最后一条数据的id，默认获取最新数据 |
-limit | int | 否 | 默认`20`，最大`100` |
+symbol | String | 是 | 只返回指定交易對的訂單信息 |
+side | String | 否 | `buy`（買）或 `sell`（賣）|
+type | String | 否 | 訂單類型: `limit`（限價單）, `market`(市價單) |
+startAt | long | 否 | 開始時間（毫秒），限制訂單最新更新(完成)時間|
+endAt | long | 否 | 截止時間（毫秒），限制訂單最新更新(完成)時間|
+lastId | long | 否 | 前一批次數據最後一條數據的id，默認獲取最新數據 |
+limit | int | 否 | 默認`20`，最大`100` |
 
-<aside class="notice">您只能获取<code>3 * 24</code>小时时间范围内的数据（即：从当前时间起至<code>3 * 24</code>小时前），若超出时间范围，系统会默认查询<code>3 * 24</code>小时时间范围内的数据。</aside>
+<aside class="notice">您只能獲取<code>3 * 24</code>小時時間範圍內的數據（即：從當前時間起至<code>3 * 24</code>小時前），若超出時間範圍，系統會默認查詢<code>3 * 24</code>小時時間範圍內的數據。</aside>
 
-<aside class="notice"><code>lastId</code>用来过滤数据和分页，如果不输入<code>lastId</code>，默认返回最多100条最新数据，返回结果中有<code>lastId</code>，使用它作为查询条件，可以查询下一页次新数据</aside>
+<aside class="notice"><code>lastId</code>用來過濾數據和分頁，如果不輸入<code>lastId</code>，默認返回最多100條最新數據，返回結果中有<code>lastId</code>，使用它作爲查詢條件，可以查詢下一頁次新數據</aside>
 
 ### 返回值
-字段	| 含义 |
+字段	| 含義 |
 --------- | ------- |
-id | 订单id，订单唯一标识 |
-symbol | 交易对 |
-opType | 操作类型: DEAL |
-type | 订单类型 |
-side | 买或卖 |
-price | 订单价格 |
-size | 下单数量 |
-funds | 下单金额 |
-dealFunds | 成交额 |
-dealSize | 成交数量 |
-fee | 手续费 |
-feeCurrency | 计手续费币种 |
-stp | 自成交保护 |
-timeInForce | 订单时效策略 |
-postOnly | 是否为被动委托 |
-hidden | 是否为隐藏单 |
-iceberg | 是否为冰山单 |
-visibleSize | 冰山单在买卖盘可见数量 |
-cancelAfter | timeInForce 为 GTT n秒后过期 |
-channel | 下单来源 |
-clientOid | 客户端生成的标识 |
-remark | 订单说明 |
-tags | 订单标签 |
-active | 订单状态 true: 订单状态为 active; false: 订单订单状态为 done |
-inOrderBook | 是否进入买卖盘 true: 进入买卖盘; false: 没有进入买卖盘 |  
-cancelExist | 订单是否存在取消记录 |
-createdAt | 订单创建时间 |
-lastUpdatedAt | 订单最新更新时间 |
-tradeType | 交易类型: TRADE（现货交易）|
+id | 訂單id，訂單唯一標識 |
+symbol | 交易對 |
+opType | 操作類型: DEAL |
+type | 訂單類型 |
+side | 買或賣 |
+price | 訂單價格 |
+size | 下單數量 |
+funds | 下單金額 |
+dealFunds | 成交額 |
+dealSize | 成交數量 |
+fee | 手續費 |
+feeCurrency | 計手續費幣種 |
+stp | 自成交保護 |
+timeInForce | 訂單時效策略 |
+postOnly | 是否爲被動委託 |
+hidden | 是否爲隱藏單 |
+iceberg | 是否爲冰山單 |
+visibleSize | 冰山單在買賣盤可見數量 |
+cancelAfter | timeInForce 爲 GTT n秒後過期 |
+channel | 下單來源 |
+clientOid | 客戶端生成的標識 |
+remark | 訂單說明 |
+tags | 訂單標籤 |
+active | 訂單狀態 true: 訂單狀態爲 active; false: 訂單訂單狀態爲 done |
+inOrderBook | 是否進入買賣盤 true: 進入買賣盤; false: 沒有進入買賣盤 |  
+cancelExist | 訂單是否存在取消記錄 |
+createdAt | 訂單創建時間 |
+lastUpdatedAt | 訂單最新更新時間 |
+tradeType | 交易類型: TRADE（現貨交易）|
 
 
-## 获取高频交易订单详情
+## 獲取高頻交易訂單詳情
 ```json
 // response
 {
@@ -935,64 +935,64 @@ tradeType | 交易类型: TRADE（现货交易）|
 }
 ```
 
-此接口，可以通过订单id获取单个订单信息。
+此接口，可以通過訂單id獲取單個訂單信息。
 
-### HTTP请求
+### HTTP請求
 `GET /api/v1/hf/orders/{orderId}?symbol={symbol}`
 
-### 请求示例
+### 請求示例
 `GET /api/v1/hf/orders/5c35c02703aa673ceec2a168?symbol=ETH-BTC`
 
-### API权限
-此接口需要`通用权限`。
+### API權限
+此接口需要`通用權限`。
 
-### 频率限制
-此接口针对每个账号请求频率限制为`30次/3s`
+### 頻率限制
+此接口針對每個賬號請求頻率限制爲`30次/3s`
 
-### 请求参数
-请求参数 | 类型 | 是否必须 | 含义 |
+### 請求參數
+請求參數 | 類型 | 是否必須 | 含義 |
 --------- | ------- | -----------| -----------|
-orderId | String | 是 | 路径参数，订单Id 唯一标识 |
-symbol | String | 是 | 交易对 比如，ETH-BTC |
+orderId | String | 是 | 路徑參數，訂單Id 唯一標識 |
+symbol | String | 是 | 交易對 比如，ETH-BTC |
 
-<aside class="notice">如果订单是已完结订单，您只能获取<code>3 * 24</code>小时时间范围内的数据（即：从当前时间起至<code>3 * 24</code>小时前）</aside>
+<aside class="notice">如果訂單是已完結訂單，您只能獲取<code>3 * 24</code>小時時間範圍內的數據（即：從當前時間起至<code>3 * 24</code>小時前）</aside>
 
 
 #### 返回值
-字段	| 含义 |
+字段	| 含義 |
 --------- | ------- |
-id	| 订单id，订单唯一标识 |
-symbol | 交易对 |
-opType | 操作类型: DEAL |
-type | 订单类型 |
-side | 买或卖 |
-price | 订单价格 |
-size | 订单数量 |
-funds | 下单金额 |
-dealFunds | 成交额 |
-dealSize | 成交数量 |
-fee | 手续费 |
-feeCurrency | 计手续费币种 |
-stp | 自成交保护 |
-timeInForce | 订单时效策略 |
-postOnly | 是否为被动委托 |
-hidden | 是否为隐藏单 |
-iceberg | 是否为冰山单 |
-visibleSize | 冰山单在买卖盘可见数量 |
-cancelAfter | timeInForce 为 GTT n秒后触发 |
-channel | 下单来源 |
-clientOid | 客户端生成的标识 |
-remark | 订单说明 |
-tags | 订单标签 |
-active | 订单状态 true: 订单状态为 active; false: 订单订单状态为 done |
-inOrderBook | 是否进入买卖盘 true: 进入买卖盘; false: 没有进入买卖盘 | 
-cancelExist | 订单是否存在取消记录 |
-createdAt | 订单创建时间 |
-lastUpdatedAt | 订单最新更新时间 |
-tradeType | 交易类型: TRADE（现货交易）|
+id	| 訂單id，訂單唯一標識 |
+symbol | 交易對 |
+opType | 操作類型: DEAL |
+type | 訂單類型 |
+side | 買或賣 |
+price | 訂單價格 |
+size | 訂單數量 |
+funds | 下單金額 |
+dealFunds | 成交額 |
+dealSize | 成交數量 |
+fee | 手續費 |
+feeCurrency | 計手續費幣種 |
+stp | 自成交保護 |
+timeInForce | 訂單時效策略 |
+postOnly | 是否爲被動委託 |
+hidden | 是否爲隱藏單 |
+iceberg | 是否爲冰山單 |
+visibleSize | 冰山單在買賣盤可見數量 |
+cancelAfter | timeInForce 爲 GTT n秒後觸發 |
+channel | 下單來源 |
+clientOid | 客戶端生成的標識 |
+remark | 訂單說明 |
+tags | 訂單標籤 |
+active | 訂單狀態 true: 訂單狀態爲 active; false: 訂單訂單狀態爲 done |
+inOrderBook | 是否進入買賣盤 true: 進入買賣盤; false: 沒有進入買賣盤 | 
+cancelExist | 訂單是否存在取消記錄 |
+createdAt | 訂單創建時間 |
+lastUpdatedAt | 訂單最新更新時間 |
+tradeType | 交易類型: TRADE（現貨交易）|
 
 
-## 基于clientOid 通过clientOid获取高频交易订单详情
+## 基於clientOid 通過clientOid獲取高頻交易訂單詳情
 ```json
 // response
 {
@@ -1030,63 +1030,63 @@ tradeType | 交易类型: TRADE（现货交易）|
     }
 }
 ```
-此接口，可以通过clientOid查询单个订单的信息，若订单不存在则提示订单不存在。
+此接口，可以通過clientOid查詢單個訂單的信息，若訂單不存在則提示訂單不存在。
 
-### HTTP请求
+### HTTP請求
 `GET /api/v1/hf/orders/client-order/{clientOid}?symbol={symbol}`
 
-### 请求示例
+### 請求示例
 `GET /api/v1/hf/orders/client-order/6d539dc614db312?symbol=ETH-BTC`
 
-### API权限
-此接口需要`通用权限`。
+### API權限
+此接口需要`通用權限`。
 
-### 频率限制
-此接口针对每个账号请求频率限制为`30次/3s`
-### 请求参数
-请求参数 | 类型 | 是否必须 | 含义 |
+### 頻率限制
+此接口針對每個賬號請求頻率限制爲`30次/3s`
+### 請求參數
+請求參數 | 類型 | 是否必須 | 含義 |
 --------- | ------- | -----------| -----------|
-clientOid | String | 是 | 路径参数，客户端生成的标识 |
-symbol | String | 是 | 交易对 比如，`ETH-BTC` |
+clientOid | String | 是 | 路徑參數，客戶端生成的標識 |
+symbol | String | 是 | 交易對 比如，`ETH-BTC` |
 
-<aside class="notice">如果订单是已完结订单，您只能获取<code>3 * 24</code>小时时间范围内的数据（即：从当前时间起至<code>3 * 24</code>小时前）</aside>
+<aside class="notice">如果訂單是已完結訂單，您只能獲取<code>3 * 24</code>小時時間範圍內的數據（即：從當前時間起至<code>3 * 24</code>小時前）</aside>
 
 #### 返回值
-字段	| 含义 |
+字段	| 含義 |
 --------- | ------- |
-id	| 订单id，订单唯一标识 |
-symbol | 交易对 |
-opType | 操作类型: DEAL |
-type | 订单类型 |
-side | 买或卖 |
-price | 订单价格 |
-size | 订单数量 |
-funds | 下单金额 |
-dealFunds | 成交额 |
-dealSize | 成交数量 |
-fee | 手续费 |
-feeCurrency | 计手续费币种 |
-stp | 自成交保护 |
-timeInForce | 订单时效策略 |
-postOnly | 是否为被动委托 |
-hidden | 是否为隐藏单 |
-iceberg | 是否为冰山单 |
-visibleSize | 冰山单在买卖盘可见数量 |
-cancelAfter | timeInForce 为 GTT n秒后触发 |
-channel | 下单来源 |
-clientOid | 客户端生成的标识 |
-remark | 订单说明 |
-tags | 订单标签 |
-active | 订单状态 true: 订单状态为 active; false: 订单订单状态为 done |
-inOrderBook | 是否进入买卖盘 true: 进入买卖盘; false: 没有进入买卖盘 |
-cancelExist | 订单是否存在取消记录 |
-createdAt | 订单创建时间 |
-lastUpdatedAt | 订单最新更新时间 |
-tradeType | 交易类型: TRADE（现货交易）|
+id	| 訂單id，訂單唯一標識 |
+symbol | 交易對 |
+opType | 操作類型: DEAL |
+type | 訂單類型 |
+side | 買或賣 |
+price | 訂單價格 |
+size | 訂單數量 |
+funds | 下單金額 |
+dealFunds | 成交額 |
+dealSize | 成交數量 |
+fee | 手續費 |
+feeCurrency | 計手續費幣種 |
+stp | 自成交保護 |
+timeInForce | 訂單時效策略 |
+postOnly | 是否爲被動委託 |
+hidden | 是否爲隱藏單 |
+iceberg | 是否爲冰山單 |
+visibleSize | 冰山單在買賣盤可見數量 |
+cancelAfter | timeInForce 爲 GTT n秒後觸發 |
+channel | 下單來源 |
+clientOid | 客戶端生成的標識 |
+remark | 訂單說明 |
+tags | 訂單標籤 |
+active | 訂單狀態 true: 訂單狀態爲 active; false: 訂單訂單狀態爲 done |
+inOrderBook | 是否進入買賣盤 true: 進入買賣盤; false: 沒有進入買賣盤 |
+cancelExist | 訂單是否存在取消記錄 |
+createdAt | 訂單創建時間 |
+lastUpdatedAt | 訂單最新更新時間 |
+tradeType | 交易類型: TRADE（現貨交易）|
 
-# 成交明细
+# 成交明細
 
-## 获取高频交易成交记录
+## 獲取高頻交易成交記錄
 ```json
 // response
 {
@@ -1118,84 +1118,84 @@ tradeType | 交易类型: TRADE（现货交易）|
    }
 }
 ```
-获取最近的成交明细列表 返回值是分页后的数据，根据成交(创建)时间降序排序。
+獲取最近的成交明細列表 返回值是分頁後的數據，根據成交(創建)時間降序排序。
 
-### HTTP请求
+### HTTP請求
 `GET /api/v1/hf/fills`
 
-### 请求示例
+### 請求示例
 `GET /api/v1/hf/fills?symbol=BTC-USDT`
 
-### API权限
-此接口需要`通用权限`。
+### API權限
+此接口需要`通用權限`。
 
-### 频率限制
-此接口针对每个账号请求频率限制为`9次/3s`
+### 頻率限制
+此接口針對每個賬號請求頻率限制爲`9次/3s`
 
-### 请求参数
-请求参数 | 类型 | 是否必须 | 含义 |
+### 請求參數
+請求參數 | 類型 | 是否必須 | 含義 |
 --------- | ------- | -----------| -----------|
-orderId | String | 否 | 查询该订单Id的成交明细（如果指定了`orderId`，请忽略其他查询条件）|
-symbol | String | 是 | 只返回指定交易对的订单信息 |
-side | String | 否 | `buy`（买） 或 `sell`（卖）|
-type | String | 否 | 订单类型: `limit`（限价单）, `market`(市价单) |
-startAt | long | 否 | 开始时间（毫秒），限制成交记录成交(创建)时间|
-endAt | long | 否 | 截止时间（毫秒），限制成交记录成交(创建)时间|
-lastId | long | 否 | 前一批次数据最后一条数据的id，默认获取最新数据 |
-limit | int | 否 | 默认`100`，最大`200` |
+orderId | String | 否 | 查詢該訂單Id的成交明細（如果指定了`orderId`，請忽略其他查詢條件）|
+symbol | String | 是 | 只返回指定交易對的訂單信息 |
+side | String | 否 | `buy`（買） 或 `sell`（賣）|
+type | String | 否 | 訂單類型: `limit`（限價單）, `market`(市價單) |
+startAt | long | 否 | 開始時間（毫秒），限制成交記錄成交(創建)時間|
+endAt | long | 否 | 截止時間（毫秒），限制成交記錄成交(創建)時間|
+lastId | long | 否 | 前一批次數據最後一條數據的id，默認獲取最新數據 |
+limit | int | 否 | 默認`100`，最大`200` |
 
-<aside class="notice"><code>lastId</code>用来过滤数据和分页，如果不输入<code>lastId</code>，默认返回最多100条最新数据，返回结果中有<code>lastId</code>，使用它作为查询条件，可以查询下一页次新数据</aside>
+<aside class="notice"><code>lastId</code>用來過濾數據和分頁，如果不輸入<code>lastId</code>，默認返回最多100條最新數據，返回結果中有<code>lastId</code>，使用它作爲查詢條件，可以查詢下一頁次新數據</aside>
 
 
 ### 返回值
-字段 | 含义 |
+字段 | 含義 |
 --------- | ------- |
-id | 成交明细Id |
-symbol | 交易对 |
+id | 成交明細Id |
+symbol | 交易對 |
 tradeId | 交易Id |
-orderId	| 订单Id |
-counterOrderId | 对手方订单Id |
-side | 买或卖 |
-liquidity | 流动性类型: taker 或 maker |
-forceTaker | 是否强制作为taker处理 |
-price | 成交价格 |
-size | 成交数量 |
-funds | 成交额 |
-fee | 手续费 |
-feeRate | 手续费率 |
-feeCurrency | 计手续费币种 |
-type | 订单类型limit 或 market |
-stop | 止盈止损类型，目前高频交易还未支持止盈止损类型，所以为空 |
-createdAt | 成交(创建)时间 |
-tradeType | 交易类型: TRADE（现货交易）|
+orderId	| 訂單Id |
+counterOrderId | 對手方訂單Id |
+side | 買或賣 |
+liquidity | 流動性類型: taker 或 maker |
+forceTaker | 是否強制作爲taker處理 |
+price | 成交價格 |
+size | 成交數量 |
+funds | 成交額 |
+fee | 手續費 |
+feeRate | 手續費率 |
+feeCurrency | 計手續費幣種 |
+type | 訂單類型limit 或 market |
+stop | 止盈止損類型，目前高頻交易還未支持止盈止損類型，所以爲空 |
+createdAt | 成交(創建)時間 |
+tradeType | 交易類型: TRADE（現貨交易）|
 
-##### 查询时间范围
+##### 查詢時間範圍
 
-您只能获取 `3 * 24` 小时时间范围内的数据（即：从当前时间起至`3 * 24` 小时前）。若超出时间范围，系统会默认查询 `3 * 24` 小时时间范围内的数据。
+您只能獲取 `3 * 24` 小時時間範圍內的數據（即：從當前時間起至`3 * 24` 小時前）。若超出時間範圍，系統會默認查詢 `3 * 24` 小時時間範圍內的數據。
 
-##### 结算
-结算分为两部分，一部分是成交结算，一部分是费用结算。当撮合完成后，这些数据将立即更新到我们的数据存储区，系统将启动结算并从您的预冻结资金中进行扣除。
+##### 結算
+結算分爲兩部分，一部分是成交結算，一部分是費用結算。當撮合完成後，這些數據將立即更新到我們的數據存儲區，系統將啓動結算並從您的預凍結資金中進行扣除。
 
-##### 手续费
+##### 手續費
 
-KuCoin平台上的订单分为两种类型：Taker 和 Maker。Taker单会与买卖盘上的已有订单立即成交，而Maker单则相反，会一直留在买卖盘中等待撮合。Taker单消耗了市场的流动性，因此会被收取taker费用，而Maker单增加了市场的流动性，会被收取较低的手续费甚至获得手续费补贴。请注意：市价单、冰山单和隐藏单都会被扣除taker手续费。
+KuCoin平臺上的訂單分爲兩種類型：Taker 和 Maker。Taker單會與買賣盤上的已有訂單立即成交，而Maker單則相反，會一直留在買賣盤中等待撮合。Taker單消耗了市場的流動性，因此會被收取taker費用，而Maker單增加了市場的流動性，會被收取較低的手續費甚至獲得手續費補貼。請注意：市價單、冰山單和隱藏單都會被扣除taker手續費。
 
-下单时，系统会预冻结您账户中的taker费用。流动性（liquidity）字段中的参数说明了订单将会被收取taker还是maker费用。
+下單時，系統會預凍結您賬戶中的taker費用。流動性（liquidity）字段中的參數說明了訂單將會被收取taker還是maker費用。
 
-假设您的订单是限价单，当您下单后在撮合引擎中被立即撮合，我们将收取您taker费用，而如果您的订单没有被立即撮合或有部分剩余未被撮合都会进入买卖盘，进入买卖盘的订单在未被取消前成交都会收取您maker手续费。
+假設您的訂單是限價單，當您下單後在撮合引擎中被立即撮合，我們將收取您taker費用，而如果您的訂單沒有被立即撮合或有部分剩餘未被撮合都會進入買賣盤，進入買賣盤的訂單在未被取消前成交都會收取您maker手續費。
 
-进入撮合后与对手盘订单撮合，当指令订单剩余金额为0，交易完成，如果剩余资金不足以购买最低数量（0.00000001）的商品，则取消指令订单。
+進入撮合後與對手盤訂單撮合，當指令訂單剩餘金額爲0，交易完成，如果剩餘資金不足以購買最低數量（0.00000001）的商品，則取消指令訂單。
 
-如果您的订单作为maker被成交，我们会将剩余预冻结的taker费用返还给您。
+如果您的訂單作爲maker被成交，我們會將剩餘預凍結的taker費用返還給您。
 
 但需要注意的是:
 
-- 当您创建了一个隐藏委托/冰山委托订单时，即使它未被撮合引擎立即成交而被被动成交，仍然会收取taker费用
-- 被动委托收取maker费用。如果该委托下单后会立刻与市场已有委托(除冰山/隐藏订单外)撮合，那么该委托将被取消。如果被动委托下单后与冰山/隐藏订单立即成交，被动委托订单将收取maker费用
+- 當您創建了一個隱藏委託/冰山委託訂單時，即使它未被撮合引擎立即成交而被被動成交，仍然會收取taker費用
+- 被動委託收取maker費用。如果該委託下單後會立刻與市場已有委託(除冰山/隱藏訂單外)撮合，那麼該委託將被取消。如果被動委託下單後與冰山/隱藏訂單立即成交，被動委託訂單將收取maker費用
 
-举例：
+舉例：
 
-以BTC/USDT为例，假设您想市价买入1BTC，手续费率为0.1%，市场买卖盘数据如下：
+以BTC/USDT爲例，假設您想市價買入1BTC，手續費率爲0.1%，市場買賣盤數據如下：
 
 Price（USDT）| Size（BTC）| Side |
 --------- | ------- | ------- |
@@ -1206,7 +1206,7 @@ Price（USDT）| Size（BTC）| Side |
 3988.60	| 0.20484000 | buy |
 3983.85	| 1.37584908 | buy |
 
-当您下一个买入市价单时，市场会立即成交，成交明细将分为3笔，如下图所示：
+當您下一個買入市價單時，市場會立即成交，成交明細將分爲3筆，如下圖所示：
 
 Price（USDT）| Size（BTC）| Fee（BTC）|
 --------- | ------- | ------- |
@@ -1216,33 +1216,33 @@ Price（USDT）| Size（BTC）| Fee（BTC）|
 
 # Websocket
 
-REST API的使用受到了访问频率的限制，因此推荐您使用websocket获取实时数据。Websocket的相关设置请参考线上文档`https://docs.kucoin.com/#websocket-feed `
+REST API的使用受到了訪問頻率的限制，因此推薦您使用websocket獲取實時數據。Websocket的相關設置請參考線上文檔`https://docs.kucoin.com/#websocket-feed `
 
-# 公共频道
-参考线上文档`https://docs.kucoin.com/#public-channels`
+# 公共頻道
+參考線上文檔`https://docs.kucoin.com/#public-channels`
 
-# 私有频道
+# 私有頻道
 
-## 高频交易账户余额变更事件
+## 高頻交易賬戶餘額變更事件
 ```json
 ```
 Topic: `/account/balance`
 
-- 推送频率: `实时推送`
+- 推送頻率: `實時推送`
 
-当您的高频交易账户余额变更时，您会收到详细的账户变更信息。
+當您的高頻交易賬戶餘額變更時，您會收到詳細的賬戶變更信息。
 
 Relation Event
 
-类型 | 描述
+類型 | 描述
 --------- | -------
-| trade_hf.hold | 高频交易账户冻结 |
-| trade_hf.setted | 高频交易账户入账 |
-| trade_hf.transfer | 高频交易账户转账 |
-| trade_hf.other | 高频交易账户其他操作 |
+| trade_hf.hold | 高頻交易賬戶凍結 |
+| trade_hf.setted | 高頻交易賬戶入賬 |
+| trade_hf.transfer | 高頻交易賬戶轉賬 |
+| trade_hf.other | 高頻交易賬戶其他操作 |
 
-## 高频交易私有订单变更事件
-参考线上文档 `https://docs.kucoin.com/#private-order-change-events`
+## 高頻交易私有訂單變更事件
+參考線上文檔 `https://docs.kucoin.com/#private-order-change-events`
 
 ## 其他部分
-其他部分参考线上文档 `https://docs.kucoin.com/#private-channels`
+其他部分參考線上文檔 `https://docs.kucoin.com/#private-channels`
