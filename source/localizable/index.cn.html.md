@@ -1157,7 +1157,7 @@ orderId	| 訂單Id |
 counterOrderId | 對手方訂單Id |
 side | 買或賣 |
 liquidity | 流動性類型: taker 或 maker |
-forceTaker | 是否強制作爲taker處理 |
+forceTaker | 是否強製作爲taker處理 |
 price | 成交價格 |
 size | 成交數量 |
 funds | 成交額 |
@@ -1180,7 +1180,7 @@ tradeType | 交易類型: TRADE（現貨交易）|
 
 KuCoin平臺上的訂單分爲兩種類型：Taker 和 Maker。Taker單會與買賣盤上的已有訂單立即成交，而Maker單則相反，會一直留在買賣盤中等待撮合。Taker單消耗了市場的流動性，因此會被收取taker費用，而Maker單增加了市場的流動性，會被收取較低的手續費甚至獲得手續費補貼。請注意：市價單、冰山單和隱藏單都會被扣除taker手續費。
 
-下單時，系統會預凍結您賬戶中的taker費用。流動性（liquidity）字段中的參數說明了訂單將會被收取taker還是maker費用。
+下單時，系統會預凍結您賬戶中的taker費用。流動性（liquidity）字段中的參數說明瞭訂單將會被收取taker還是maker費用。
 
 假設您的訂單是限價單，當您下單後在撮合引擎中被立即撮合，我們將收取您taker費用，而如果您的訂單沒有被立即撮合或有部分剩餘未被撮合都會進入買賣盤，進入買賣盤的訂單在未被取消前成交都會收取您maker手續費。
 

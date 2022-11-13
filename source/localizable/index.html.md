@@ -1226,7 +1226,7 @@ You will receive this message when an HF account balance changes. The message co
 
 Relation Event
 
-类型 | 描述
+類型 | 描述
 --------- | -------
 | trade_hf.hold | Hold (high frequency account) |
 | trade_hf.setted | Settlement (high frequency account) |
