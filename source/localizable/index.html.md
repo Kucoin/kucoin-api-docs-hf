@@ -199,8 +199,8 @@ This API limits request frequencies to `18 times/3s` for all accounts.
 ### Parameters
 Parameters | Type | Mandatory | Description |
 --------- | ------- | -----------| -----------| 
-currency | String | No | currency | 
-type | String | No | Account type, `TRADE_HF`(high-frequency trading account)|
+currency | String | Yes | currency | 
+type | String | Yes | Account type, `TRADE_HF`(high-frequency trading account)|
 
 ### Return Value
 Field | Description 

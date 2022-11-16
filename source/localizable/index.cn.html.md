@@ -200,8 +200,8 @@ holds | 賬戶凍結的資金 |
 
 請求參數 | 類型 | 是否必須 | 含義 |
 --------- | ------- | -----------| -----------|
-currency | String | 否 | 幣種 |
-type | String | 否 | 賬戶類型: `TRADE_HF`|
+currency | String | 是 | 幣種 |
+type | String | 是 | 賬戶類型: `TRADE_HF`|
 
 
 ### 返回值
