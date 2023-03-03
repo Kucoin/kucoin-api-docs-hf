@@ -470,6 +470,81 @@ For example: if the threshold value is 10%, when a user places a market price pu
 | --------------------------------- | ---- | 
 | orderId | An order Id is returned once an order is successfully placed.|
 
+
+
+
+
+## Order sync placement
+```json
+{
+    "code": "200000", 
+    "data": {
+    "orderId": "6d539dc614db3",
+    "orderTime": "1507725176595",//order time
+    "originSize": "10.01", 
+    "dealSize": "2.01",
+    "remainSize": "8",
+    "canceledSize": "0",
+    "status": "open", //open: the order is active: the order has been completed
+    "matchTime": "1507725176595" //begin match time
+  }
+}
+```
+
+The request parameters of this interface are the same as those of the "Order placement" interface
+
+The difference between this interface and "Order placement" is that this interface will synchronously return the order information after the order matching is completed.
+
+For higher latency requirements, please select the "Order placement" interface. If there is a requirement for returning data integrity, please select this interface
+
+### HTTP Request
+
+`POST /api/v1/hf/orders/sync`
+
+### Example
+
+`POST /api/v1/hf/orders/sync`
+
+### API Permissions
+
+This API requires `Trade` permissions
+
+### REQUEST RATE LIMIT
+
+The request frequency of this API is limited to `45 times/3s` for each account
+
+### Parameters
+
+The request parameters of this interface are the same as those of the "Order placement" interface
+
+### Return Value
+
+| Field | Description | 
+--------- |------------|
+orderId | An order Id is returned once an order is successfully placed.      |
+orderTime | order time       |
+originSize | original order size    |
+originFunds | Order original funds - market order |
+dealSize | deal size       |
+dealFunds | deal funds - market order  |
+remainSize | remain size       |
+remainFunds | remain funds - market order   |
+canceledSize | Cumulative number of cancellations     |
+canceledFunds | Cumulative funds of cancellations - market order |
+status | Order Status. open：order is active; done：order has been completed |
+matchTime | matching time       |
+
+
+
+
+
+<aside class="spacer4"></aside>
+<aside class="spacer4"></aside>
+<aside class="spacer2"></aside>
+
+
+
+
 ## Batch Order Placement for high-frequency trading
 ```json
 //request
@@ -586,7 +661,7 @@ remark | String | No | \[Optional] Order placement remarks cannot exceed a lengt
 Msg | Reason of failure |
 
 
-## Cancellation of high-frequency orders by orderId
+## Cancellation of orders by orderId
 ```json
 // response
 {   
@@ -628,7 +703,7 @@ symbol | String | Yes | Trading pair, such as `ETH-BTC` |
 | orderId | Order id of the cancelled order |
 
 
-## Cancellation of high-frequency order by clientOid
+## Cancellation of order by clientOid
 ```json
 // response
 {
@@ -660,6 +735,60 @@ symbol | String | Yes | Trading pair such as `ETH-BTC` |
 Field | Description | 
 --------- | ------- | 
 clientOid | Identifier created by the client |
+
+
+
+## Cancellation the specified number of orders by orderId
+```json
+{
+    "code": "200000", 
+    "data": {
+    "orderId": "6d539dc614db3",
+    "cancelSize": "10.01"
+  }
+}
+```
+
+This interface can cancel the specified quantity of the order according to the orderId.
+
+### HTTP Request
+
+`DELETE /api/v1/hf/orders/cancel/{orderId}`
+
+### Example
+
+`DELETE /api/v1/hf/orders/cancel/1?symbol=BTC-USDT&cancelSize=10.01`
+
+### API Permissions
+
+This API requires `Trade` permissions
+
+
+### REQUEST RATE LIMIT
+The request frequency of this API is limited to `60 times/3s` for each account
+
+
+### Parameters
+
+Parameters | Type | Mandatory | Description | 
+--------- | ------- | -----------|------|
+orderId | String | Yes | Order id of the cancelled order |
+symbol | String | Yes | symbol  |
+cancelSize | String | Yes | canceled size |
+
+#### Return Value
+Field | Description | 
+--------- |------|
+orderId | Canceled orderId |
+cancelSize | canceled size |
+
+
+
+
+<aside class="spacer4"></aside>
+<aside class="spacer4"></aside>
+<aside class="spacer2"></aside>
+
 
 ## Cancellation of all HF orders related to a specific trading pair
 ```json 

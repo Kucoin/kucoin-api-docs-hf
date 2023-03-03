@@ -468,6 +468,81 @@ CB | Cancel both | 雙方都取消 |
 | --------------------------------- | ---- |
 | orderId                           | 訂單Id,下單成功後，會返回一個`orderId`字段 |
 
+
+
+
+
+## 高频交易同步下单
+
+此接口請求參數同"高頻交易下單"接口
+
+该接口和"高頻交易下單"的不同点在于：此接口会同步返回本次下单撮合完成后的订单信息。
+
+對延遲要求較高，請選“高頻交易下單”接口。對返回數據完整性有要求，請選擇該接口
+
+### HTTP请求
+
+`POST /api/v1/hf/orders/sync`
+
+### 请求示例
+
+`POST /api/v1/hf/orders/sync`
+
+### API权限
+
+此接口需要`交易權限`。
+
+### 频率限制
+
+此接口針對每個賬號請求頻率限制爲`45次/3s`
+
+### 请求参数
+
+此接口请求參數同"高頻交易下單"接口
+
+### 返回值
+
+字段  | 含义         |
+--------- |------------|
+orderId | 订单id       |
+orderTime | 订单时间       |
+originSize | 订单原始数量     |
+originFunds | 订单原始资金-市价单 |
+dealSize | 已成交数量      |
+dealFunds | 已成交资金-市价单  |
+remainSize | 剩余数量       |
+remainFunds | 剩余资金-市价单   |
+canceledSize | 累计取消数量     |
+canceledFunds | 累计取消资金-市价单 |
+status | 订单状态  open：在买卖盘 done：订单已经完结 |
+matchTime | 撮合时间       |
+
+### 返回示例
+
+```json
+{
+    "code": "200000", 
+    "data": {
+    "orderId": "6d539dc614db3",
+    "orderTime": "1507725176595",//下单时间
+    "originSize": "10.01", 
+    "dealSize": "2.01",
+    "remainSize": "8",
+    "canceledSize": "0",
+    "status": "open", // open：在买卖盘 done：订单已经完结
+    "matchTime": "1507725176595" //开始撮合的时间
+  }
+}
+```
+
+
+
+<aside class="spacer4"></aside>
+<aside class="spacer4"></aside>
+<aside class="spacer2"></aside>
+
+
+
 ## 高頻交易批量下單
 ```json
 //request
@@ -585,6 +660,13 @@ remark | String | 否 | [可選] 下單備註，長度不超過`20`個字符（�
 |failMsg |  失敗原因                    |
 
 
+
+<aside class="spacer4"></aside>
+<aside class="spacer4"></aside>
+<aside class="spacer2"></aside>
+
+
+
 ## 高頻交易通過orderId撤單
 ```json
 // response
@@ -655,6 +737,70 @@ symbol | String | 是 | 交易對 比如，`ETH-BTC` |
 字段	| 含義 |
 --------- | ------- |
 clientOid | 客戶端生成的標識 |
+
+
+<aside class="spacer4"></aside>
+<aside class="spacer4"></aside>
+<aside class="spacer2"></aside>
+
+
+## 高頻交易取消訂單指定數量
+
+此接口，可以根據orderId取消訂單的指定數量。
+
+### HTTP請求
+
+```
+DELETE /api/v1/hf/orders/cancel/{orderId}
+
+```
+### 請求示例
+
+```
+DELETE /api/v1/hf/orders/cancel/1?symbol=BTC-USDT&cancelSize=10.01
+
+```
+### API權限
+
+此接口需要`交易權限`。
+
+### 頻率限制
+
+此接口針對每個賬號請求頻率限制爲`60次/3s`
+
+### 請求參數
+
+
+请求参数 | 类型 | 是否必须 | 含义   |
+--------- | ------- | -----------|------|
+orderId | String | 是 | 订单id |
+symbol | String | 是 | 交易对  |
+cancelSize | String | 是 | 取消数量 |
+
+### 返回值
+
+字段  | 含义   |
+--------- |------|
+orderId | 取消的订单Id |
+cancelSize | 取消数量 |
+
+### 返回示例
+
+```json
+{
+    "code": "200000", 
+    "data": {
+    "orderId": "6d539dc614db3",
+    "cancelSize": "10.01"
+  }
+}
+```
+
+
+<aside class="spacer4"></aside>
+<aside class="spacer4"></aside>
+<aside class="spacer2"></aside>
+
 
 ## 高頻交易全部撤單
 ```json 
@@ -992,7 +1138,7 @@ lastUpdatedAt | 訂單最新更新時間 |
 tradeType | 交易類型: TRADE（現貨交易）|
 
 
-## 基於clientOid 通過clientOid獲取高頻交易訂單詳情
+## 通過clientOid獲取高頻交易訂單詳情
 ```json
 // response
 {
