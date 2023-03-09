@@ -750,16 +750,12 @@ clientOid | 客戶端生成的標識 |
 
 ### HTTP請求
 
-```
-DELETE /api/v1/hf/orders/cancel/{orderId}
+`DELETE /api/v1/hf/orders/cancel/{orderId}`
 
-```
 ### 請求示例
 
-```
-DELETE /api/v1/hf/orders/cancel/1?symbol=BTC-USDT&cancelSize=10.01
+`DELETE /api/v1/hf/orders/cancel/1?symbol=BTC-USDT&cancelSize=10.01`
 
-```
 ### API權限
 
 此接口需要`交易權限`。
@@ -1389,6 +1385,7 @@ Relation Event
 
 ## 高頻交易私有訂單變更事件
 參考線上文檔 `https://docs.kucoin.com/#private-order-change-events`
+或者 `https://docs.kucoin.com/cn/#v2-2`
 
 ## 其他部分
 其他部分參考線上文檔 `https://docs.kucoin.com/#private-channels`

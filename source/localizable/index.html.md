@@ -1364,6 +1364,7 @@ Relation Event
 
 ## Private HF Order Change Events
 please refer to the documentation `https://docs.kucoin.com/#private-order-change-events`
+or `https://docs.kucoin.com/#private-order-change-v2`
 
 ## Other
 Other parts please refer to the documentation `https://docs.kucoin.com/#private-channels`
