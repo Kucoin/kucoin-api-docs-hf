@@ -330,7 +330,7 @@ Before placing orders, please be sure to fully understand the meaning of the par
 This API requires `Trade` permissions
 
 ### REQUEST RATE LIMIT
-The request frequency for this API is limited to `45 times/3s` for each account
+The request frequency for this API is limited to `150 times/3s` for each account
 
 ### Parameters
 
@@ -684,7 +684,7 @@ This endpoint can be used to cancel a high-frequency order by orderId.
 This API requires `Trade` permissions
 
 ### REQUEST RATE LIMIT
-The request frequency of this API is limited to `60 times/3s` for each account
+The request frequency of this API is limited to `150 times/3s` for each account
 
 ### Parameters
 Parameters | Type | Mandatory | Description | 
@@ -724,6 +724,9 @@ This endpoint sends out a request to cancel a high-frequency order using clientO
 
 ### API Permissions
 This API requires `Trade` permissions
+
+### REQUEST RATE LIMIT
+The request frequency of this API is limited to `150 times/3s` for each account
 
 ### Parameters
 Parameters  | Type | Mandatory | Description | 
