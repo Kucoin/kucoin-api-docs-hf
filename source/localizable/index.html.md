@@ -28,7 +28,7 @@ KuCoin API: **REST API**
 
 ## Update Preview
 
-**11/08/22**:
+**04/01/23**:
 
 - 【Add】Add`POST /api/v1/hf/orders/alter`interface
 - 【Add】Add`DELETE /api/v1/hf/orders/sync/{orderId}`interface

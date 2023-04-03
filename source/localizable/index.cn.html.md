@@ -28,7 +28,7 @@ KuCoin API：**REST API**
 
 ## 更新預告
 
-**11/08/22**:
+**04/01/23**:
 
 - 【新增】新增`POST /api/v1/hf/orders/alter`接口
 - 【新增】新增`DELETE /api/v1/hf/orders/sync/{orderId}`接口
