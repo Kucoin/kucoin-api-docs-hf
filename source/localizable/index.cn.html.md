@@ -30,6 +30,17 @@ KuCoin API：**REST API**
 
 **11/08/22**:
 
+- 【新增】新增`POST /api/v1/hf/orders/alter`接口
+- 【新增】新增`DELETE /api/v1/hf/orders/sync/{orderId}`接口
+- 【新增】新增`DELETE /api/v1/hf/orders/sync/client-order/{clientOid}`接口
+- 【新增】新增`POST /api/v1/hf/orders/multi/sync`接口
+- 【新增】新增`GET /api/v1/hf/orders/active/symbols`接口
+- 【修改】`GET /api/v1/hf/orders/done`接口，入參：支持不同的交易對批量下單；出參：返回值做了優化，只返回orderId和下單結果
+
+
+
+**11/08/22**:
+
 - 【廢棄】廢棄`POST /api/v1/accounts`接口
 
 **10/18/22**:
@@ -548,72 +559,44 @@ matchTime | 撮合时间       |
 ```json
 //request
 {
-    "symbol": "BTC-USDT",
-    "orderList": [
-        {
-            "clientOid": "3d07008668054da6b3cb12e432c2b13a",
-            "side": "buy",
-            "type": "limit",
-            "price": "0.01",
-            "size": "0.01",
-            "symbol": "BTC-USDT"
-        },
-        {
-            "clientOid": "37245dbe6e134b5c97732bfb36cd4a9d",
-            "side": "buy",
-            "type": "limit",
-            "price": "0.01",
-            "size": "0.01",
-            "symbol": "BTC-USDT"
-        }
-    ]
+  "orderList": [
+	  {
+		  "clientOid": "3d07008668054da6b3cb12e432c2b13a",
+		  "side": "buy",
+		  "type": "limit",
+		  "price": "0.01",
+		  "size": "1",
+		  "symbol": "ETH-USDT"
+	  },
+	  {
+		  "clientOid": "37245dbe6e134b5c97732bfb36cd4a9d",
+		  "side": "buy",
+		  "type": "limit",
+		  "price": "0.01",
+		  "size": "1",
+		  "symbol": "ETH-USDT"
+	  }
+  ]
 }
 ```
 
 ```json
 //response
 {
-   "code":"200000",
-   "data":[
-        {
-            "symbol": "KCS-USDT",
-            "type": "limit",
-            "side": "buy",
-            "price": "0.01",
-            "size": "0.01",
-            "funds": null,
-            "stp": "",
-            "timeInForce": "GTC",
-            "cancelAfter": 0,
-            "postOnly": false,
-            "iceberg": false,
-            "visibleSize": null,
-            "channel": "API",
-            "id": "611a6a309281bc000674d3c0",
-            "status": "success",
-            "failMsg": null,
-            "clientOid": "552a8a0b7cb04354be8266f0e202e7e9"
-        },
-        {
-            "symbol": "KCS-USDT",
-            "type": "limit",
-            "side": "buy",
-            "price": "0.01",
-            "size": "0.01",
-            "funds": null,
-            "stp": "",
-            "timeInForce": "GTC",
-            "cancelAfter": 0,
-            "postOnly": false,
-            "iceberg": false,
-            "visibleSize": null,
-            "channel": "API",
-            "id": "611a6a309281bc000674d3c1",
-            "status": "success",
-            "failMsg": null,
-            "clientOid": "bd1e95e705724f33b508ed270888a4a9"
-        }
-   ]
+  "success": true,
+  "code": "200",
+  "msg": "success",
+  "retry": false,
+  "data": [
+	  {
+		  "orderId": "641d669c9ca34800017a2a3c",
+		  "success": true
+	  },
+	  {
+		  "orderId": "641d669c9ca34800017a2a45",
+		  "success": true
+	  }
+  ]
 }
 ```
 
@@ -662,10 +645,177 @@ remark | String | 否 | [可選] 下單備註，長度不超過`20`個字符（�
 
 
 
+<aside class="spacer2"></aside>
+
+
+
+## 高頻交易同步批量下單
+
+```json
+//request
+{
+              "orderList": [
+                  {
+                      "clientOid": "3d07008668054da6b3cb12e432c2b13a",
+                      "side": "buy",
+                      "type": "limit",
+                      "price": "0.01",
+                      "size": "1",
+                      "symbol": "ETH-USDT"
+                  },
+                  {
+                      "clientOid": "37245dbe6e134b5c97732bfb36cd4a9d",
+                      "side": "buy",
+                      "type": "limit",
+                      "price": "0.01",
+                      "size": "1",
+                      "symbol": "ETH-USDT"
+                  }
+              ]
+          }
+```
+
+
+```json
+//response
+ {
+              "success": true,
+              "code": "200",
+              "msg": "success",
+              "retry": false,
+              "data": [
+                  {
+                      "orderId": "641d67ea162d47000160bfb8",
+                      "orderTime": 1679648746796,
+                      "originSize": "1",
+                      "dealSize": "0",
+                      "remainSize": "1",
+                      "canceledSize": "0",
+                      "status": "open",
+                      "matchTime": 1679648746443,
+                      "success": true
+                  },
+                  {
+                      "orderId": "641d67eb162d47000160bfc0",
+                      "orderTime": 1679648747369,
+                      "originSize": "1",
+                      "dealSize": "0",
+                      "remainSize": "1",
+                      "canceledSize": "0",
+                      "status": "open",
+                      "matchTime": 1679648746644,
+                      "success": true
+                  }
+              ]
+          }
+```
+
+此接口請求參數同"高頻交易批量下單"
+
+該接口和"高頻交易批量下單"的不同點在於：此接口會同步返回本次下單撮合完成後的訂單信息
+
+對延遲要求較高，請選“高頻交易批量下單”接口。對返回數據完整性有要求，請選擇該接口
+
+
+### HTTP請求
+
+`POST /api/v1/hf/orders/multi/sync`
+
+### 請求示例
+
+`POST /api/v1/hf/orders/multi/sync`
+
+### API權限
+
+此接口需要交易權限。
+
+### 頻率限制
+
+此接口針對每個帳號請求頻率限制為3次/3s
+
+### 請求參數
+
+此接口請求參數同"高頻交易批量下單",最大支持20個訂單
+
+### 返回值
+
+字段  | 含義 |
+--------- | ------- |
+orderId | 訂單id       |
+orderTime | 訂單時間     |
+originSize | 訂單原始數量     |
+dealSize | 已成交數量      |
+remainSize | 剩餘數量       |
+canceledSize | 累計取消數量     |
+status | 訂單狀態  open：在買賣盤 done：訂單已經完結 |
+matchTime | 撮合時間     |
+success | 是否下單成功     |
+
+
+
+
+<aside class="spacer2"></aside>
+
+
+## 高頻交易修改訂單
+
+此接口，可以根據orderId或clientOid修改訂單的價格和數量。
+
+該接口的實現方式為：撤銷買賣盤的訂單並在同個交易對上重新下單,並將修改結果同步返回給客戶端
+
+當用戶更新的新訂單數量小於此筆訂單的已成交數量時，將認為此訂單為已完成狀態，即會撤銷此訂單，並且不會重新下新單
+
+### HTTP請求
+
+`POST /api/v1/hf/orders/alter`
+
+### 請求示例
+
+`POST /api/v1/hf/orders/alter`
+
+### API權限
+
+此接口需要交易權限。
+
+### 頻率限制
+
+此接口針對每個帳號請求頻率限制為60次/3s
+
+### 請求參數
+
+請求參數 | 類型 | 是否必須 | 含義            |
+--------- | ------- | -----------|---------------|
+symbol | String | 是 | 交易對           |
+clientOid | String | 否 | clientOid     |
+orderId | String | 否 | 訂單id          |
+newPrice | String | 否 | 修改後新訂單的交易價格 |
+newSize | String | 否 | 修改後新訂單的交易數量    |
+
+orderId和clientOid必須傳一個
+
+newPrice和newSize必須傳一個
+
+### 返回值
+
+字段  | 含義       |
+--------- |----------|
+newOrderId | 新訂單的訂單id |
+
+### 返回示例
+
+```json
+{
+    "code": "200000", 
+    "data": {
+    "newOrderId": "6d539dc614db3"
+  }
+}
+```
+
+
 <aside class="spacer4"></aside>
 <aside class="spacer4"></aside>
 <aside class="spacer2"></aside>
-
 
 
 ## 高頻交易通過orderId撤單
@@ -707,6 +857,69 @@ symbol | String | 是 | 交易對 比如，ETH-BTC |
 | ----------------- | ------- |
 | orderId | 取消的訂單id |
 
+
+
+
+## 高頻交易通過orderId同步撤單
+
+此接口請求參數同"高頻交易通過orderId撤單"
+
+該接口和"高頻交易通過orderId撤單"的不同點在於：此接口會同步返回本次撤單完成後的訂單信息
+
+對延遲要求較高，請選“高頻交易通過orderId撤單”接口。對返回數據完整性有要求，請選擇該接口
+
+### HTTP請求
+
+`DELETE /api/v1/hf/orders/sync/{orderId}`
+
+### 請求示例
+
+`DELETE /api/v1/hf/orders/sync/{orderId}`
+
+### API權限
+
+此接口需要交易權限。
+
+### 頻率限制
+
+此接口針對每個帳號請求頻率限制為150次/3s
+
+### 請求參數
+
+請求參數 | 類型 | 是否必須 | 含義            |
+--------- | ------- | -----------|---------------|
+symbol | String | 是 | 交易對           |
+orderId | String | 是 | 訂單id          |
+
+### 返回值
+
+字段  | 含義         |
+--------- |------------|
+orderId | 訂單id       |
+originSize | 訂單原始數量     |
+originFunds | 訂單原始資金-市價單 |
+dealSize | 已成交數量      |
+remainSize | 剩餘數量       |
+canceledSize | 累計取消數量     |
+status | 訂單狀態  open：在買賣盤 done：訂單已經完結 |
+
+### 返回示例
+
+```json
+ {
+    "orderId": "641d67ea162d47000160bfb8",
+    "originSize": "1",
+    "dealSize": "0",
+    "remainSize": "1",
+    "canceledSize": "0",
+    "status": "done"
+}
+```
+
+<aside class="spacer4"></aside>
+
+
+
 ## 高頻交易通過clientOid單個撤單
 ```json
 // response
@@ -744,8 +957,67 @@ clientOid | 客戶端生成的標識 |
 
 
 <aside class="spacer4"></aside>
+
+
+
+## 高頻交易通過clientOid同步撤單
+
+此接口請求參數同"高頻交易通過clientOid單個撤單"
+
+該接口和"高頻交易通過clientOid單個撤單"的不同點在於：此接口會同步返回本次撤單完成後的訂單信息
+
+對延遲要求較高，請選“高頻交易通過clientOid單個撤單”接口。對返回數據完整性有要求，請選擇該接口
+
+
+### HTTP請求
+
+`DELETE /api/v1/hf/orders/sync/client-order/{clientOid}`
+
+### 請求示例
+
+`DELETE /api/v1/hf/orders/sync/client-order/{clientOid}`
+
+### API權限
+
+此接口需要交易權限。
+
+### 頻率限制
+
+此接口針對每個帳號請求頻率限制為150次/3s
+
+### 請求參數
+
+請求參數 | 類型 | 是否必須 | 含義            |
+--------- | ------- | -----------|---------------|
+symbol | String | 是 | 交易對           |
+clientOid | String | 是 | 訂單clientOid        |
+
+### 返回值
+
+字段  | 含義         |
+--------- |------------|
+orderId | 訂單id       |
+originSize | 訂單原始數量     |
+originFunds | 訂單原始資金-市價單 |
+dealSize | 已成交數量      |
+remainSize | 剩餘數量       |
+canceledSize | 累計取消數量     |
+status | 訂單狀態  open：在買賣盤 done：訂單已經完結 |
+
+### 返回示例
+
+```json
+ {
+    "orderId": "641d67ea162d47000160bfb8",
+    "originSize": "1",
+    "dealSize": "0",
+    "remainSize": "1",
+    "canceledSize": "0",
+    "status": "done"
+}
+```
+
 <aside class="spacer4"></aside>
-<aside class="spacer2"></aside>
 
 
 ## 高頻交易取消訂單指定數量
@@ -796,10 +1068,13 @@ cancelSize | 取消数量 |
 }
 ```
 
+<aside class="spacer4"></aside>
 
-<aside class="spacer4"></aside>
-<aside class="spacer4"></aside>
-<aside class="spacer2"></aside>
+
+
+
+
+
 
 
 ## 高頻交易全部撤單
@@ -839,6 +1114,11 @@ symbol | String | 是 | 取消指定交易對的open訂單 |
 包含獲取活躍訂單(Active)和已完成訂單(Done)兩個接口，活躍訂單接口返回值是所有還沒有完成的訂單列表，已完成訂單接口獲取歷史訂單列表，返回值是分頁後的數據。兩個接口的返回數據都根據訂單最新更新時間降序排序。用戶成功下單後，訂單就處於活躍（Active）狀態，用戶可以通過 inOrderBook 來判斷委託是否進入買賣盤。被取消或者已完全成交的訂單則被標記爲已完成（Done）狀態。
 
 查詢“活躍”狀態的訂單，沒有時間限制。但查詢“已完成”狀態的訂單時，您只能獲取 3 * 24 小時時間範圍內的數據（即：從當前時間起至3 * 24 小時前）。若超出時間範圍，系統會默認查詢 3 * 24 小時時間範圍內的數據。
+
+
+
+
+
 
 ## 獲取活躍訂單列表
 ```json
@@ -934,6 +1214,66 @@ tradeType | 交易類型: TRADE（現貨交易）|
 #### 訂單輪詢(Polling)
 
 對於高頻交易的用戶，建議您在本地緩存和維護一份自己的活動委託列表，並使用市場數據流實時更新自己的訂單信息。
+
+
+<aside class="spacer4"></aside>
+
+
+## 高頻交易查詢活躍訂單交易對
+
+該接口可以查詢出用戶有活躍訂單的所有交易對
+
+### HTTP請求
+
+`GET /api/v1/hf/orders/active/symbols`
+
+### 請求示例
+
+`GET /api/v1/hf/orders/active/symbols`
+
+### API權限
+
+此接口需要交易權限。
+
+### 頻率限制
+
+此接口針對每個帳號請求頻率限制為3次/3s
+
+### 請求參數
+
+無
+
+
+### 返回值
+
+
+字段  | 含義         |
+--------- |------------|
+symbols | 有活躍訂單的交易對列表       |
+
+
+### 返回示例
+
+```json
+{
+
+    "success": true,
+    "code": "200",
+    "msg": "success",
+    "retry": false,
+    "data": {
+        "symbols": ["BTC-USDT"]
+    }
+
+}
+
+```
+
+<aside class="spacer4"></aside>
+<aside class="spacer4"></aside>
+
+
+
 
 ## 已完成訂單列表
 ```json
