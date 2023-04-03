@@ -35,7 +35,7 @@ KuCoin API：**REST API**
 - 【新增】新增`DELETE /api/v1/hf/orders/sync/client-order/{clientOid}`接口
 - 【新增】新增`POST /api/v1/hf/orders/multi/sync`接口
 - 【新增】新增`GET /api/v1/hf/orders/active/symbols`接口
-- 【修改】`GET /api/v1/hf/orders/done`接口，入參：支持不同的交易對批量下單；出參：返回值做了優化，只返回orderId和下單結果
+- 【修改】`POST /api/v1/hf/orders/multi`接口，入參：支持不同的交易對批量下單；出參：返回值做了優化，只返回orderId和下單結果
 
 
 

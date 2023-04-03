@@ -35,7 +35,7 @@ KuCoin API: **REST API**
 - 【Add】Add`DELETE /api/v1/hf/orders/sync/client-order/{clientOid}`interface
 - 【Add】Add`POST /api/v1/hf/orders/multi/sync`interface
 - 【Add】Add`GET /api/v1/hf/orders/active/symbols`interface
-- 【Modify】Modify`GET /api/v1/hf/orders/done`interface，Input parameters: support batch orders for different trading pairs; output parameters: the return value has been optimized, only orderId and order results are returned
+- 【Modify】Modify`POST /api/v1/hf/orders/multi`interface，Input parameters: support batch orders for different trading pairs; output parameters: the return value has been optimized, only orderId and order results are returned
 
 
 **11/08/22**:
