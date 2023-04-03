@@ -28,13 +28,23 @@ KuCoin API: **REST API**
 
 ## Update Preview
 
+**04/01/23**:
+
+- 【Add】Add`POST /api/v1/hf/orders/alter`interface
+- 【Add】Add`DELETE /api/v1/hf/orders/sync/{orderId}`interface
+- 【Add】Add`DELETE /api/v1/hf/orders/sync/client-order/{clientOid}`interface
+- 【Add】Add`POST /api/v1/hf/orders/multi/sync`interface
+- 【Add】Add`GET /api/v1/hf/orders/active/symbols`interface
+- 【Modify】Modify`GET /api/v1/hf/orders/done`interface，Input parameters: support batch orders for different trading pairs; output parameters: the return value has been optimized, only orderId and order results are returned
+
+
 **11/08/22**:
 
-- Deprecate `POST /api/v1/accounts` interface.
+- 【Deprecate】Deprecate `POST /api/v1/accounts` interface.
 
 **10/18/22**:
 
-- Modify the `limit` request parameter description in the `GET /api/v1/hf/orders/done` interface to "default 20, maximum 100".
+- 【Modify】Modify the `limit` request parameter description in the `GET /api/v1/hf/orders/done` interface to "default 20, maximum 100".
 
 # User
 
@@ -296,7 +306,7 @@ The following requires signature verification.
 
 # Order
 
-## Order placement
+## Place hf order
 ```json
 // response
 {
@@ -474,7 +484,7 @@ For example: if the threshold value is 10%, when a user places a market price pu
 
 
 
-## Order sync placement
+## Sync place hf order 
 ```json
 {
     "code": "200000", 
@@ -491,11 +501,11 @@ For example: if the threshold value is 10%, when a user places a market price pu
 }
 ```
 
-The request parameters of this interface are the same as those of the "Order placement" interface
+The request parameters of this interface are the same as those of the "Place hf order" interface
 
-The difference between this interface and "Order placement" is that this interface will synchronously return the order information after the order matching is completed.
+The difference between this interface and "Place hf order" is that this interface will synchronously return the order information after the order matching is completed.
 
-For higher latency requirements, please select the "Order placement" interface. If there is a requirement for returning data integrity, please select this interface
+For higher latency requirements, please select the "Place hf order" interface. If there is a requirement for returning data integrity, please select this interface
 
 ### HTTP Request
 
@@ -515,7 +525,7 @@ The request frequency of this API is limited to `45 times/3s` for each account
 
 ### Parameters
 
-The request parameters of this interface are the same as those of the "Order placement" interface
+The request parameters of this interface are the same as those of the "Place hf order" interface
 
 ### Return Value
 
@@ -545,76 +555,49 @@ matchTime | matching time       |
 
 
 
-## Batch Order Placement for high-frequency trading
+## Place multiple hf orders
+
 ```json
 //request
 {
-    "symbol": "BTC-USDT",
-    "orderList": [
-        {
-            "clientOid": "3d07008668054da6b3cb12e432c2b13a",
-            "side": "buy",
-            "type": "limit",
-            "price": "0.01",
-            "size": "0.01",
-            "symbol": "BTC-USDT"
-        },
-        {
-            "clientOid": "37245dbe6e134b5c97732bfb36cd4a9d",
-            "side": "buy",
-            "type": "limit",
-            "price": "0.01",
-            "size": "0.01",
-            "symbol": "BTC-USDT"
-        }
-    ]
+  "orderList": [
+	  {
+		  "clientOid": "3d07008668054da6b3cb12e432c2b13a",
+		  "side": "buy",
+		  "type": "limit",
+		  "price": "0.01",
+		  "size": "1",
+		  "symbol": "ETH-USDT"
+	  },
+	  {
+		  "clientOid": "37245dbe6e134b5c97732bfb36cd4a9d",
+		  "side": "buy",
+		  "type": "limit",
+		  "price": "0.01",
+		  "size": "1",
+		  "symbol": "ETH-USDT"
+	  }
+  ]
 }
 ```
 
 ```json
 //response
 {
-   "code":"200000",
-   "data":[
-        {
-            "symbol": "KCS-USDT",
-            "type": "limit",
-            "side": "buy",
-            "price": "0.01",
-            "size": "0.01",
-            "funds": null,
-            "stp": "",
-            "timeInForce": "GTC",
-            "cancelAfter": 0,
-            "postOnly": false,
-            "iceberg": false,
-            "visibleSize": null,
-            "channel": "API",
-            "id": "611a6a309281bc000674d3c0",
-            "status": "success",
-            "failMsg": null,
-            "clientOid": "552a8a0b7cb04354be8266f0e202e7e9"
-        },
-        {
-            "symbol": "KCS-USDT",
-            "type": "limit",
-            "side": "buy",
-            "price": "0.01",
-            "size": "0.01",
-            "funds": null,
-            "stp": "",
-            "timeInForce": "GTC",
-            "cancelAfter": 0,
-            "postOnly": false,
-            "iceberg": false,
-            "visibleSize": null,
-            "channel": "API",
-            "id": "611a6a309281bc000674d3c1",
-            "status": "success",
-            "failMsg": null,
-            "clientOid": "bd1e95e705724f33b508ed270888a4a9"
-        }
-   ]
+  "success": true,
+  "code": "200",
+  "msg": "success",
+  "retry": false,
+  "data": [
+	  {
+		  "orderId": "641d669c9ca34800017a2a3c",
+		  "success": true
+	  },
+	  {
+		  "orderId": "641d669c9ca34800017a2a45",
+		  "success": true
+	  }
+  ]
 }
 ```
 
@@ -623,9 +606,11 @@ This endpoint supports batch order placement from a single endpoint. A maximum o
 This endpoint only supports order placement requests. To obtain the results of the order placement, you will need to check the order status or subscribe to websocket to obtain information about he order. 
 
 ### HTTP Request
+
 `POST /api/v1/hf/orders/multi`
 
 ### Example
+
 `POST /api/v1/hf/orders/multi`
 
 ### API Permissions
@@ -661,7 +646,182 @@ remark | String | No | \[Optional] Order placement remarks cannot exceed a lengt
 Msg | Reason of failure |
 
 
-## Cancellation of orders by orderId
+## Sync place multiple hf orders
+
+```json
+//request
+{
+  "orderList": [
+	  {
+		  "clientOid": "3d07008668054da6b3cb12e432c2b13a",
+		  "side": "buy",
+		  "type": "limit",
+		  "price": "0.01",
+		  "size": "1",
+		  "symbol": "ETH-USDT"
+	  },
+	  {
+		  "clientOid": "37245dbe6e134b5c97732bfb36cd4a9d",
+		  "side": "buy",
+		  "type": "limit",
+		  "price": "0.01",
+		  "size": "1",
+		  "symbol": "ETH-USDT"
+	  }
+  ]
+}
+```
+
+
+```json
+//response
+ {
+  "success": true,
+  "code": "200",
+  "msg": "success",
+  "retry": false,
+  "data": [
+	  {
+		  "orderId": "641d67ea162d47000160bfb8",
+		  "orderTime": 1679648746796,
+		  "originSize": "1",
+		  "dealSize": "0",
+		  "remainSize": "1",
+		  "canceledSize": "0",
+		  "status": "open",
+		  "matchTime": 1679648746443,
+		  "success": true
+	  },
+	  {
+		  "orderId": "641d67eb162d47000160bfc0",
+		  "orderTime": 1679648747369,
+		  "originSize": "1",
+		  "dealSize": "0",
+		  "remainSize": "1",
+		  "canceledSize": "0",
+		  "status": "open",
+		  "matchTime": 1679648746644,
+		  "success": true
+	  }
+  ]
+}
+```
+
+
+The request parameters of this interface are the same as those of the "Sync place multiple hf orders" interface
+
+The difference between this interface and "Sync place multiple hf orders" is that this interface will synchronously return the order information after the order matching is completed.
+
+For higher latency requirements, please select the "Sync place multiple hf orders" interface. If there is a requirement for returning data integrity, please select this interface
+
+
+### HTTP Request
+
+`POST /api/v1/hf/orders/multi/sync`
+
+### Example
+
+`POST /api/v1/hf/orders/multi/sync`
+
+### API Permissions
+
+This API requires `Trade` permissions
+
+### REQUEST RATE LIMIT
+
+The request frequency of this API endpoint is limited to `3 times/3s` for each account
+
+
+### Parameters
+
+The request parameters of this interface are the same as those of the "Sync place multiple hf orders" interface, Maximum support for 20 orders
+
+### Return Value
+Field | Description | 
+--------- | ------- | 
+orderId | order Id is returned once an order is successfully placed.       |
+orderTime | order time     |
+originSize | original order size     |
+dealSize | deal size      |
+remainSize | remain size       |
+canceledSize | Cumulative number of cancellations     |
+status | Order Status. open：order is active; done：order has been completed |
+matchTime | matching time     |
+success | Whether the order was placed successfully.     |
+
+
+<aside class="spacer2"></aside>
+
+
+
+
+
+
+
+
+## Modify order
+
+This interface can modify the price and quantity of the order according to orderId or clientOid.
+
+The implementation of this interface is: cancel the order and place a new order on the same trading pair, and return the modification result to the client synchronously
+
+When the quantity of the new order updated by the user is less than the filled quantity of this order, the order will be considered as completed, and the order will be cancelled, and no new order will be placed
+
+
+### HTTP Request
+
+`POST /api/v1/hf/orders/alter`
+
+### Example
+
+`POST /api/v1/hf/orders/alter`
+
+### API Permissions
+
+This API requires `Trade` permissions
+
+### REQUEST RATE LIMIT
+
+The request frequency of this API endpoint is limited to `60 times/3s` for each account
+
+
+### Parameters
+Parameters | Type | Mandatory | Description | 
+--------- | ------- | -----------| -----------| 
+symbol | String | Yes | symbol      |
+clientOid | String | No | clientOid     |
+orderId | String | No | other id          |
+newPrice | String | No | The modified price of the new order |
+newSize | String | No | The modified size of the new order   |
+
+orderId and clientOid must choose one
+
+newPrice and newSize must choose one
+
+### Return Value
+Field | Description | 
+--------- | ------- | 
+newOrderId | The order id of the new order |
+
+
+```json
+//response
+{
+    "code": "200000", 
+    "data": {
+    "newOrderId": "6d539dc614db3"
+  }
+}
+```
+
+<aside class="spacer4"></aside>
+
+
+
+
+
+
+## Cancel orders by orderId
 ```json
 // response
 {   
@@ -702,8 +862,77 @@ symbol | String | Yes | Trading pair, such as `ETH-BTC` |
 | ----------------- | ------- | 
 | orderId | Order id of the cancelled order |
 
+<aside class="spacer4"></aside>
 
-## Cancellation of order by clientOid
+
+
+
+
+## Sync cancel orders by orderId
+
+The request parameters of this interface are the same as those of the "Cancel orders by orderId" interface
+
+The difference between this interface and "Cancel orders by orderId" is that this interface will synchronously return the order information after the order canceling is completed.
+
+For higher latency requirements, please select the "Cancel orders by orderId" interface. If there is a requirement for returning data integrity, please select this interface
+
+
+### HTTP Request
+
+`DELETE /api/v1/hf/orders/sync/{orderId}`
+
+### Example
+
+`DELETE /api/v1/hf/orders/sync/{orderId}`
+
+### API Permissions
+
+This API requires `Trade` permissions
+
+### REQUEST RATE LIMIT
+
+The request frequency of this API endpoint is limited to `150 times/3s` for each account
+
+
+### Parameters
+Parameters | Type | Mandatory | Description | 
+--------- | ------- | -----------| -----------| 
+orderId | String | Yes | Path parameter，Order Id unique identifier | 
+symbol | String | Yes | Trading pair, such as `ETH-BTC` |
+
+### Return Value
+Field | Description | 
+--------- | ------- | 
+orderId | order Id       |
+originSize | original order size     |
+originFunds | Order original funds - market order |
+dealSize | deal size      |
+remainSize | remain size       |
+canceledSize | Cumulative number of cancellations     |
+status | Order Status. open：order is active; done：order has been completed |
+
+
+```json
+//response
+ {
+    "orderId": "641d67ea162d47000160bfb8",
+    "originSize": "1",
+    "dealSize": "0",
+    "remainSize": "1",
+    "canceledSize": "0",
+    "status": "done"
+}
+```
+
+<aside class="spacer4"></aside>
+
+
+
+
+
+
+
+## Cancel order by clientOid
 ```json
 // response
 {
@@ -734,14 +963,76 @@ Parameters  | Type | Mandatory | Description |
 clientOid | String | Yes | Path parameter，an identifier created by the 
 symbol | String | Yes | Trading pair such as `ETH-BTC` |
 
-#### Return Value
+### Return Value
 Field | Description | 
 --------- | ------- | 
 clientOid | Identifier created by the client |
 
+<aside class="spacer4"></aside>
 
 
-## Cancellation the specified number of orders by orderId
+
+
+
+
+## Sync cancel orders by clientOid
+
+The request parameters of this interface are the same as those of the "Cancellation of order by clientOid" interface
+
+The difference between this interface and "Cancellation of order by clientOid" is that this interface will synchronously return the order information after the order canceling is completed.
+
+For higher latency requirements, please select the "Cancellation of order by clientOid" interface. If there is a requirement for returning data integrity, please select this interface
+
+
+### HTTP Request
+
+`DELETE /api/v1/hf/orders/sync/client-order/{clientOid}`
+
+### Example
+
+`DELETE /api/v1/hf/orders/sync/client-order/{clientOid}`
+
+### API Permissions
+
+This API requires `Trade` permissions
+
+### REQUEST RATE LIMIT
+
+The request frequency of this API endpoint is limited to `150 times/3s` for each account
+
+
+### Parameters
+Parameters | Type | Mandatory | Description | 
+--------- | ------- | -----------| -----------| 
+clientOid | String | Yes | Path parameter，an identifier created by the 
+symbol | String | Yes | Trading pair such as `ETH-BTC` |
+
+### Return Value
+Field | Description | 
+--------- | ------- | 
+orderId | order Id       |
+originSize | original order size     |
+originFunds | Order original funds - market order |
+dealSize | deal size      |
+remainSize | remain size       |
+canceledSize | Cumulative number of cancellations     |
+status | Order Status. open：order is active; done：order has been completed |
+
+```json
+//response
+ {
+    "orderId": "641d67ea162d47000160bfb8",
+    "originSize": "1",
+    "dealSize": "0",
+    "remainSize": "1",
+    "canceledSize": "0",
+    "status": "done"
+}
+```
+
+<aside class="spacer4"></aside>
+
+## Cancel specified number of orders by orderId
 ```json
 {
     "code": "200000", 
@@ -786,14 +1077,11 @@ orderId | Canceled orderId |
 cancelSize | canceled size |
 
 
-
-
 <aside class="spacer4"></aside>
-<aside class="spacer4"></aside>
-<aside class="spacer2"></aside>
 
 
-## Cancellation of all HF orders related to a specific trading pair
+
+## Cancel all HF orders by symbol
 ```json 
 // response
 {
@@ -921,6 +1209,57 @@ tradeType | Trade type: TRADE (Spot Trading)|
 #### Order Polling (Polling)
 
 For high-frequency trading users, we recommend locally caching, maintaining your own order records, and using market data streams to update your order information in real time. 
+
+
+##Obtain List of symbol with active HF orders
+
+This interface can query all trading pairs that the user has active orders
+
+### HTTP Request
+
+`GET /api/v1/hf/orders/active/symbols`
+
+### Example
+
+`GET /api/v1/hf/orders/active/symbols`
+
+### API Permissions
+
+This API requires `Trade` permissions
+
+### REQUEST RATE LIMIT
+
+The request frequency of this API endpoint is limited to `3 times/3s` for each account
+
+### Parameters
+`N/A`
+
+
+### Return Value
+Field | Description | 
+--------- | ------- | 
+symbols | List of trading pairs with active orders       |
+
+
+```json
+//response
+{
+
+    "success": true,
+    "code": "200",
+    "msg": "success",
+    "retry": false,
+    "data": {
+        "symbols": ["BTC-USDT"]
+    }
+
+}
+
+```
+
+<aside class="spacer4"></aside>
+<aside class="spacer4"></aside>
+
 
 ## Obtain List of Filled HF Orders
 ```json
@@ -1068,13 +1407,21 @@ tradeType | Trade type: TRADE (Spot Trading)|
     }
 }
 ```
+
 This endpoint can be used to obtain information for a single HF order using the order id.
+
 ### HTTP Request
+
 `GET /api/v1/hf/orders/{orderId}?symbol={symbol}`
+
 ### Example
+
 `GET /api/v1/hf/orders/5c35c02703aa673ceec2a168?symbol=ETH-BTC`
+
 ### API Permissions
+
 This API requires `General` permissions
+
 ### Parameters
 Parameters | Type | Mandatory | Description | 
 --------- | ------- | -----------| -----------| 
