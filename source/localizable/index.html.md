@@ -601,7 +601,7 @@ matchTime | matching time       |
 }
 ```
 
-This endpoint supports batch order placement from a single endpoint. A maximum of `5`orders can be placed simultaneously. The order types must be limit orders of the same trading pair （this endpoint currently only supports spot trading and does not support margin trading）.
+This endpoint supports sequential batch order placement from a single endpoint. A maximum of `5`orders can be placed simultaneously. The order types must be limit orders of the same trading pair （this endpoint currently only supports spot trading and does not support margin trading）.
 
 This endpoint only supports order placement requests. To obtain the results of the order placement, you will need to check the order status or subscribe to websocket to obtain information about he order. 
 
