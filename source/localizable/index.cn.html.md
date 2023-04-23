@@ -28,6 +28,11 @@ KuCoin API：**REST API**
 
 ## 更新預告
 
+**04/23/23**:
+
+- 【新增】新增`POST /api/v1/hf/orders/dead-cancel-all`接口
+- 【新增】新增`GET /api/v1/hf/orders/dead-cancel-all/query`接口
+
 **04/01/23**:
 
 - 【新增】新增`POST /api/v1/hf/orders/alter`接口
