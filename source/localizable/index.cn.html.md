@@ -28,6 +28,11 @@ KuCoin API：**REST API**
 
 ## 更新預告
 
+**04/23/23**:
+
+- 【新增】新增`POST /api/v1/hf/orders/dead-cancel-all`接口
+- 【新增】新增`GET /api/v1/hf/orders/dead-cancel-all/query`接口
+
 **04/01/23**:
 
 - 【新增】新增`POST /api/v1/hf/orders/alter`接口
@@ -1569,6 +1574,97 @@ cancelExist | 訂單是否存在取消記錄 |
 createdAt | 訂單創建時間 |
 lastUpdatedAt | 訂單最新更新時間 |
 tradeType | 交易類型: TRADE（現貨交易）|
+
+
+
+## 高頻交易自動撤單設置
+
+用戶調用此接口設置在指定時間後，自動撤銷設置的交易對所有訂單。如果在設置的時間之前沒有再次調用此接口進行續期或者撤銷操作，系統則會幫助用戶進行對應交易對的撤單操作。反之則不會。
+
+注：訂單撤銷延遲在  0 ~ 10 秒之間，不會實時撤單。系統撤單時如遇到交易對狀態已不可操作撤單，則不會進行撤單操作
+
+### HTTP請求
+`POST /api/v1/hf/orders/dead-cancel-all`
+
+### 請求示例
+`POST /api/v1/hf/orders/dead-cancel-all`
+
+### API權限
+該接口需要`交易權限`。
+
+### 頻率限制
+此接口針對每個賬號請求頻率限制爲`1次/3s`
+
+### 請求參數
+
+請求參數 | 類型 | 含義            
+--------- | ---------|---------------
+timeout | Integer | 自動撤單觸發設置時間，單位 秒。範圍:timeout = -1（表示取消設置）, 或者  5 <= timeout <= 86400
+symbols | String |[可選] 交易對列表。逗號隔開，為空表示所有交易對 
+
+### 返回值
+
+字段  | 含義       
+--------- |----------
+currentTime | 系統當前時間（單位 秒） 
+triggerTime | 觸發撤單時間（單位 秒） 
+
+### 返回示例
+
+```json
+{
+    "code": "200000", 
+    "data": {
+    "currentTime": 1682010526,
+    "triggerTime": 1682010531 
+  }
+}
+```
+
+<aside class="spacer4"></aside>
+
+## 高頻交易自動撤單設置查詢
+
+通過此接口可查詢自動撤單設置情況
+
+### HTTP請求
+`GET /api/v1/hf/orders/dead-cancel-all/query`
+
+### 請求示例
+`GET /api/v1/hf/orders/dead-cancel-all/query`
+
+### API權限
+該接口需要`交易權限`。
+
+### 頻率限制
+此接口針對每個賬號請求頻率限制爲`1次/3s`
+
+### 請求參數
+
+無
+
+### 返回值
+字段  | 含義         
+--------- |------------
+timeout | 自動撤單觸發設置時間，單位 秒。範圍:timeout = -1（表示取消設置）, 或者  5 <= timeout <= 86400。例如timeout=5，表示超過5秒未收到客戶請求，即自動撤單。
+symbols | 交易對列表。多個交易對時逗號隔開；為空表示所有交易對 
+currentTime | 系統當前時間（單位 秒） 
+triggerTime | 觸發撤單時間（單位 秒） 
+
+
+### 返回示例
+
+```json
+ {
+    "timeout": 5,
+    "symbols": "BTC-USDT",
+    "currentTime": 1682010526,
+    "triggerTime": 1682010531
+}
+```
+
+<aside class="spacer4"></aside>
+
 
 # 成交明細
 

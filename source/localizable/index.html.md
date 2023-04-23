@@ -28,6 +28,11 @@ KuCoin API: **REST API**
 
 ## Update Preview
 
+**04/23/23**:
+
+- 【Add】Add`POST /api/v1/hf/orders/dead-cancel-all`interface
+- 【Add】Add`GET /api/v1/hf/orders/dead-cancel-all/query`interface
+
 **04/01/23**:
 
 - 【Add】Add`POST /api/v1/hf/orders/alter`interface
@@ -1520,7 +1525,7 @@ symbol | String | Yes | Trading pair such as `ETH-BTC` |
 
 <aside class="notice">If the order is not an active order, you can only get data within the time frame of <code>3 * 24</code> hours (ie: from the current time to <code>3 * 24</code> hours ago)</aside>
 
-#### Return Value
+### Return Value
 Field | Description | 
 --------- | ------- | 
 id | Order id，a unique identifier of the order  | 
@@ -1552,6 +1557,89 @@ cancelExist | Are there any cancellation records pertaining to the order? |
 createdAt | order creation time | 
 lastUpdatedAt | Last update time of order |
 tradeType | Trade type: TRADE (Spot Trading)|
+
+
+## HF auto cancel setting
+
+```json
+// response
+{
+    "code": "200000", 
+    "data": {
+    "currentTime": 1682010526,
+    "triggerTime": 1682010531 
+  }
+}
+```
+
+Call this interface to automatically cancel all orders of the set trading pair after the specified time. If this interface is not called again for renewal or cancellation before the set time, the system will help the user to cancel the order of the corresponding trading pair. Otherwise it will not.
+
+Note: The order cancellation delay is between 0 and 10 seconds, and the order will not be canceled in real time. When the system cancels the order, if the transaction pair status is no longer operable to cancel the order, it will not cancel the order
+
+### HTTP Request
+`POST /api/v1/hf/orders/dead-cancel-all`
+
+### Example
+`POST /api/v1/hf/orders/dead-cancel-all`
+
+### API Permissions
+This API requires `Trade` permissions
+
+### REQUEST RATE LIMIT
+The request frequency of this API is limited to `1 times/3s` for each account
+
+### Parameters
+Parameters | Type | Mandatory | Description
+--------- | ------- | -----------| -----------
+timeout | Integer| Yes | Auto cancel order trigger setting time, the unit is second. range: timeout=-1 (meaning unset) or 5 <= timeout <= 86400. For example, timeout=5 means that the order will be automatically canceled if no user request is received for more than 5 seconds.
+symbols | String | No | List of trading pairs. Separated by commas, empty means all trading pairs
+
+### Return Value
+Field | Description 
+--------- |----------
+currentTime | System current time (in seconds)
+triggerTime | Trigger cancellation time (in seconds) 
+
+
+
+
+## HF auto cancel order setting query
+
+```json
+// response
+ {
+    "timeout": 5,
+    "symbols": "BTC-USDT",
+    "currentTime": 1682010526,
+    "triggerTime": 1682010531
+}
+```
+
+Through this interface, you can query the settings of automatic order cancellation
+
+### HTTP Request
+`GET /api/v1/hf/orders/dead-cancel-all/query`
+
+### Example
+`GET /api/v1/hf/orders/dead-cancel-all/query`
+
+### API Permissions
+This API requires `Trade` permissions
+
+### REQUEST RATE LIMIT
+The request frequency of this API is limited to `1 times/3s` for each account
+
+### Parameters
+`N/A`
+
+### Return Value
+Field | Description    
+--------- |------------
+timeout | Auto cancel order trigger setting time, the unit is second. range: timeout=-1 (meaning unset) or 5 <= timeout <= 86400
+symbols | List of trading pairs. Separated by commas, empty means all trading pairs
+currentTime | System current time (in seconds)） 
+triggerTime | Trigger cancellation time (in seconds)
+
 
 # Transaction details
 
