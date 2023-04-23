@@ -1591,8 +1591,8 @@ The request frequency of this API is limited to `1 times/3s` for each account
 ### Parameters
 Parameters | Type | Mandatory | Description
 --------- | ------- | -----------| -----------
-timeout | Integer| Yes | Auto cancel order trigger setting time, the unit is second. range: timeout=-1 (meaning unset) or 5 <= timeout <= 86400. For example, timeout=5 means that the order will be automatically canceled if no user request is received for more than 5 seconds.
-symbols | String | No | List of trading pairs. When this parameter is not empty, separate it with commas and support up to 50 trading pairs. Empty means all trading pairs
+timeout | Integer| Yes | Auto cancel order trigger setting time, the unit is second. range: timeout=-1 (meaning unset) or 5 <= timeout <= 86400. For example, timeout=5 means that the order will be automatically canceled if no user request is received for more than 5 seconds. When this parameter is changed, the previous setting will be overwritten.
+symbols | String | No | List of trading pairs. When this parameter is not empty, separate it with commas and support up to 50 trading pairs. Empty means all trading pairs. When this parameter is changed, the previous setting will be overwritten.
 
 ### Return Value
 Field | Description 
