@@ -28,6 +28,14 @@ KuCoin API: **REST API**
 
 ## Update Preview
 
+**05/18/23**:
+
+- 【Modify】`GET /api/v1/hf/orders/{orderId}?symbol={symbol}`interface, add response parameter：cancelledSize、cancelledFunds、remainSize、remainFunds
+- 【Modify】`GET /api/v1/hf/orders/client-order/{clientOid}?symbol={symbol}`interface, add response parameter：cancelledSize、cancelledFunds、remainSize、remainFunds
+- 【Modify】`GET /api/v1/hf/orders/active`interface, add response parameter：cancelledSize、cancelledFunds、remainSize、remainFunds
+- 【Modify】`GET /api/v1/hf/orders/done`interface, add response parameter：cancelledSize、cancelledFunds、remainSize、remainFunds
+
+
 **04/23/23**:
 
 - 【Add】Add`POST /api/v1/hf/orders/dead-cancel-all`interface
@@ -1123,39 +1131,43 @@ Since this interface is a batch cancellation, the http status of the interface i
 ```json
 // response
 {
-    "code" : "200000",
-    "data" : [
-        "id": "5c35c02703aa673ceec2a168",
-        "symbol": "BTC-USDT",
-        "opType": "DEAL",
-        "type": "limit",
-        "side": "buy",
-        "price": "10",
-        "size": "2",
-        "funds": "0",
-        "dealFunds": "0.166",
-        "dealSize": "2",
-        "fee": "0",
-        "feeCurrency": "USDT",
-        "stp": "",
-        "timeInForce": "GTC",
-        "postOnly": false,
-        "hidden": false,
-        "iceberg": false,
-        "visibleSize": "0",
-        "cancelAfter": 0,
-        "channel": "IOS",
-        "clientOid": "",
-        "remark": "",
-        "tags": "",
-        "active": true,
-        "inOrderBook": true,
-        "cancelExist": false,
-        "createdAt": 1547026471000,
-        "lastUpdatedAt": 1547026471001,
-        "tradeType": "TRADE"
-        }        
-    ]
+    "code" : "200000",
+    "data" : [
+        "id": "5c35c02703aa673ceec2a168",
+        "symbol": "BTC-USDT",
+        "opType": "DEAL",
+        "type": "limit",
+        "side": "buy",
+        "price": "10",
+        "size": "2",
+        "funds": "0",
+        "dealFunds": "0.166",
+        "dealSize": "2",
+        "fee": "0",
+        "feeCurrency": "USDT",
+        "stp": "",
+        "timeInForce": "GTC",
+        "postOnly": false,
+        "hidden": false,
+        "iceberg": false,
+        "visibleSize": "0",
+        "cancelAfter": 0,
+        "channel": "IOS",
+        "clientOid": "",
+        "remark": "",
+        "tags": "",
+        "active": true,
+        "inOrderBook": true,
+        "cancelExist": false,
+        "createdAt": 1547026471000,
+        "lastUpdatedAt": 1547026471001,
+        "tradeType": "TRADE",
+        "cancelledSize": "0",
+        "cancelledFunds": "0",
+        "remainSize": "0",
+        "remainFunds": "0"
+        }        
+    ]
 }
 ```
 This endpoint obtains a list of all active HF orders. The return data is sorted in descending order based on the latest update times.
@@ -1187,10 +1199,14 @@ opType | Operation type: DEAL |
 type | Order type | 
 side | Buy or sell | 
 price | Order price | 
-size | Order size | 
+size | Order size |
+dealSize | Number of filled transactions |
+cancelledSize | Number of canceled transactions |
+remainSize | Number of remain transactions |
 funds | Order amount | 
-dealFunds | Turnover | 
-dealSize | Number of filled transactions | 
+dealFunds |  Number of filled funds | 
+cancelledFunds | Number of canceled funds | 
+remainFunds | Number of remain funds |  
 fee | Service fee | 
 feeCurrency | currency used to calculate fees | 
 stp | Self trade protection | 
@@ -1270,43 +1286,47 @@ symbols | List of trading pairs with active orders       |
 ```json
 // response
 {
-   "code":"200000",
-   "data":{
-      "lastId":2682265600,
-      "items":[
-         {
-            "id":"63074a5a27ecbe0001e1f3ba",
-            "symbol":"CSP-USDT",
-            "opType":"DEAL",
-            "type":"limit",
-            "side":"sell",
-            "price":"0.1",
-            "size":"0.1",
-            "funds":"0.01",
-            "dealSize":"0",
-            "dealFunds":"0",
-            "fee":"0",
-            "feeCurrency":"USDT",
-            "stp":"",
-            "timeInForce":"GTC",
-            "postOnly":false,
-            "hidden":false,
-            "iceberg":false,
-            "visibleSize":"0",
-            "cancelAfter":0,
-            "channel":"API",
-            "clientOid":"",
-            "remark":"",
-            "tags":"",
-            "cancelExist":true,
-            "createdAt":1661422170924,
-            "lastUpdatedAt":1661422196926,
-            "tradeType":"TRADE",
-            "inOrderBook":false,
-            "active":false
-         }
-      ]
-   }
+   "code":"200000",
+   "data":{
+      "lastId":2682265600,
+      "items":[
+         {
+            "id":"63074a5a27ecbe0001e1f3ba",
+            "symbol":"CSP-USDT",
+            "opType":"DEAL",
+            "type":"limit",
+            "side":"sell",
+            "price":"0.1",
+            "size":"0.1",
+            "funds":"0.01",
+            "dealSize":"0",
+            "dealFunds":"0",
+            "fee":"0",
+            "feeCurrency":"USDT",
+            "stp":"",
+            "timeInForce":"GTC",
+            "postOnly":false,
+            "hidden":false,
+            "iceberg":false,
+            "visibleSize":"0",
+            "cancelAfter":0,
+            "channel":"API",
+            "clientOid":"",
+            "remark":"",
+            "tags":"",
+            "cancelExist":true,
+            "createdAt":1661422170924,
+            "lastUpdatedAt":1661422196926,
+            "tradeType":"TRADE",
+            "inOrderBook":false,
+            "active":false,
+            "cancelledSize": "0",
+            "cancelledFunds": "0",
+            "remainSize": "0",
+            "remainFunds": "0"
+         }
+      ]
+   }
 }
 ```
 This endpoint obtains a list of filled HF orders and returns paginated data. The returned data is sorted in descending order based on the latest order update times.
@@ -1349,10 +1369,14 @@ opType | Operation type: DEAL |
 type | Order type | 
 side | Buy or sell | 
 price | Order price | 
-size | Order size | 
+size | Order size |
+dealSize | Number of filled transactions |
+cancelledSize | Number of canceled transactions |
+remainSize | Number of remain transactions |
 funds | Order amount | 
-dealFunds | Turnover | 
-dealSize | Number of filled transactions | 
+dealFunds |  Number of filled funds | 
+cancelledFunds | Number of canceled funds | 
+remainFunds | Number of remain funds | 
 fee | Service fee | 
 feeCurrency | currency used to calculate fees | 
 stp | Self trade protection | 
@@ -1378,38 +1402,42 @@ tradeType | Trade type: TRADE (Spot Trading)|
 ```json
 // response
 {
-   "code":"200000",
-   "data": {
-        "id": "5f3113a1c9b6d539dc614dc6",
-        "symbol": "KCS-BTC",
-        "opType": "DEAL",
-        "type": "limit",
-        "side": "buy",
-        "price": "0.00001",
-        "size": "1",
-        "funds": "0",
-        "dealFunds": "0",
-        "dealSize": "0",
-        "fee": "0",
-        "feeCurrency": "BTC",
-        "stp": "",
-        "timeInForce": "GTC",
-        "postOnly": false,
-        "hidden": false,
-        "iceberg": false,
-        "visibleSize": "0",
-        "cancelAfter": 0,
-        "channel": "API",
-        "clientOid": "6d539dc614db312",
-        "remark": "",
-        "tags": "",
-        "active": true,
-        "inOrderBook": false,
-        "cancelExist": false,
-        "createdAt": 1547026471000,
-        "lastUpdatedAt": 1547026471001,
-        "tradeType": "TRADE"
-    }
+   "code":"200000",
+   "data": {
+        "id": "5f3113a1c9b6d539dc614dc6",
+        "symbol": "KCS-BTC",
+        "opType": "DEAL",
+        "type": "limit",
+        "side": "buy",
+        "price": "0.00001",
+        "size": "1",
+        "funds": "0",
+        "dealFunds": "0",
+        "dealSize": "0",
+        "fee": "0",
+        "feeCurrency": "BTC",
+        "stp": "",
+        "timeInForce": "GTC",
+        "postOnly": false,
+        "hidden": false,
+        "iceberg": false,
+        "visibleSize": "0",
+        "cancelAfter": 0,
+        "channel": "API",
+        "clientOid": "6d539dc614db312",
+        "remark": "",
+        "tags": "",
+        "active": true,
+        "inOrderBook": false,
+        "cancelExist": false,
+        "createdAt": 1547026471000,
+        "lastUpdatedAt": 1547026471001,
+        "tradeType": "TRADE",
+        "cancelledSize": "0",
+        "cancelledFunds": "0",
+        "remainSize": "0",
+        "remainFunds": "0"
+    }
 }
 ```
 
@@ -1444,10 +1472,14 @@ opType | Operation type: DEAL |
 type | Order type | 
 side | Buy or sell | 
 price | Order price | 
-size | Order size | 
+size | Order size |
+dealSize | Number of filled transactions |
+cancelledSize | Number of canceled transactions |
+remainSize | Number of remain transactions |
 funds | Order amount | 
-dealFunds | Turnover | 
-dealSize | Number of filled transactions | 
+dealFunds |  Number of filled funds | 
+cancelledFunds | Number of canceled funds | 
+remainFunds | Number of remain funds | 
 fee | Service fee | 
 feeCurrency | currency used to calculate fees | 
 stp | Self trade protection | 
@@ -1473,38 +1505,42 @@ tradeType | Trade type: TRADE (Spot Trading)|
 ```json
 // response
 {
-   "code":"200000",
-   "data": {
-        "id": "5f3113a1c9b6d539dc614dc6",
-        "symbol": "KCS-BTC",
-        "opType": "DEAL",
-        "type": "limit",
-        "side": "buy",
-        "price": "0.00001",
-        "size": "1",
-        "funds": "0",
-        "dealFunds": "0",
-        "dealSize": "0",
-        "fee": "0",
-        "feeCurrency": "BTC",
-        "stp": "",
-        "timeInForce": "GTC",
-        "postOnly": false,
-        "hidden": false,
-        "iceberg": false,
-        "visibleSize": "0",
-        "cancelAfter": 0,
-        "channel": "API",
-        "clientOid": "6d539dc614db312",
-        "remark": "",
-        "tags": "",
-        "active": true,
-        "inOrderBook": false,
-        "cancelExist": false,
-        "createdAt": 1547026471000,
-        "lastUpdatedAt": 1547026471001,
-        "tradeType": "TRADE"
-    }
+   "code":"200000",
+   "data": {
+        "id": "5f3113a1c9b6d539dc614dc6",
+        "symbol": "KCS-BTC",
+        "opType": "DEAL",
+        "type": "limit",
+        "side": "buy",
+        "price": "0.00001",
+        "size": "1",
+        "funds": "0",
+        "dealFunds": "0",
+        "dealSize": "0",
+        "fee": "0",
+        "feeCurrency": "BTC",
+        "stp": "",
+        "timeInForce": "GTC",
+        "postOnly": false,
+        "hidden": false,
+        "iceberg": false,
+        "visibleSize": "0",
+        "cancelAfter": 0,
+        "channel": "API",
+        "clientOid": "6d539dc614db312",
+        "remark": "",
+        "tags": "",
+        "active": true,
+        "inOrderBook": false,
+        "cancelExist": false,
+        "createdAt": 1547026471000,
+        "lastUpdatedAt": 1547026471001,
+        "tradeType": "TRADE",
+        "cancelledSize": "0",
+        "cancelledFunds": "0",
+        "remainSize": "0",
+        "remainFunds": "0"
+    }
 }
 ```
 The endpoint can be used to obtain information about a single order using clientOid. If the order does not exist, then there will be a prompt saying that the order does not exist.
@@ -1534,10 +1570,14 @@ opType | Operation type: DEAL |
 type | Order type | 
 side | Buy or sell | 
 price | Order price | 
-size | Order size | 
+size | Order size |
+dealSize | Number of filled transactions |
+cancelledSize | Number of canceled transactions |
+remainSize | Number of remain transactions |
 funds | Order amount | 
-dealFunds | Turnover | 
-dealSize | Number of filled transactions | 
+dealFunds |  Number of filled funds | 
+cancelledFunds | Number of canceled funds | 
+remainFunds | Number of remain funds | 
 fee | Service fee | 
 feeCurrency | currency used to calculate fees | 
 stp | Self trade protection | 

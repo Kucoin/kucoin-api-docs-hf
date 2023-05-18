@@ -28,6 +28,13 @@ KuCoin API：**REST API**
 
 ## 更新預告
 
+**05/18/23**:
+
+- 【修改】`GET /api/v1/hf/orders/{orderId}?symbol={symbol}`接口,增加返回字段：cancelledSize(累计取消数量)、cancelledFunds(市价单累计取消资金)、remainSize(剩余size)、remainFunds（市价单剩余funds）
+- 【修改】`GET /api/v1/hf/orders/client-order/{clientOid}?symbol={symbol}`接口,增加返回字段：cancelledSize(累计取消数量)、cancelledFunds(市价单累计取消资金)、remainSize(剩余size)、remainFunds（市价单剩余funds）
+- 【修改】`GET /api/v1/hf/orders/active`接口,增加返回字段：cancelledSize(累计取消数量)、cancelledFunds(市价单累计取消资金)、remainSize(剩余size)、remainFunds（市价单剩余funds）
+- 【修改】`GET /api/v1/hf/orders/done`接口,增加返回字段：cancelledSize(累计取消数量)、cancelledFunds(市价单累计取消资金)、remainSize(剩余size)、remainFunds（市价单剩余funds）
+
 **04/23/23**:
 
 - 【新增】新增`POST /api/v1/hf/orders/dead-cancel-all`接口
@@ -1129,39 +1136,43 @@ symbol | String | 是 | 取消指定交易對的open訂單 |
 ```json
 // response
 {
-    "code" : "200000",
-    "data" : [
-        "id": "5c35c02703aa673ceec2a168",
-        "symbol": "BTC-USDT",
-        "opType": "DEAL",
-        "type": "limit",
-        "side": "buy",
-        "price": "10",
-        "size": "2",
-        "funds": "0",
-        "dealFunds": "0.166",
-        "dealSize": "2",
-        "fee": "0",
-        "feeCurrency": "USDT",
-        "stp": "",
-        "timeInForce": "GTC",
-        "postOnly": false,
-        "hidden": false,
-        "iceberg": false,
-        "visibleSize": "0",
-        "cancelAfter": 0,
-        "channel": "IOS",
-        "clientOid": "",
-        "remark": "",
-        "tags": "",
-        "active": true,
-        "inOrderBook": true,
-        "cancelExist": false,
-        "createdAt": 1547026471000,
-        "lastUpdatedAt": 1547026471001,
-        "tradeType": "TRADE"
-        }        
-    ]
+    "code" : "200000",
+    "data" : [
+        "id": "5c35c02703aa673ceec2a168",
+        "symbol": "BTC-USDT",
+        "opType": "DEAL",
+        "type": "limit",
+        "side": "buy",
+        "price": "10",
+        "size": "2",
+        "funds": "0",
+        "dealFunds": "0.166",
+        "dealSize": "2",
+        "fee": "0",
+        "feeCurrency": "USDT",
+        "stp": "",
+        "timeInForce": "GTC",
+        "postOnly": false,
+        "hidden": false,
+        "iceberg": false,
+        "visibleSize": "0",
+        "cancelAfter": 0,
+        "channel": "IOS",
+        "clientOid": "",
+        "remark": "",
+        "tags": "",
+        "active": true,
+        "inOrderBook": true,
+        "cancelExist": false,
+        "createdAt": 1547026471000,
+        "lastUpdatedAt": 1547026471001,
+        "tradeType": "TRADE",
+        "cancelledSize": "0",
+        "cancelledFunds": "0",
+        "remainSize": "0",
+        "remainFunds": "0"
+        }        
+    ]
 }
 ```
 該接口是獲取所有活躍訂單列表。返回數據都根據訂單最新更新時間降序排序。
@@ -1192,10 +1203,14 @@ opType | 操作類型: DEAL |
 type | 訂單類型 |
 side | 買或賣 |
 price | 訂單價格 |
-size | 下單數量 |
-funds | 下單金額 |
-dealFunds | 成交額 |
+size | 訂單數量 |
+cancelledSize | 累計取消數量 |
 dealSize | 成交數量 |
+remainSize | 剩餘數量 |
+funds | 下單金額 |
+cancelledFunds | 市價單累計取消資金 |
+dealFunds | 成交額 |
+remainFunds | 市價單剩餘資金 |
 fee | 手續費 |
 feeCurrency | 計手續費幣種 |
 stp | 自成交保護 |
@@ -1284,43 +1299,47 @@ symbols | 有活躍訂單的交易對列表       |
 ```json
 // response
 {
-   "code":"200000",
-   "data":{
-      "lastId":2682265600,
-      "items":[
-         {
-            "id":"63074a5a27ecbe0001e1f3ba",
-            "symbol":"CSP-USDT",
-            "opType":"DEAL",
-            "type":"limit",
-            "side":"sell",
-            "price":"0.1",
-            "size":"0.1",
-            "funds":"0.01",
-            "dealSize":"0",
-            "dealFunds":"0",
-            "fee":"0",
-            "feeCurrency":"USDT",
-            "stp":"",
-            "timeInForce":"GTC",
-            "postOnly":false,
-            "hidden":false,
-            "iceberg":false,
-            "visibleSize":"0",
-            "cancelAfter":0,
-            "channel":"API",
-            "clientOid":"",
-            "remark":"",
-            "tags":"",
-            "cancelExist":true,
-            "createdAt":1661422170924,
-            "lastUpdatedAt":1661422196926,
-            "tradeType":"TRADE",
-            "inOrderBook":false,
-            "active":false
-         }
-      ]
-   }
+   "code":"200000",
+   "data":{
+      "lastId":2682265600,
+      "items":[
+         {
+            "id":"63074a5a27ecbe0001e1f3ba",
+            "symbol":"CSP-USDT",
+            "opType":"DEAL",
+            "type":"limit",
+            "side":"sell",
+            "price":"0.1",
+            "size":"0.1",
+            "funds":"0.01",
+            "dealSize":"0",
+            "dealFunds":"0",
+            "fee":"0",
+            "feeCurrency":"USDT",
+            "stp":"",
+            "timeInForce":"GTC",
+            "postOnly":false,
+            "hidden":false,
+            "iceberg":false,
+            "visibleSize":"0",
+            "cancelAfter":0,
+            "channel":"API",
+            "clientOid":"",
+            "remark":"",
+            "tags":"",
+            "cancelExist":true,
+            "createdAt":1661422170924,
+            "lastUpdatedAt":1661422196926,
+            "tradeType":"TRADE",
+            "inOrderBook":false,
+            "active":false,
+            "cancelledSize": "0",
+            "cancelledFunds": "0",
+            "remainSize": "0",
+            "remainFunds": "0"
+         }
+      ]
+   }
 }
 ```
 該接口是獲取已成交高頻訂單列表，返回值是分頁後的數據。返回數據都根據訂單最新更新時間降序排序。
@@ -1362,10 +1381,14 @@ opType | 操作類型: DEAL |
 type | 訂單類型 |
 side | 買或賣 |
 price | 訂單價格 |
-size | 下單數量 |
-funds | 下單金額 |
-dealFunds | 成交額 |
+size | 訂單數量 |
+cancelledSize | 累計取消數量 |
 dealSize | 成交數量 |
+remainSize | 剩餘數量 |
+funds | 下單金額 |
+cancelledFunds | 市價單累計取消資金 |
+dealFunds | 成交額 |
+remainFunds | 市價單剩餘資金 |
 fee | 手續費 |
 feeCurrency | 計手續費幣種 |
 stp | 自成交保護 |
@@ -1391,38 +1414,42 @@ tradeType | 交易類型: TRADE（現貨交易）|
 ```json
 // response
 {
-   "code":"200000",
-   "data": {
-        "id": "5f3113a1c9b6d539dc614dc6",
-        "symbol": "KCS-BTC",
-        "opType": "DEAL",
-        "type": "limit",
-        "side": "buy",
-        "price": "0.00001",
-        "size": "1",
-        "funds": "0",
-        "dealFunds": "0",
-        "dealSize": "0",
-        "fee": "0",
-        "feeCurrency": "BTC",
-        "stp": "",
-        "timeInForce": "GTC",
-        "postOnly": false,
-        "hidden": false,
-        "iceberg": false,
-        "visibleSize": "0",
-        "cancelAfter": 0,
-        "channel": "API",
-        "clientOid": "6d539dc614db312",
-        "remark": "",
-        "tags": "",
-        "active": true,
-        "inOrderBook": false,
-        "cancelExist": false,
-        "createdAt": 1547026471000,
-        "lastUpdatedAt": 1547026471001,
-        "tradeType": "TRADE"
-    }
+   "code":"200000",
+   "data": {
+        "id": "5f3113a1c9b6d539dc614dc6",
+        "symbol": "KCS-BTC",
+        "opType": "DEAL",
+        "type": "limit",
+        "side": "buy",
+        "price": "0.00001",
+        "size": "1",
+        "funds": "0",
+        "dealFunds": "0",
+        "dealSize": "0",
+        "fee": "0",
+        "feeCurrency": "BTC",
+        "stp": "",
+        "timeInForce": "GTC",
+        "postOnly": false,
+        "hidden": false,
+        "iceberg": false,
+        "visibleSize": "0",
+        "cancelAfter": 0,
+        "channel": "API",
+        "clientOid": "6d539dc614db312",
+        "remark": "",
+        "tags": "",
+        "active": true,
+        "inOrderBook": false,
+        "cancelExist": false,
+        "createdAt": 1547026471000,
+        "lastUpdatedAt": 1547026471001,
+        "tradeType": "TRADE",
+        "cancelledSize": "0",
+        "cancelledFunds": "0",
+        "remainSize": "0",
+        "remainFunds": "0"
+    }
 }
 ```
 
@@ -1459,9 +1486,13 @@ type | 訂單類型 |
 side | 買或賣 |
 price | 訂單價格 |
 size | 訂單數量 |
-funds | 下單金額 |
-dealFunds | 成交額 |
+cancelledSize | 累計取消數量 |
 dealSize | 成交數量 |
+remainSize | 剩餘數量 |
+funds | 下單金額 |
+cancelledFunds | 市價單累計取消資金 |
+dealFunds | 成交額 |
+remainFunds | 市價單剩餘資金 |
 fee | 手續費 |
 feeCurrency | 計手續費幣種 |
 stp | 自成交保護 |
@@ -1487,38 +1518,42 @@ tradeType | 交易類型: TRADE（現貨交易）|
 ```json
 // response
 {
-   "code":"200000",
-   "data": {
-        "id": "5f3113a1c9b6d539dc614dc6",
-        "symbol": "KCS-BTC",
-        "opType": "DEAL",
-        "type": "limit",
-        "side": "buy",
-        "price": "0.00001",
-        "size": "1",
-        "funds": "0",
-        "dealFunds": "0",
-        "dealSize": "0",
-        "fee": "0",
-        "feeCurrency": "BTC",
-        "stp": "",
-        "timeInForce": "GTC",
-        "postOnly": false,
-        "hidden": false,
-        "iceberg": false,
-        "visibleSize": "0",
-        "cancelAfter": 0,
-        "channel": "API",
-        "clientOid": "6d539dc614db312",
-        "remark": "",
-        "tags": "",
-        "active": true,
-        "inOrderBook": false,
-        "cancelExist": false,
-        "createdAt": 1547026471000,
-        "lastUpdatedAt": 1547026471001,
-        "tradeType": "TRADE"
-    }
+   "code":"200000",
+   "data": {
+        "id": "5f3113a1c9b6d539dc614dc6",
+        "symbol": "KCS-BTC",
+        "opType": "DEAL",
+        "type": "limit",
+        "side": "buy",
+        "price": "0.00001",
+        "size": "1",
+        "funds": "0",
+        "dealFunds": "0",
+        "dealSize": "0",
+        "fee": "0",
+        "feeCurrency": "BTC",
+        "stp": "",
+        "timeInForce": "GTC",
+        "postOnly": false,
+        "hidden": false,
+        "iceberg": false,
+        "visibleSize": "0",
+        "cancelAfter": 0,
+        "channel": "API",
+        "clientOid": "6d539dc614db312",
+        "remark": "",
+        "tags": "",
+        "active": true,
+        "inOrderBook": false,
+        "cancelExist": false,
+        "createdAt": 1547026471000,
+        "lastUpdatedAt": 1547026471001,
+        "tradeType": "TRADE",
+        "cancelledSize": "0",
+        "cancelledFunds": "0",
+        "remainSize": "0",
+        "remainFunds": "0"
+    }
 }
 ```
 此接口，可以通過clientOid查詢單個訂單的信息，若訂單不存在則提示訂單不存在。
@@ -1552,9 +1587,13 @@ type | 訂單類型 |
 side | 買或賣 |
 price | 訂單價格 |
 size | 訂單數量 |
-funds | 下單金額 |
-dealFunds | 成交額 |
+cancelledSize | 累計取消數量 |
 dealSize | 成交數量 |
+remainSize | 剩餘數量 |
+funds | 下單金額 |
+cancelledFunds | 市價單累計取消資金 |
+dealFunds | 成交額 |
+remainFunds | 市價單剩餘資金 |
 fee | 手續費 |
 feeCurrency | 計手續費幣種 |
 stp | 自成交保護 |
