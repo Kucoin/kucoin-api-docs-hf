@@ -93,7 +93,7 @@ Users can transfer funds between their main account, trading account, and high-f
 `POST /api/v2/accounts/inner-transfer`
 
 ### API Permissions
-This API requires `Trade` permissions
+This API requires `Spot Trading` permissions
 
 ### Parameters
 Parameters | Type | Mandatory | Description | 
@@ -350,7 +350,7 @@ Before placing orders, please be sure to fully understand the meaning of the par
 `POST /api/v1/hf/orders`
 
 ### API Permissions
-This API requires `Trade` permissions
+This API requires `Spot Trading` permissions
 
 ### REQUEST RATE LIMIT
 The request frequency for this API is limited to `150 times/3s` for each account
@@ -530,7 +530,7 @@ For higher latency requirements, please select the "Place hf order" interface. I
 
 ### API Permissions
 
-This API requires `Trade` permissions
+This API requires `Spot Trading` permissions
 
 ### REQUEST RATE LIMIT
 
@@ -627,7 +627,7 @@ This endpoint only supports order placement requests. To obtain the results of t
 `POST /api/v1/hf/orders/multi`
 
 ### API Permissions
-This API requires `Trade` permissions
+This API requires `Spot Trading` permissions
 
 ### REQUEST RATE LIMIT
 The request frequency of this API endpoint is limited to `3 times/3s` for each account
@@ -738,7 +738,7 @@ For higher latency requirements, please select the "Sync place multiple hf order
 
 ### API Permissions
 
-This API requires `Trade` permissions
+This API requires `Spot Trading` permissions
 
 ### REQUEST RATE LIMIT
 
@@ -791,7 +791,7 @@ When the quantity of the new order updated by the user is less than the filled q
 
 ### API Permissions
 
-This API requires `Trade` permissions
+This API requires `Spot Trading` permissions
 
 ### REQUEST RATE LIMIT
 
@@ -854,7 +854,7 @@ This endpoint can be used to cancel a high-frequency order by orderId.
 `DELETE /api/v1/hf/orders/5bd6e9286d99522a52e458de?symbol=ETH-BTC`
 
 ### API Permissions
-This API requires `Trade` permissions
+This API requires `Spot Trading` permissions
 
 ### REQUEST RATE LIMIT
 The request frequency of this API is limited to `150 times/3s` for each account
@@ -900,7 +900,7 @@ For higher latency requirements, please select the "Cancel orders by orderId" in
 
 ### API Permissions
 
-This API requires `Trade` permissions
+This API requires `Spot Trading` permissions
 
 ### REQUEST RATE LIMIT
 
@@ -965,7 +965,7 @@ This endpoint sends out a request to cancel a high-frequency order using clientO
 `DELETE /api/v1/hf/orders/client-order/6d539dc614db3?symbol=ETH-BTC`
 
 ### API Permissions
-This API requires `Trade` permissions
+This API requires `Spot Trading` permissions
 
 ### REQUEST RATE LIMIT
 The request frequency of this API is limited to `150 times/3s` for each account
@@ -1007,7 +1007,7 @@ For higher latency requirements, please select the "Cancellation of order by cli
 
 ### API Permissions
 
-This API requires `Trade` permissions
+This API requires `Spot Trading` permissions
 
 ### REQUEST RATE LIMIT
 
@@ -1068,7 +1068,7 @@ This interface can cancel the specified quantity of the order according to the o
 
 ### API Permissions
 
-This API requires `Trade` permissions
+This API requires `Spot Trading` permissions
 
 
 ### REQUEST RATE LIMIT
@@ -1114,7 +1114,7 @@ This endpoint only sends cancellation requests. The results of the requests must
 `DELETE /api/v1/hf/orders?symbol=ETH-BTC`
 
 ### API Permissions
-This API requires `Trade` permissions
+This API requires `Spot Trading` permissions
 
 ### REQUEST RATE LIMIT
 The request frequency of this API endpoint is limited to `3 times/3s` for each account
@@ -1246,7 +1246,7 @@ This interface can query all trading pairs that the user has active orders
 
 ### API Permissions
 
-This API requires `Trade` permissions
+This API requires `Spot Trading` permissions
 
 ### REQUEST RATE LIMIT
 
@@ -1455,6 +1455,9 @@ This endpoint can be used to obtain information for a single HF order using the 
 
 This API requires `General` permissions
 
+### REQUEST RATE LIMIT
+The request frequency of this API is limited to `30 times/3s` for each account
+
 ### Parameters
 Parameters | Type | Mandatory | Description | 
 --------- | ------- | -----------| -----------| 
@@ -1623,7 +1626,7 @@ Note: The order cancellation delay is between 0 and 10 seconds, and the order wi
 `POST /api/v1/hf/orders/dead-cancel-all`
 
 ### API Permissions
-This API requires `Trade` permissions
+This API requires `Spot Trading` permissions
 
 ### REQUEST RATE LIMIT
 The request frequency of this API is limited to `1 times/3s` for each account
